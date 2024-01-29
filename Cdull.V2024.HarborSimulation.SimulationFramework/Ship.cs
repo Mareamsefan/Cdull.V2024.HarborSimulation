@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-    internal class Ship
+    public class Ship
     {
         private string name {  get; }
         private string model {  get; }

@@ -9,14 +9,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     internal interface IHarborSimulation
     {
-      
+        // made 
         public void Harbor(String name, List<Dock> DockList, List<Ship> ShipList, Queue<Cargo> ShipQueue,
             List<Crane> CraneList, List<CargoStorage> cargoStorageFacility);
 
-
+        // made 
         public void Dock(String name, String size, String dockType, bool IsAvalible = true);
 
-
+        // made 
         public void InitializeDocks(int number, String docktype, Crane crane);
 
 
@@ -29,6 +29,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         public void Crane(bool IsCraneAvalible = true, bool IsCraneOutOfFuntion = false);
 
+        // made 
         public void InitializingCranes(int number, List<Dock> DockList);
 
         public void Cargo(String name, double weight);
