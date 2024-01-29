@@ -1,26 +1,26 @@
 ﻿
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-     public class Harbor
+    public class Harbor
     {
-        private int id {  get; set; }
-        private string name { get;  }
-        private List<Dock> dockList { get;  } = new List<Dock>();
+        private int id { get; set; }
+        private string name { get; }
+        private List<Dock> dockList { get; } = new List<Dock>();
         private List<Ship> shipList { get; } = new List<Ship>();
         private Queue<Ship> shipQueue { get; } = new Queue<Ship>();
-        private List<Crane> craneList {  get; } = new List<Crane>();
+        private List<Crane> craneList { get; } = new List<Crane>();
 
-        private List<CargoStorage> cargoStorageList { get; } = new List<CargoStorage>();
+        private CargoStorage cargoStorage { get; } 
 
         public Harbor(string harborName, List<Dock> harborDockList, List<Ship> harborShipList,
-            Queue<Ship> harborShipQueue, List<Crane> harborCraneList, List<CargoStorage> harborCargoStorageList)
+            Queue<Ship> harborShipQueue, List<Crane> harborCraneList, CargoStorage harborCargoStorage)
         {
             this.name = harborName;
             this.dockList = harborDockList;
             this.shipList = harborShipList;
             this.shipQueue = harborShipQueue;
             this.craneList = harborCraneList;
-            this.cargoStorageList = harborCargoStorageList;
+            this.cargoStorage = harborCargoStorage;
 
         }
         public List<Crane> GetCraneList()
@@ -28,20 +28,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return craneList;
         }
         public override string ToString()
-            {
-           
-             string harborInfo = $"Harbor Name: {name}\n" +
-                        $"Dock List: {string.Join(", ", dockList.Select(dock => dock.ToString()))}\n" +
-                        $"Ship List: {string.Join(", ", shipList.Select(ship => ship.ToString()))}\n" +
-                        $"Ship Queue: {string.Join(", ", shipQueue.Select(ship => ship.ToString()))}\n" +
-                        $"Crane List: {string.Join(", ", craneList.Select(crane => crane.ToString()))}\n" +
-                        $"Cargo Storage List: {string.Join(", ", cargoStorageList.Select(storage => storage.ToString()))}";
+        {
+
+            string harborInfo = $"Harbor Name: {name}\n" +
+                       $"Dock List: {string.Join(", ", dockList.Select(dock => dock.ToString()))}\n" +
+                       $"Ship List: {string.Join(", ", shipList.Select(ship => ship.ToString()))}\n" +
+                       $"Ship Queue: {string.Join(", ", shipQueue.Select(ship => ship.ToString()))}\n" +
+                       $"Crane List: {string.Join(", ", craneList.Select(crane => crane.ToString()))}\n";
+                   
 
             return harborInfo;
-            }
+        }
 
         public void InitializeCranes(int number)
-        {   
+        {
             List<Crane> cranes = new List<Crane>();
             for (int i = 0; i < number; i++)
             {
@@ -60,17 +60,27 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
 
         }
-        
+
         public void InitializeCargosStorage()
         {
 
         }
 
+        public void AddCargoToStorage( Ship ship, Dock dock)
+        {
+          
+            foreach (var cargo in ship.cargoList)
+            {
+                cargoStorage.AddCargoToList(cargo);
+            }           
+            
+
+        }
+
+
+
+
+
     }
-
-     
-
-   
-
 }
 

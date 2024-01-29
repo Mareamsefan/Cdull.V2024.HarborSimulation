@@ -8,14 +8,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class CargoStorage
     {
-        private int id {  get; set; }
         private string name {  get; set; }
-        private int number {  get; set; }
+        private List<Cargo> cargoList {  get; set; } = new List<Cargo>();
         private bool isAvailable { get; set; }
 
-        public CargoStorage(int cargoStorageNumber) {
-            this.number = cargoStorageNumber;
+        public CargoStorage(string cargoStoargeName) {
+            this.name = cargoStoargeName;
             isAvailable = true;
+        }
+        public void AddCargoToList(Cargo cargo)
+        {
+            cargoList.Add(cargo);
         }
     }
 }
