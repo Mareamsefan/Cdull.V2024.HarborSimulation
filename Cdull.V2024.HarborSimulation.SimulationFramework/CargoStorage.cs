@@ -8,6 +8,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class CargoStorage
     {
+        private int id {  get; set; }
+        private string name {  get; set; }
         private int number {  get; set; }
         private bool isAvailable { get; set; }
 

@@ -3,11 +3,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
      public class Harbor
     {
+        private int id {  get; set; }
         private string name { get;  }
         private List<Dock> dockList { get;  } = new List<Dock>();
         private List<Ship> shipList { get; } = new List<Ship>();
         private Queue<Ship> shipQueue { get; } = new Queue<Ship>();
         private List<Crane> craneList {  get; } = new List<Crane>();
+
         private List<CargoStorage> cargoStorageList { get; } = new List<CargoStorage>();
 
         public Harbor(string harborName, List<Dock> harborDockList, List<Ship> harborShipList,
@@ -58,7 +60,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
 
         }
+        
+        public void InitializeCargosStorage()
+        {
 
+        }
 
     }
 

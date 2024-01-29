@@ -8,6 +8,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Ship
     {
+        private int id {  get; set; }
         private string name {  get; }
         private string model {  get; }
         private string size { get; }
@@ -23,6 +24,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             this.hasDocked = false;
             this.cargoList = shipCargoList;
             this.dockedBy = null; 
+        }
+
+
+        public void InitializeCargos(int number, double weight)
+        {
+            for (int i = 0; i < number; i++)
+            {
+                Cargo cargo = new($"name{i}", weight);
+                this.cargoList.Add(cargo);
+            }
+
         }
 
     }
