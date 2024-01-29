@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Cargo
-    { 
-
+    {
+        private int id {  get; set; }
         private string name {  get; set; }
         private double weight { get; set; }
         private List<String> historyList { get; set; } = new List<String>();

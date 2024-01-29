@@ -32,14 +32,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         // made 
         public void InitializingCranes(int number, List<Dock> DockList);
 
+        //made 
         public void Cargo(String name, double weight);
 
 
 
-
+        // made 
         public void Dock(String name, String size, String dockType = "CargohandlingDock");
 
-
+        //made 
         void InitiateShipQueue(Queue<Ship> ShipQueue);
 
 
@@ -66,7 +67,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
-    
+        
         public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList,
             String dockname, bool isSailing);
 
