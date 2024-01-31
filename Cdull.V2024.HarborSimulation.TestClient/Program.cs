@@ -17,11 +17,12 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Watch watch = new(startTime, stopTime);
             watch.StartCountingTime(); 
             Harbor harbor = new Harbor("My Harbor", new CargoStorage("cargoStoage"));
-
+            harbor.InitializeShips(10, "small", 10);
             harbor.InitializeCranes(10);
             List<Crane> cranes = harbor.GetCraneList();  
             harbor.InitializeDocks(10, "normal", "small", cranes);
             Console.WriteLine(harbor);
+            
 
             watch.StopCountingTime();
             Console.WriteLine(watch.MeasureTimeElapsed()); 

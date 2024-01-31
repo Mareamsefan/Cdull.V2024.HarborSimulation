@@ -64,11 +64,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        public void InitializeShips(int numberOfShips, string size)
+        public void InitializeShips(int numberOfShips, string shipSize, int numberOfCargos, int CargoWeight = 10)
         {
             for (int i = 0; i < numberOfShips; i++)
             {
-                Ship ship = new($"ship{i}", size);
+                Ship ship = new($"ship{i}", shipSize);
+                ship.InitializeCargos(numberOfCargos);
                 this.Ships.Add(ship);
             }
 
