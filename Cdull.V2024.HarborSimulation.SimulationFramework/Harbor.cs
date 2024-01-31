@@ -24,7 +24,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
              this.Ships = harborShipList;
              this.WaitingShips = harborShipQueue;
              this.Cranes = harborCraneList;*/
-            this.CargoStorage = harborCargoStorage; 
+            this.CargoStorage = harborCargoStorage;
 
         }
         public List<Crane> GetCraneList()
@@ -58,7 +58,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             for (int i = 0; i <= numberOfDock; i++)
             {
                 Dock dock = new($"dock{i}", size, type, cranes[i]);
-                
+
                 this.Docks.Add(dock);
 
             }
@@ -78,20 +78,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         public Dock GetAvailableDockOfSize(string shipSize)
         {
-            foreach(Dock dock in this.Docks)
+            foreach (Dock dock in this.Docks)
             {
-                if(dock.Size == shipSize && dock.IsAvalible)
+                if (dock.Size == shipSize && dock.IsAvalible)
                 {
-                    return dock; 
+                    return dock;
                 }
-               
+
             }
-            return null; 
+            return null;
         }
 
         public void QueueShipsToDock()
         {
-            foreach(Ship ship in this.Ships)
+            foreach (Ship ship in this.Ships)
             {
                 this.WaitingShips.Enqueue(ship);
             }
@@ -99,50 +99,51 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         public void DockShips()
         {
-            foreach(Ship ship in this.Ships)
-            { 
-                Dock availableDock = GetAvailableDockOfSize(ship.Size); 
+            foreach (Ship ship in this.Ships)
+            {
+                Dock availableDock = GetAvailableDockOfSize(ship.Size);
 
-                if (availableDock is not null){
+                if (availableDock is not null)
+                {
                     ship.HasDocked = true;
                     ship.DockedBy = availableDock;
                     availableDock.IsAvalible = false;
                     ship.History.Add($"{DateTime.Now} + {availableDock.Name}");
-                   
+
                 }
 
             }
-           
+
         }
 
         public void AddCargoToStorage()
         {
-            foreach(Ship ship in this.Ships)
+            foreach (Ship ship in this.Ships)
             {
-                foreach (Cargo cargo in Ship.cargo)
+                foreach (Cargo cargo in ship.Cargo)
                 {
                     CargoStorage.Cargo.Add(cargo);
-                    Ship.Cargo.Remove(cargo);
+                    ship.Cargo.Remove(cargo);
                 }
             }
-                  
+
         }
-    }
 
 
-        public void AddCargoToShip(int numberOfCargo)
-    {
-        for (int i = 0; i <= number; i++)
+
+        public void AddCargoToShip(int numberOfCargo, Ship ship)
         {
-            foreach(Cargo cargo in CargoStorage)
+            for (int i = 0; i <= numberOfCargo; i++)
             {
-                Ship.Cargo.Add(cargo);
-                CargoStorage.Cargo.Remove(cargo);
+                foreach (Cargo cargo in CargoStorage.Cargo)
+                {
+                    ship.Cargo.Add(cargo);
+                    CargoStorage.Cargo.Remove(cargo);
+                }
             }
         }
+
     }
-        
-       
     
-    }
+    
 }
