@@ -24,6 +24,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine(harbor);
             
 
+
+
             watch.StopCountingTime();
             Console.WriteLine(watch.MeasureTimeElapsed()); 
            
