@@ -8,19 +8,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Cargo
     {
-        private int id {  get; set; }
-        private string name {  get; set; }
-        private double weight { get; set; }
-        private List<String> historyList { get; set; } = new List<String>();
+        private string Name {  get; set; }
+        private double Weight { get; set; }
+        private List<String> History { get; set; } = new List<String>();
         public Cargo(string cargoName, double cargoWeight) 
-        {   this.name = cargoName; 
-            this.weight = cargoWeight; 
+        {   this.Name = cargoName; 
+            this.Weight = cargoWeight; 
         
         }
         public override string ToString()
         {
 
-            string cargoInfo = name + " " +  weight;
+            string cargoInfo = Name + " " +  Weight;
 
             return cargoInfo;
         }
