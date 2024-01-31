@@ -26,15 +26,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-        public void InitializeCargos(int number, double weight)
+        public void InitializeCargos(int number, double weight = 10)
         {
             for (int i = 0; i <= number; i++)
             {
-                Cargo cargo = new($"name{i}", weight);
+                Cargo cargo = new($"cargo{i}", weight);
                 this.Cargo.Add(cargo);
             }
 
         }
+
+        public void override()
 
 
     }

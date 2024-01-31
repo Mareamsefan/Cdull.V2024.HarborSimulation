@@ -58,17 +58,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             for (int i = 0; i <= numberOfDock; i++)
             {
                 Dock dock = new($"dock{i}", size, type, cranes[i]);
+                
                 this.Docks.Add(dock);
 
             }
 
         }
 
-        public void InitializeShips(int numberOfShips, string size)
+        public void InitializeShips(int numberOfShips, string shipSize, int numberOfCargos, int CargoWeight = 10)
         {
             for (int i = 0; i <= numberOfShips; i++)
             {
-                Ship ship = new($"ship{i}", size);
+                Ship ship = new($"ship{i}", shipSize);
+                ship.InitializeCargos(numberOfCargos);
                 this.Ships.Add(ship);
             }
 
@@ -106,6 +108,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     ship.DockedBy = availableDock;
                     availableDock.IsAvalible = false;
                     ship.History.Add($"{DateTime.Now} + {availableDock.Name}");
+                   
                 }
 
             }
