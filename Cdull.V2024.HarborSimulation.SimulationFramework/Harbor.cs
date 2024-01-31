@@ -119,6 +119,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 foreach (Cargo cargo in Ship.cargo)
                 {
                     CargoStorage.Cargo.Add(cargo);
+                    Ship.Cargo.Remove(cargo);
                 }
             }
                   
@@ -132,7 +133,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             foreach(Cargo cargo in CargoStorage)
             {
-                Ship.Cargo.Add(cargo)
+                Ship.Cargo.Add(cargo);
+                CargoStorage.Cargo.Remove(cargo);
             }
         }
     }
