@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Crane
-    {   
-        private int id {  get; set; }
+    {  
         private string name {  get; set; }
         private bool isCraneAvalible { get; set; }
         private bool isCraneOutOfFuntion {  get; set; }

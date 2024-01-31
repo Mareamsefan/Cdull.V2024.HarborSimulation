@@ -8,20 +8,21 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Ship
     {
-        private int id {  get; set; }
-        private string name {  get; }
-        private string model {  get; }
-        private string size { get; }
-        private bool hasDocked { get; set; }
-        public List<Cargo> cargoList { get; } = new List<Cargo>();
-        private List<String> historyList { get; set; } = new List<String>();
-        private Dock? dockedBy { get; set; }
-        public Ship(string shipName, string shipModel, string shipSize) {
-            this.name = shipName;   
-            this.model = shipModel;
-            this.size = shipSize;
-            this.hasDocked = false;
-            this.dockedBy = null; 
+        private string Name {  get; }
+        //private string Model {  get; }
+        public string Size { get; }
+        public bool HasDocked { get; set; }
+        private List<Cargo> Cargo { get; } = new List<Cargo>();
+        public List<String> History { get; } = new List<String>();
+        public Dock? DockedBy { get; set; }
+        public Ship(string shipName, /*string shipModel*/ string shipSize 
+            /*List<Cargo> shipCargoList*/) {
+            this.Name = shipName;   
+            //this.Model = shipModel;
+            this.Size = shipSize;
+            this.HasDocked = false;
+            //this.Cargo = shipCargoList;
+            this.DockedBy = null; 
         }
 
 
@@ -30,10 +31,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             for (int i = 0; i < number; i++)
             {
                 Cargo cargo = new($"name{i}", weight);
-                this.cargoList.Add(cargo);
+                this.Cargo.Add(cargo);
             }
 
         }
+
 
     }
 }

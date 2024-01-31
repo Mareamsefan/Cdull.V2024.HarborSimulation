@@ -8,18 +8,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Dock
     {
-        private string name { get; }
-        private string size { get; }
-        private string type { get; }
-        private bool isAvalible { get; set; }
-        private Crane crane { get; set; }
+        public string Name { get; }
+        public string Size { get; }
+        private string Type { get; }
+        public bool IsAvalible { get; set; }
+        private Crane Crane { get; set; }
         private Ship? OccupiedBy {  get; set; }
         public Dock(string dockName, string dockSize, string dockType, Crane dockCrane) {
-                this.name = dockName;
-                this.size = dockSize; 
-                this.type = dockType;
-                this.isAvalible = true;
-                this.crane = dockCrane;
+                this.Name = dockName;
+                this.Size = dockSize; 
+                this.Type = dockType;
+                this.IsAvalible = true;
+                this.Crane = dockCrane;
                 this.OccupiedBy = null; 
             
            
@@ -27,7 +27,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public override string ToString()
         {
 
-            string dockInfo = name + " " + size + " " + type + " " + crane;
+            string dockInfo = Name + " " + Size + " " + Type + " " + Crane;
 
             return dockInfo;
         }
