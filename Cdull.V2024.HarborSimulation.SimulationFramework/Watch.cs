@@ -9,13 +9,45 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Watch
     {
-        private DataSetDateTime startTime {  get; set; }
-        private DataSetDateTime stopTime { get; set; }
+        public DateTime StartTime {  get; set; }
+        public DateTime StopTime { get; set; }
         private bool IsCounting { get; set; }   
-        public Watch(DataSetDateTime watchStartTime, DataSetDateTime watchStopTime) {
-            this.startTime = watchStartTime;
-            this.stopTime = watchStopTime;
+        public Watch(DateTime watchStartTime, DateTime watchStopTime) {
+            this.StartTime = watchStartTime;
+            this.StopTime = watchStopTime;
             this.IsCounting = false; 
+        }
+
+        public void StartCountingTime()
+        {
+            if (!IsCounting)
+            {
+                StartTime = DateTime.Now;
+                IsCounting = true; 
+            }
+            else
+            {
+                Console.WriteLine("time is already counting");
+            }
+        }
+
+        public void StopCountingTime()
+        {
+            if (IsCounting)
+            {
+                StopTime = DateTime.Now;
+                IsCounting = false;
+            }
+            else
+            {
+                Console.WriteLine("time is currently not counting");
+            }
+        }
+
+        public TimeSpan MeasureTimeElapsed()
+        {
+            TimeSpan elapsedTime = this.StopTime - this.StartTime;
+            return elapsedTime; 
         }
     }
 }

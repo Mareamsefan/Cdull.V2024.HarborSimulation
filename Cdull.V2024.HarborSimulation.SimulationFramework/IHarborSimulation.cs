@@ -76,6 +76,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         void RecurringSailing(Boolean IsWeekly, Boolean IsDaily);
 
+        // fikk et nytt navn --> HasAvailableDockOfSize ligger i harbor
         delegate void CheckIfDockAvailable(bool IsAvailable, String size);
 
 
