@@ -10,6 +10,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         private string Name { get; }
         private List<Dock> Docks { get; } = new List<Dock>();
         private List<Ship> Ships { get; } = new List<Ship>();
+        private List<Ship> DockedShips { get; } = new List<Ship>();
         private Queue<Ship> WaitingShips { get; } = new Queue<Ship>();
         private List<Crane> Cranes { get; } = new List<Crane>();
 
@@ -53,13 +54,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
-        public void InitializeDocks(int numberOfDock, String type, String size, List<Crane> cranes)
+        public void InitializeDocks(int numberOfDock, String type, String size)
         {
             for (int i = 0; i <= numberOfDock; i++)
             {
+                Dock dock = new($"dock{i}", size, type, this.Cranes[i]);
                 Dock dock = new($"dock{i}", size, type, cranes[i]);
 
                 this.Docks.Add(dock);
+                
 
             }
 
@@ -98,6 +101,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
         public void DockShips()
+        {   //kjører så lenge det er noen ship som venter på å docke 
+            while(this.WaitingShips.Count < 0)
+            {   // henter ut første skip i køen 
+                Ship ship = this.WaitingShips.Peek();
+                Dock availableDock = GetAvailableDockOfSize(ship.Size); 
         {
             foreach (Ship ship in this.Ships)
             {
@@ -109,6 +117,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     ship.DockedBy = availableDock;
                     availableDock.IsAvalible = false;
                     ship.History.Add($"{DateTime.Now} + {availableDock.Name}");
+                }
+            }
+           
+        }
+    }
+        
+       
+
+}
 
                 }
 
