@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+// spør marius om det er ok at man henter enums slik og at klassen med enums er public
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Ship
     {
         private string Name {  get; }
-        //private string Model {  get; }
-        public string Size { get; }
+        private ShipType Type {  get; }
+        public ShipSize Size { get; }
         public bool HasDocked { get; set; }
         public List<Cargo> Cargo { get; } = new List<Cargo>();
         public List<String> History { get; } = new List<String>();
         public Dock? DockedBy { get; set; }
-        public Ship(string shipName, /*string shipModel*/ string shipSize 
-            /*List<Cargo> shipCargoList*/) {
+        public Ship(string shipName, ShipType shipType, ShipSize shipSize) {
             this.Name = shipName;   
-            //this.Model = shipModel;
+            this.Type = shipType;
             this.Size = shipSize;
             this.HasDocked = false;
-            //this.Cargo = shipCargoList;
             this.DockedBy = null; 
         }
 
