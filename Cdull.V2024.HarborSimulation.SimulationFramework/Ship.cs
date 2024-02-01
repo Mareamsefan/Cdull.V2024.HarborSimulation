@@ -12,7 +12,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         //private string Model {  get; }
         public string Size { get; }
         public bool HasDocked { get; set; }
-        private List<Cargo> Cargo { get; } = new List<Cargo>();
+        public List<Cargo> Cargo { get; } = new List<Cargo>();
         public List<String> History { get; } = new List<String>();
         public Dock? DockedBy { get; set; }
         public Ship(string shipName, /*string shipModel*/ string shipSize 
@@ -26,15 +26,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-        public void InitializeCargos(int number, double weight)
+        public void InitializeCargos(int number, double weight = 10)
         {
-            for (int i = 0; i < number; i++)
+            for (int i = 0; i <= number; i++)
             {
-                Cargo cargo = new($"name{i}", weight);
+                Cargo cargo = new($"cargo{i}", weight);
                 this.Cargo.Add(cargo);
             }
 
         }
+
+        public void override()
 
 
     }

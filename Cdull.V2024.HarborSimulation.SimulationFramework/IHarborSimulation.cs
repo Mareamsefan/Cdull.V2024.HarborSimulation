@@ -20,13 +20,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public void InitializeDocks(int number, String docktype, Crane crane);
 
 
-
+        // made
         public void AddDock(Dock dock);
 
-
+        // made
         public void AddCrane(Crane crane);
 
-
+        // made
         public void Crane(bool IsCraneAvalible = true, bool IsCraneOutOfFuntion = false);
 
         // made 
@@ -43,25 +43,27 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         //made 
         void InitiateShipQueue(Queue<Ship> ShipQueue);
 
-
+        // made
         public void Dock(String name, String size, String dockType, Crane crane, bool IsAvalible = true);
 
 
-
+        // made
         public void Dock(String name, String size, String dockType, Crane crane, bool IsAvalible = true, Ship IsOccupiedBy = null);
+        // made
 
         public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList, String dockname);
 
 
-
+        // made
         void AddShips(Ship ship, List<Ship> ShipList);
 
 
+        // made
+        public void CargoStorage(int number, bool IsAvailable = true);
 
-        public void CargoStorageFacility(int number, bool IsAvailable = true);
-
-
+        
         void AddCargoToStorage(List<CargoStorage> cargoStorageFacility, List<Cargo> CargoList, Crane crane);
+
 
         void MoveCargoToShip(Cargo Cargo, SaveCargoHistory saveCargoHistory);
 
@@ -71,38 +73,43 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList,
             String dockname, bool isSailing);
 
+
         void Sailing(UnicodeEncoding id, DataSetDateTime datatime, Ship ship, Watch watch);
 
 
         void RecurringSailing(Boolean IsWeekly, Boolean IsDaily);
 
-        // fikk et nytt navn --> HasAvailableDockOfSize ligger i harbor
-        delegate void CheckIfDockAvailable(bool IsAvailable, String size);
+        // made
+        delegate void GetAvailableDockofSize(bool IsAvailable, String size);
 
+        // made
+        void DockShips();
 
-        void DockAt(Dock dock, DataSetDateTime datatime, Watch watch, CheckIfDockAvailable
-            checkIfDockAvailable);
-
-
+        // made ish (ligger i dockships)
         delegate void SaveShipHistory();
 
-        public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList, List<String> HistoryList, String dockname);
+        // made
+        public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList, List<String> HistoryList, Dock DockedBy);
 
 
         delegate void SaveCargoHistory();
 
+        // made
         public void Cargo(String name, double weight, List<String> HistoryList);
 
+        // made ish (need fix)
         void AddToQueue(Ship ship, Queue<Ship> ShipQueue);
 
-
-    
+        // made
         public void Watch(DataSetDateTime startTime, DataSetDateTime stopTime, bool IsCounting);
 
+        // made
         void StartCountingTime();
 
+        // made
         void StopCountingTime();
 
+        //made
         DateTime MeasureTimeElapsed();
 
     }
