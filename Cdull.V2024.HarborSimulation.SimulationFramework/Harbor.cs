@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel.Design;
 using System.Xml.Schema;
+using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
@@ -28,18 +29,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             return Cranes;
         }
-        public override string ToString()
-        {
-
-            string harborInfo = $"Harbor Name: {Name}\n" +
-                       $"Dock List: {string.Join(", ", Docks.Select(dock => dock.ToString()))}\n" +
-                       $"Ship List: {string.Join(", ", Ships.Select(ship => ship.ToString()))}\n" +
-                       $"Ship Queue: {string.Join(", ", WaitingShips.Select(ship => ship.ToString()))}\n" +
-                       $"Crane List: {string.Join(", ", Cranes.Select(crane => crane.ToString()))}\n" +
-                       $"Cargo Storage List: {string.Join(", ", CargoStorage.ToString())}";
-
-            return harborInfo;
-        }
 
         public void InitializeCranes(int numberOfCranes)
         {
@@ -50,7 +39,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
-        public void InitializeDocks(int numberOfDock, String type, String size)
+        public void InitializeDocks(int numberOfDock, DockType type,  DockSize size)
         {
             for (int i = 0; i <= numberOfDock; i++)
             {
@@ -63,22 +52,22 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        public void InitializeShips(int numberOfShips, string shipSize, int numberOfCargos, int CargoWeight = 10)
+        public void InitializeShips(int numberOfShips, ShipSize shipSize, ShipType shipType,  int numberOfCargos, int CargoWeight = 10)
         {
             for (int i = 0; i <= numberOfShips; i++)
             {
-                Ship ship = new($"ship{i}", shipSize);
+                Ship ship = new($"ship{i}", shipType, shipSize);
                 ship.InitializeCargos(numberOfCargos);
                 this.Ships.Add(ship);
             }
 
         }
 
-        public Dock GetAvailableDockOfSize(string shipSize)
+        public Dock GetAvailableDockOfSize(ShipSize shipSize)
         {
             foreach (Dock dock in this.Docks)
             {
-                if (dock.Size == shipSize && dock.IsAvalible)
+                if (dock.Size.Equals(shipSize) && dock.IsAvalible)
                 {
                     return dock;
                 }
@@ -146,6 +135,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
+        public override string ToString()
+        {
+
+            string harborInfo = $"Harbor Name: {Name}\n" +
+                       $"Dock List: {string.Join(", ", Docks.Select(dock => dock.ToString()))}\n" +
+                       $"Ship List: {string.Join(", ", Ships.Select(ship => ship.ToString()))}\n" +
+                       $"Ship Queue: {string.Join(", ", WaitingShips.Select(ship => ship.ToString()))}\n" +
+                       $"Crane List: {string.Join(", ", Cranes.Select(crane => crane.ToString()))}\n" +
+                       $"Cargo Storage List: {string.Join(", ", CargoStorage.ToString())}";
+
+            return harborInfo;
+        }
     }
     
     
