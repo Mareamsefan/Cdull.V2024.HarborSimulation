@@ -19,8 +19,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Harbor harbor = new Harbor("My Harbor", new CargoStorage("cargoStoage"));
             harbor.InitializeShips(10, "small", 10);
             harbor.InitializeCranes(10);
-            List<Crane> cranes = harbor.GetCraneList();  
-            harbor.InitializeDocks(10, "normal", "small", cranes);
+            harbor.InitializeDocks(10, "normal", "small");
             Console.WriteLine(harbor);
             
 

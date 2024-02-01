@@ -36,7 +36,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        public void override()
+        public override String ToString()
+        {
+            return Name;
+        }
 
 
     }

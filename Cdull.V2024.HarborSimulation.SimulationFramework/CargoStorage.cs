@@ -17,9 +17,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             this.Name = cargoStorageName;
             this.IsAvailable = true;
         }
-        public void AddCargoToList(Cargo cargo)
+        public void AddCargo(Cargo cargo)
         {
-            cargoList.Add(cargo);
+            Cargo.Add(cargo);
+        }
+        public void RemoveCargo(Cargo cargo)
+        {
+            Cargo.Remove(cargo);
         }
     }
 }
