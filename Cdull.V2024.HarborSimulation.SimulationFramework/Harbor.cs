@@ -9,7 +9,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
 
         private string Name { get; }
-        private Watch Watch { get; }
+        public Watch Watch { get; set; }
         private List<Dock> Docks { get; } = new List<Dock>();
         private List<Ship> Ships { get; } = new List<Ship>();
         private List<Ship> DockedShips { get; } = new List<Ship>();
@@ -25,9 +25,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             this.CargoStorage = harborCargoStorage; 
           
         }
-        public List<Crane> GetCraneList()
+
+        public void SetUpWatch(DateTime startWatch, DateTime stopWatch) 
         {
-            return Cranes;
+            this.Watch = new Watch(startWatch, stopWatch);
         }
 
         public void InitializeCranes(int numberOfCranes)
@@ -83,7 +84,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 this.WaitingShips.Enqueue(ship);
             }
         }
-
+        // inkluderer sikring av dock 
         public void DockShips()
         {   //kjører så lenge det er noen ship som venter på å docke 
             while (this.WaitingShips.Count < 0)
@@ -93,6 +94,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
                 if (availableDock is not null)
                 {
+                    if (ship.Size.Equals("Small")) {
+                        this.Watch.StartTime.AddSeconds(150);
+                    }
+                    else if (ship.Size.Equals("Medium"))
+                    {
+                        this.Watch.StartTime.AddSeconds(250);
+                    }
+                    // ca 16 min for docking 
+                    else
+                    {
+                        this.Watch.StartTime.AddSeconds(350);
+                    }
                     ship.HasDocked = true;
                     ship.DockedBy = availableDock;
                     availableDock.IsAvalible = false;
