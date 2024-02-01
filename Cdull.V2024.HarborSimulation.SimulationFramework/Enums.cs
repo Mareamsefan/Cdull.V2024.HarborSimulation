@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-    internal class Enums
+    public class Enums
     {
         public enum ShipType
         {
@@ -31,7 +31,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Medium,
             Large
         }
-        public enum DOckType
+        public enum DockType
         {
             ContainerDock,
             BulkerDock,
