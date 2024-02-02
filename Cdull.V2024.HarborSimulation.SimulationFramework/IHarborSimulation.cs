@@ -61,12 +61,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         // made
         public void CargoStorage(int number, bool IsAvailable = true);
 
-        
+        // made
         void AddCargoToStorage(List<CargoStorage> cargoStorageFacility, List<Cargo> CargoList, Crane crane);
 
-
-        void MoveCargoToShip(Cargo Cargo, SaveCargoHistory saveCargoHistory);
-
+        // made
+        void AddCargoToShip(int numberOfCargo, Ship ship);
 
 
         
