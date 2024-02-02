@@ -10,11 +10,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     public class Watch
     {
         public DateTime StartTime {  get; set; }
-        public DateTime StopTime { get; set; }
+        public DateTime EndTime { get; set; }
         private bool IsCounting { get; set; }   
-        public Watch(DateTime watchStartTime, DateTime watchStopTime) {
+        public Watch(DateTime watchStartTime, DateTime watchEndTime) {
             this.StartTime = watchStartTime;
-            this.StopTime = watchStopTime;
+            this.EndTime = watchEndTime;
             this.IsCounting = false; 
         }
 
@@ -35,7 +35,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             if (IsCounting)
             {
-                StopTime = DateTime.Now;
+                EndTime = DateTime.Now;
                 IsCounting = false;
             }
             else
@@ -46,7 +46,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         public TimeSpan MeasureTimeElapsed()
         {
-            TimeSpan elapsedTime = this.StopTime - this.StartTime;
+            TimeSpan elapsedTime = this.EndTime - this.StartTime;
             return elapsedTime; 
         }
     }
