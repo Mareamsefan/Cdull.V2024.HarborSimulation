@@ -12,14 +12,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public string Name { get; }
         public Size Size { get; }
         private DockType Type { get; }
-        public bool IsAvalible { get; set; }
+        public bool IsAvailable { get; set; }
         private Crane Crane { get; set; }
-        private Ship? OccupiedBy {  get; set; }
+        public Ship? OccupiedBy {  get; set; }
+
+        
+
         public Dock(string dockName, Size dockSize, DockType dockType, Crane dockCrane) {
                 this.Name = dockName;
                 this.Size = dockSize; 
                 this.Type = dockType;
-                this.IsAvalible = true;
+                this.IsAvailable = true;
                 this.Crane = dockCrane;
                 this.OccupiedBy = null; 
             
@@ -32,6 +35,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             return dockInfo;
         }
+        /*
+        public string DockedBy()
+        {
+            if (OccupiedBy != null)
+            {
+                return OccupiedBy.Name;
+            }
+            else
+            {
+                return "No ship docked";
+            }
+        }*/
 
     }
 }

@@ -68,7 +68,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             foreach (Dock dock in this.Docks)
             {
-                if (dock.Size.Equals(shipSize) && dock.IsAvalible)
+                if (dock.Size.Equals(shipSize) && dock.IsAvailable)
                 {
                     return dock;
                 }
@@ -109,7 +109,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     }
                     ship.HasDocked = true;
                     ship.DockedBy = availableDock;
-                    availableDock.IsAvalible = false;
+                    availableDock.IsAvailable = false;
+                    availableDock.OccupiedBy = ship; 
                     ship.History.Add($"{DateTime.Now} + {availableDock.Name}");
                     this.DockedShips.Add(ship);
                     this.WaitingShips.Dequeue();
@@ -156,6 +157,35 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
+        //NY
+        public void RemoveShipFromDock(Dock dock)
+        {
+            if (dock != null && dock.OccupiedBy != null)
+            {
+                Ship ship = (Ship)dock.OccupiedBy;
+
+                // Fjern skipet fra dokken
+                dock.OccupiedBy = null;
+
+                // Sett dokken til ledig igjen
+                dock.IsAvailable = true;
+
+                // Fjern skipet fra listen over dockede skip
+                DockedShips.Remove(ship);
+
+                Console.WriteLine($"Ship '{ship.Name}' has been removed from dock '{dock.Name}' and dock is now available.");
+            }
+            else if (dock == null)
+            {
+                Console.WriteLine("Dock parameter is null.");
+            }
+            else
+            {
+                Console.WriteLine($"Dock '{dock.Name}' is already available or no ship is docked in it.");
+            }
+        }
+
+
         public override string ToString()
         {
 
@@ -168,7 +198,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             return harborInfo;
         }
+
+
     }
+
+
     
     
 }
