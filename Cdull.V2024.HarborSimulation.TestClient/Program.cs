@@ -34,6 +34,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.Docks.Clear();
             DateTime mintid = new DateTime(2024, 2, 2, 10, 0, 0);
             harbor.Watch.StartCountingTime(mintid);
+            harbor.Watch.StartCountingTime(mintid);
+            Console.WriteLine(mintid);
+            
             Crane nycrane = new Crane("BigCrane");
             Dock nydock = new Dock("Anders", Enums.Size.Large, Enums.DockType.ContainerDock, nycrane);
             Ship badBoiShip = new Ship("FarligShip", Enums.ShipType.ContainerShip, Enums.Size.Large);
@@ -41,12 +44,21 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.Docks.Add(nydock);
 
             harbor.QueueShipsToDock();
+
+            
+
+            Console.WriteLine("\n");
             Console.WriteLine(harbor.WaitingShips.Count);
             Console.WriteLine(harbor.Docks.Count);
             Console.WriteLine(nydock.IsAvalible);
             Console.WriteLine(harbor.AvailableDockOfSize(badBoiShip.Size));
             Console.WriteLine(harbor.DockShips());
             Console.WriteLine(badBoiShip.HasDocked);
+            Console.WriteLine("\n");
+
+
+
+           
             
             
 

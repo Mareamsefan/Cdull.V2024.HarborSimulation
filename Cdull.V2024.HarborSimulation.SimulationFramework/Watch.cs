@@ -23,13 +23,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             if (!IsCounting)
             {
                 StartTime = specificTime;
-                IsCounting = true; 
+                IsCounting = true;
             }
             else
             {
                 Console.WriteLine("time is already counting");
             }
         }
+
 
         public void StopCountingTime()
         {
