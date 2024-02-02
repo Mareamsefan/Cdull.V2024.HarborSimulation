@@ -25,6 +25,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             
            
         }
+
+        /// <summary>
+        /// A method that returns information about the dock, such as name, size, 
+        /// type and the specific crane thats on this particular dock.
+        /// </summary>
+        /// <returns>A string with info about the dock.</returns>
         public override string ToString()
         {
 

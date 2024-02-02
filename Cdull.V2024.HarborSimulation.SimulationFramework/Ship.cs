@@ -25,8 +25,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             this.DockedBy = null; 
         }
 
-
-        public void InitializeCargos(int number, double weight = 10)
+        /// <summary>
+        /// A method to create cargo in the simulation.
+        /// </summary>
+        /// <param name="number">The amount of cargo you want to create.</param>
+        /// <param name="weight">The weight of each cargo you're creating.</param>
+        public void InitializeCargo(int number, double weight = 10)
         {
             for (int i = 0; i <= number; i++)
             {
@@ -36,6 +40,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
+        /// <summary>
+        /// A method that returns the name of the ship.
+        /// </summary>
+        /// <returns>Name of the ship.</returns>
         public override String ToString()
         {
             return Name;

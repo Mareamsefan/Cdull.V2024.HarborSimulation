@@ -20,6 +20,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             this.Weight = cargoWeight; 
         
         }
+
+        /// <summary>
+        /// A method that returns information about the cargo, such as name and weight in tons.
+        /// </summary>
+        /// <returns>Info about the cargo.</returns>
         public override string ToString()
         {
 
