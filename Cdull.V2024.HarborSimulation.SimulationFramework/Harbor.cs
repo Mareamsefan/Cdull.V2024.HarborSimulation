@@ -10,11 +10,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         private string Name { get; }
         public Watch Watch { get; set; }
-        private List<Dock> Docks { get; } = new List<Dock>();
-        private List<Ship> Ships { get; } = new List<Ship>();
-        private List<Ship> DockedShips { get; } = new List<Ship>();
-        private Queue<Ship> WaitingShips { get; } = new Queue<Ship>();
-        private List<Crane> Cranes { get; } = new List<Crane>();
+        public List<Dock> Docks { get; } = new List<Dock>();
+        public List<Ship> Ships { get; } = new List<Ship>();
+        public List<Ship> DockedShips { get; } = new List<Ship>();
+        public Queue<Ship> WaitingShips { get; } = new Queue<Ship>();
+        public List<Crane> Cranes { get; } = new List<Crane>();
 
         private CargoStorage CargoStorage { get; } = new CargoStorage("CargoStorage");
 
@@ -40,7 +40,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
-        public void InitializeDocks(int numberOfDock, DockType type,  DockSize size)
+        public void InitializeDocks(int numberOfDock, DockType type,  Size size)
         {
             for (int i = 0; i <= numberOfDock; i++)
             {
@@ -53,7 +53,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        public void InitializeShips(int numberOfShips, ShipSize shipSize, ShipType shipType,  int numberOfCargos, int CargoWeight = 10)
+        public void InitializeShips(int numberOfShips, Size shipSize, ShipType shipType,  int numberOfCargos, int CargoWeight = 10)
         {
             for (int i = 0; i <= numberOfShips; i++)
             {
@@ -64,7 +64,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        public Dock GetAvailableDockOfSize(ShipSize shipSize)
+        public Dock AvailableDockOfSize(Size shipSize)
         {
             foreach (Dock dock in this.Docks)
             {
@@ -85,15 +85,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
         // inkluderer sikring av dock 
-        public void DockShips()
+        
+        public String DockShips()
         {   //kjører så lenge det er noen ship som venter på å docke 
-            while (this.WaitingShips.Count < 0)
+            while (this.WaitingShips.Count > 0)
             {   // henter ut første skip i køen 
                 Ship ship = this.WaitingShips.Peek();
-                Dock availableDock = GetAvailableDockOfSize(ship.Size);
+                Dock availableDock = AvailableDockOfSize(ship.Size);
 
                 if (availableDock is not null)
-                {
+                {   
                     if (ship.Size.Equals("Small")) {
                         this.Watch.StartTime.AddSeconds(150);
                     }
@@ -112,14 +113,21 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     ship.History.Add($"{DateTime.Now} + {availableDock.Name}");
                     this.DockedShips.Add(ship);
                     this.WaitingShips.Dequeue();
+                    return "docket :)";
                 }
                 else
                 {   //avslutter løkken dersom det ikke er noen docker for dette skipet 
                     break;
+                    return "docket ikke pga..";
                 }
+            
             }
+            return "koden kjørte ikke";
         }
         
+
+   
+
 
         public void AddCargoToStorage()
         {

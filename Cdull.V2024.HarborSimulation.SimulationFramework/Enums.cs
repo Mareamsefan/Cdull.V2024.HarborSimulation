@@ -18,19 +18,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        public enum ShipSize
+        public enum Size
         {
             Small, 
             Medium, 
             Large
         }
 
-        public enum DockSize
-        {
-            Small,
-            Medium,
-            Large
-        }
+  
         public enum DockType
         {
             ContainerDock,

@@ -18,18 +18,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             this.IsCounting = false; 
         }
 
-        public void StartCountingTime()
+        public void StartCountingTime(DateTime specificTime)
         {
             if (!IsCounting)
             {
-                StartTime = DateTime.Now;
-                IsCounting = true; 
+                StartTime = specificTime;
+                IsCounting = true;
             }
             else
             {
                 Console.WriteLine("time is already counting");
             }
         }
+
 
         public void StopCountingTime()
         {
