@@ -10,14 +10,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Ship
     {
-        private string Name {  get; }
-        private ShipType Type {  get; }
-        public ShipSize Size { get; }
+
+        //Gjort public
+        public string Name {  get; }
+        //GJort public
+        public ShipType Type {  get; }
+        public Size Size { get; }
         public bool HasDocked { get; set; }
         public List<Cargo> Cargo { get; } = new List<Cargo>();
         public List<String> History { get; } = new List<String>();
         public Dock? DockedBy { get; set; }
-        public Ship(string shipName, ShipType shipType, ShipSize shipSize) {
+        public Ship(string shipName, ShipType shipType, Size shipSize) {
             this.Name = shipName;   
             this.Type = shipType;
             this.Size = shipSize;
