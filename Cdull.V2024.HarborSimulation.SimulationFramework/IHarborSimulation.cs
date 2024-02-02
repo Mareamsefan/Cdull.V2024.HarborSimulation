@@ -36,7 +36,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public void Cargo(String name, double weight);
 
 
-
         // made 
         public void Dock(String name, String size, String dockType = "CargohandlingDock");
 
@@ -49,8 +48,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         // made
         public void Dock(String name, String size, String dockType, Crane crane, bool IsAvalible = true, Ship IsOccupiedBy = null);
+       
         // made
-
         public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList, String dockname);
 
 
