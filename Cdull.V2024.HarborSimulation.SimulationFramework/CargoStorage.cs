@@ -16,7 +16,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public CargoStorage(string cargoStorageName) {
 
             name = cargoStorageName;
-            this.IsAvailable = true;
+            IsAvailable = true;
         }
 
         /// <summary>
