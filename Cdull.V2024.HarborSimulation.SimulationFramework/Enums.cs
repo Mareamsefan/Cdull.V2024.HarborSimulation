@@ -34,5 +34,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             LNGCarrierDock,
             RoRoDock
         }
+
+        public enum RecurringType
+        {
+            Daily,
+            Weekly
+        }
     }
 }
