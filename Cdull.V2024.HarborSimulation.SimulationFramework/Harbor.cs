@@ -8,7 +8,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     public class Harbor
     {
 
-        private string Name { get; }
+        private string name; 
         public Watch Watch { get; set; }
         public List<Dock> Docks { get; } = new List<Dock>();
         public List<Ship> Ships { get; } = new List<Ship>();
@@ -16,7 +16,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public Queue<Ship> WaitingShips { get; } = new Queue<Ship>();
         public List<Crane> Cranes { get; } = new List<Crane>();
 
-        private CargoStorage CargoStorage { get; } = new CargoStorage("CargoStorage");
+        internal CargoStorage cargoStorage  = new CargoStorage("CargoStorage");
 
         /// <summary>
         /// A method to create the harbor for the simulation.
@@ -25,7 +25,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="harborCargoStorage">Antall lagringsplasser ment for cargo</param>
         public Harbor(string harborName)
         {
-            this.Name = harborName;
+            name = harborName;
 
         }
         
@@ -36,7 +36,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="stopWatch">The date and time you want the simulation to stop.</param>
         public void SetUpWatch(DateTime startWatch, DateTime stopWatch) 
         {
-            this.Watch = new Watch(startWatch, stopWatch);
+            Watch = new Watch(startWatch, stopWatch);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             for (int i = 0; i <= numberOfCranes; i++)
             {
                 Crane crane = new($"crane{i}");
-                this.Cranes.Add(crane);
+                Cranes.Add(crane);
             }
         }
 
@@ -63,8 +63,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             for (int i = 0; i <= numberOfDock; i++)
             {
 
-                Dock dock = new($"dock{i}", size, type, this.Cranes[i]);
-                this.Docks.Add(dock);
+                Dock dock = new($"dock{i}", size, type, Cranes[i]);
+                Docks.Add(dock);
                 
 
             }
@@ -85,7 +85,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 Ship ship = new($"ship{i}", shipType, shipSize);
                 ship.InitializeCargo(numberOfCargos);
-                this.Ships.Add(ship);
+                Ships.Add(ship);
             }
 
         }
@@ -97,7 +97,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>A dock that has the same size as the ship and is available, if nothing is available, returns null.</returns>
         public Dock AvailableDockOfSize(Size shipSize)
         {
-            foreach (Dock dock in this.Docks)
+            foreach (Dock dock in Docks)
             {
                 if (dock.Size.Equals(shipSize) && dock.IsAvailable)
                 {
@@ -113,9 +113,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         public void QueueShipsToDock()
         {
-            foreach (Ship ship in this.Ships)
+            foreach (Ship ship in Ships)
             {
-                this.WaitingShips.Enqueue(ship);
+                WaitingShips.Enqueue(ship);
             }
         }
         // inkluderer sikring av dock 
@@ -127,9 +127,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         
         public String DockShips()
         {   //kjører så lenge det er noen ship som venter på å docke 
-            while (this.WaitingShips.Count > 0)
+            while (WaitingShips.Count > 0)
             {   // henter ut første skip i køen 
-                Ship ship = this.WaitingShips.Peek();
+                Ship ship = WaitingShips.Peek();
                 Dock availableDock = AvailableDockOfSize(ship.Size);
 
                 if (availableDock is not null)
@@ -140,14 +140,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     availableDock.IsAvailable = false;
                     availableDock.OccupiedBy = ship; 
                     ship.History.Add($"{DateTime.Now} + {availableDock.Name}");
-                    this.DockedShips.Add(ship);
-                    this.WaitingShips.Dequeue();
+                    DockedShips.Add(ship);
+                    WaitingShips.Dequeue();
                     return "docket :)";
                 }
                 else
                 {   //avslutter løkken dersom det ikke er noen docker for dette skipet 
-                    break;
-                    return "docket ikke pga..";
+                    break; 
                 }
             
             }
@@ -159,11 +158,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         public void AddCargoToStorage()
         {
-            foreach (Ship ship in this.Ships)
+            foreach (Ship ship in Ships)
             {
                 foreach (Cargo cargo in ship.Cargo)
                 {
-                    CargoStorage.AddCargo(cargo);
+                    cargoStorage.AddCargo(cargo);
                     ship.Cargo.Remove(cargo);
                 }
             }
@@ -180,10 +179,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             for (int i = 0; i <= numberOfCargo; i++)
             {
-                foreach (Cargo cargo in CargoStorage.Cargo)
+                foreach (Cargo cargo in cargoStorage.Cargo)
                 {
                     ship.Cargo.Add(cargo);
-                    CargoStorage.RemoveCargo(cargo);
+                    cargoStorage.RemoveCargo(cargo);
                 }
             }
         }
@@ -299,12 +298,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public override string ToString()
         {
 
-            string harborInfo = $"Harbor Name: {Name}\n" +
+            string harborInfo = $"Harbor Name: {name}\n" +
                        $"Dock List: {string.Join(", ", Docks.Select(dock => dock.ToString()))}\n" +
                        $"Ship List: {string.Join(", ", Ships.Select(ship => ship.ToString()))}\n" +
                        $"Ship Queue: {string.Join(", ", WaitingShips.Select(ship => ship.ToString()))}\n" +
                        $"Crane List: {string.Join(", ", Cranes.Select(crane => crane.ToString()))}\n" +
-                       $"Cargo Storage List: {string.Join(", ", CargoStorage.ToString())}";
+                       $"Cargo Storage List: {string.Join(", ", cargoStorage.ToString())}";
 
             return harborInfo;
         }
