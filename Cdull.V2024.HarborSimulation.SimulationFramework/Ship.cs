@@ -11,24 +11,24 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     public class Ship
     {
 
-        //Gjort public
-        public string Name {  get; }
+        //kanskje internal? 
+        internal string Name {  get; }
         //GJort public
-        public ShipType Type {  get; }
-        public Size Size { get; }
-        public bool HasDocked { get; set; }
-        public List<Cargo> Cargo { get; } = new List<Cargo>();
-        public List<String> History { get; } = new List<String>();
-        public bool isSailing { get; set; }
-        public Dock? DockedBy { get; set; }
+        internal ShipType Type {  get; }
+        internal Size Size { get; }
+        internal bool HasDocked { get; set; }
+        internal List<Cargo> Cargo { get; } = new List<Cargo>();
+        internal List<String> History { get; } = new List<String>();
+        internal bool isSailing { get; set; }
+        internal Dock? DockedBy { get; set; }
 
         public Ship(string shipName, ShipType shipType, Size shipSize) {
-            this.Name = shipName;   
-            this.Type = shipType;
-            this.Size = shipSize;
-            this.HasDocked = false;
-            this.DockedBy = null;
-            this.isSailing = false;
+            Name = shipName;   
+            Type = shipType;
+            Size = shipSize;
+            HasDocked = false;
+            DockedBy = null;
+            isSailing = false;
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             for (int i = 0; i <= number; i++)
             {
                 Cargo cargo = new($"cargo{i}", weight);
-                this.Cargo.Add(cargo);
+                Cargo.Add(cargo);
             }
 
         }

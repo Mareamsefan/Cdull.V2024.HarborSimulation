@@ -23,7 +23,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         {
             Console.WriteLine($"\n");
             // Scenario 1: 2 minutes elapses when small ships gets docked.
-            Console.WriteLine(" Scenario 1: 5 minutes elapses when small ships gets docked.");
+            Console.WriteLine(" Scenario 1: 2 minutes elapses when small ships gets docked.");
             //CargoStorage harborCargoStorage = new("cargoStorage");  
             // Eksempel på starttidspunkt (1. januar 2024 kl. 00:00:00)
             // År , måned, dag 

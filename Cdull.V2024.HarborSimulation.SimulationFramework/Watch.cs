@@ -94,19 +94,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 TimeSpan minutesToAdd = TimeSpan.FromMinutes(2);
                 AddTime(minutesToAdd);
-                Console.WriteLine("- if kjøres-");
+             
             }
             else if (size == Enums.Size.Medium)
             {
                 TimeSpan minutesToAdd = TimeSpan.FromMinutes(5);
                 AddTime(minutesToAdd);
-                Console.WriteLine("- else if kjøres-");
+          
             }
             else
             {
                 TimeSpan minutesToAdd = TimeSpan.FromMinutes(8);
                 AddTime(minutesToAdd);
-                Console.WriteLine("- else kjøres-");
+          
             }
         }
     }

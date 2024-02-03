@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class CargoStorage
-    { 
-        private string Name {  get; set; }
+    {
+        private string name; 
+        // kanksje internal? 
         public List<Cargo> Cargo {  get; set; } = new List<Cargo>();
         private bool IsAvailable { get; set; }
 
         public CargoStorage(string cargoStorageName) {
 
-            this.Name = cargoStorageName;
+            name = cargoStorageName;
             this.IsAvailable = true;
         }
 
