@@ -217,6 +217,81 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
         /// <summary>
+        /// A method to simulate a sailing for a ship.
+        /// </summary>
+        /// <param name="ship">The ship that is sailing</param>
+        /// <param name="sailingStartTime">The time of the departure</param>
+        //trenger vi sailingTimeStop????
+        public void Sailing(Ship ship, DateTime sailingStartTime, int numberOfDays)
+        {
+            if (Watch.CurrentTime == sailingStartTime)
+                if (ship.DockedBy != null)
+                {
+                    Console.WriteLine($"{ship} is ready for sailing. ");
+                    RemoveShipFromDock(ship.DockedBy);
+                    TimeSpan sailingTime = TimeSpan.FromDays(numberOfDays);
+                    Watch.AddTime(sailingTime);
+                    ship.isSailing = true;
+
+                }
+                else
+                {
+                    Console.WriteLine("Ship is not docked");
+                }
+            else
+            {
+                Console.WriteLine("Waiting for sailing");
+            }
+
+        }
+
+        public void RecurringSailing(Ship ship, DateTime sailingStartTime, RecurringType recurringType)
+        {
+            TimeSpan weeklySailing = TimeSpan.FromDays(7);
+            TimeSpan dailySailing = TimeSpan.FromDays(1);
+
+            if (ship.DockedBy != null)
+            {
+                RemoveShipFromDock(ship.DockedBy);
+
+                while (Watch.CurrentTime < sailingStartTime.AddDays(1))  // Repeat until the next day
+                {
+                    // Sjekk om det er daglig eller ukentlig seiling og legg til riktig tidsintervall
+                    if (recurringType == RecurringType.Daily)
+                    {
+                        RemoveShipFromDock(ship.DockedBy);
+                        ship.isSailing = true;
+                        Watch.AddTime(dailySailing);
+                        Console.WriteLine("Daily sailing! \n");
+                        Thread.Sleep(2000);
+                        QueueShipsToDock();
+                        DockShips();
+                        Console.WriteLine("Ship has returned from the sailing and is now docked!");
+                    }
+                    else if (recurringType == RecurringType.Weekly)
+                    {
+                        RemoveShipFromDock(ship.DockedBy);
+                        ship.isSailing = true;
+                        Watch.AddTime(weeklySailing);
+                        Console.WriteLine("Weekly Sailing! \n");
+                        Thread.Sleep(2000);
+                        QueueShipsToDock();
+                        DockShips();
+                        Console.WriteLine("Ship has returned from the sailing and is now docked!");
+                    }
+
+                    ship.isSailing = true;
+                    Console.WriteLine(Watch.MeasureTimeElapsed());
+                    Console.WriteLine(ship.isSailing);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ship is not docked");
+            }
+        }
+
+        /// <summary>
         /// Prints out information about the harbor, a list of all the docks, ships docked, 
         /// ships that are waiting in the ship queue, cranes and a list of the cargo storage.
         /// </summary>
