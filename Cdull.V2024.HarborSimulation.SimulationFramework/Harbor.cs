@@ -23,13 +23,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="harborName">Navnet på Havnen</param>
         /// <param name="harborCargoStorage">Antall lagringsplasser ment for cargo</param>
-        public Harbor(string harborName, CargoStorage harborCargoStorage)
+        public Harbor(string harborName)
         {
             this.Name = harborName;
-            this.CargoStorage = harborCargoStorage; 
-          
-        }
 
+        }
+        
         /// <summary>
         /// A method for the user to decide at what time they want to start and stop the simulation.
         /// </summary>
@@ -59,7 +58,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="numberOfDock">The amount of docks you want to create</param>
         /// <param name="type">The type of dock you want to create</param>
         /// <param name="size">The size of the dock you're creating</param>
-        public void InitializeDocks(int numberOfDock, DockType type,  DockSize size)
         public void InitializeDocks(int numberOfDock, DockType type,  Size size)
         {
             for (int i = 0; i <= numberOfDock; i++)
@@ -81,7 +79,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="shipType">The type of ship you want to create</param>
         /// <param name="numberOfCargos">The amount of cargo on the ship</param>
         /// <param name="CargoWeight">The weight of all the cargo on the ship</param>
-        public void InitializeShips(int numberOfShips, ShipSize shipSize, ShipType shipType,  int numberOfCargos, int CargoWeight = 10)
         public void InitializeShips(int numberOfShips, Size shipSize, ShipType shipType,  int numberOfCargos, int CargoWeight = 10)
         {
             for (int i = 0; i <= numberOfShips; i++)
@@ -98,7 +95,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="shipSize">The size of the ship</param>
         /// <returns>A dock that has the same size as the ship and is available, if nothing is available, returns null.</returns>
-        public Dock GetAvailableDockOfSize(ShipSize shipSize)
         public Dock AvailableDockOfSize(Size shipSize)
         {
             foreach (Dock dock in this.Docks)
@@ -128,7 +124,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// A method to dock the ships in the harbor. Docks all the ships that has a dock available
         /// to them (Checks size of the available docks and then docks the ship)
         /// </summary>
-        public void DockShips()
         
         public String DockShips()
         {   //kjører så lenge det er noen ship som venter på å docke 
@@ -138,19 +133,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 Dock availableDock = AvailableDockOfSize(ship.Size);
 
                 if (availableDock is not null)
-                {   
-                    if (ship.Size.Equals("Small")) {
-                        this.Watch.StartTime.AddSeconds(150);
-                    }
-                    else if (ship.Size.Equals("Medium"))
-                    {
-                        this.Watch.StartTime.AddSeconds(250);
-                    }
-                    // ca 16 min for docking 
-                    else
-                    {
-                        this.Watch.StartTime.AddSeconds(350);
-                    }
+                {
+                    Watch.TimeBasedOnSize(ship.Size); 
                     ship.HasDocked = true;
                     ship.DockedBy = availableDock;
                     availableDock.IsAvailable = false;

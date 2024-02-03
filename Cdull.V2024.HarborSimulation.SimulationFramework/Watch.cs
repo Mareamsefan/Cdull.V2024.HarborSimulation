@@ -1,59 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Watch
     {
-        public DateTime StartTime {  get; set; }
+        public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         private bool IsCounting { get; set; }
-
-        //NY
         public DateTime CurrentTime { get; private set; }
 
-        public Watch(DateTime watchStartTime, DateTime watchEndTime) {
+        public Watch(DateTime watchStartTime, DateTime watchEndTime)
+        {
             this.StartTime = watchStartTime;
             this.EndTime = watchEndTime;
-            this.IsCounting = false; 
+            this.IsCounting = false;
+            this.CurrentTime = watchStartTime; // Start med StartTime
         }
 
-        /// <summary>
-        /// A method that starts a timer.
-        /// </summary>
-        public void StartCountingTime()
-        public void StartCountingTime(DateTime specificTime)
-        {
-            if (!IsCounting)
-            {
-                StartTime = specificTime;
-                IsCounting = true;
-            }
-            else
-            {
-                Console.WriteLine("time is already counting");
-            }
-        }
-
-
-
-        //Ny (se på etterpå)
         public void AddTime(TimeSpan timeToAdd)
         {
             if (IsCounting)
             {
-                // Legg til tid i StartTime
-                CurrentTime = StartTime.Add(timeToAdd);
+                // Legg til tid i CurrentTime
+                CurrentTime = CurrentTime.Add(timeToAdd);
 
                 // Legg til tid i EndTime hvis den ikke er null
-                if (EndTime != DateTime.MinValue)
+                if (CurrentTime >= EndTime)
                 {
-                    EndTime = EndTime.Add(timeToAdd);
+                    Console.WriteLine("The simulation has ended.");
+                    IsCounting = false;
                 }
 
                 Console.WriteLine($"{timeToAdd} has passed from the start time. Current time is: {CurrentTime}");
@@ -64,35 +47,68 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
-     
+        public void StartCountingTime()
+        {
+            if (!IsCounting)
+            {
+                IsCounting = true;
+
+                Task.Run(async () =>
+                {
+                    while (IsCounting)
+                    {
+                        await Task.Delay(1000);
+                        AddTime(TimeSpan.FromSeconds(1)); // Legg til 1 sekund i gangen
+                        Console.WriteLine($"Current time: {CurrentTime}");
+                    }
+                });
+            }
+            else
+            {
+                Console.WriteLine("Timer is already counting.");
+            }
+        }
 
         public DateTime StopCountingTime()
-        /// <summary>
-        /// A method that stops the timer if its already been started, if a timer never was started nothing happens.
-        /// </summary>
-        public void StopCountingTime()
         {
             if (IsCounting)
             {
                 EndTime = CurrentTime;
                 IsCounting = false;
-               
             }
             else
             {
-                Console.WriteLine("time is currently not counting");
+                Console.WriteLine("Time is currently not counting.");
             }
             return EndTime;
         }
 
-        /// <summary>
-        /// A method to calculate how much time has gone by between when you started the timer and when it stopped.
-        /// </summary>
-        /// <returns>Returns time</returns>
         public TimeSpan MeasureTimeElapsed()
         {
-            TimeSpan elapsedTime = this.EndTime - this.StartTime;
-            return elapsedTime; 
+            return CurrentTime - StartTime;
+        }
+
+        public void TimeBasedOnSize(Size size)
+        {
+            if (size == Enums.Size.Small)
+            {
+                TimeSpan minutesToAdd = TimeSpan.FromMinutes(2);
+                AddTime(minutesToAdd);
+                Console.WriteLine("- if kjøres-");
+            }
+            else if (size == Enums.Size.Medium)
+            {
+                TimeSpan minutesToAdd = TimeSpan.FromMinutes(5);
+                AddTime(minutesToAdd);
+                Console.WriteLine("- else if kjøres-");
+            }
+            else
+            {
+                TimeSpan minutesToAdd = TimeSpan.FromMinutes(8);
+                AddTime(minutesToAdd);
+                Console.WriteLine("- else kjøres-");
+            }
         }
     }
+
 }
