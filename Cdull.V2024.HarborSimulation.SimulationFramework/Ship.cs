@@ -14,7 +14,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         //kanskje internal? 
         internal string Name {  get; }
         //GJort public
-        internal ShipType Type {  get; }
+        internal Model Model {  get; }
         internal Size Size { get; }
         internal bool HasDocked { get; set; }
         internal List<Cargo> Cargo { get; } = new List<Cargo>();
@@ -22,9 +22,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal bool isSailing { get; set; }
         internal Dock? DockedBy { get; set; }
 
-        public Ship(string shipName, ShipType shipType, Size shipSize) {
+
+        public Ship(string shipName, Model shipModel, Size shipSize) {
             Name = shipName;   
-            Type = shipType;
+            Model = shipModel;
             Size = shipSize;
             HasDocked = false;
             DockedBy = null;

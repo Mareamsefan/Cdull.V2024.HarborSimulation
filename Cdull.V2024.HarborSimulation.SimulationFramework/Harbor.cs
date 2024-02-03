@@ -14,7 +14,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public List<Ship> Ships { get; } = new List<Ship>();
         public List<Ship> DockedShips { get; } = new List<Ship>();
         public Queue<Ship> WaitingShips { get; } = new Queue<Ship>();
-        public List<Crane> Cranes { get; } = new List<Crane>();
 
         internal CargoStorage cargoStorage  = new CargoStorage("CargoStorage");
 
@@ -39,18 +38,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Watch = new Watch(startWatch, stopWatch);
         }
 
-        /// <summary>
-        /// A method to create cranes in the harbor, you choose how many with an int number
-        /// </summary>
-        /// <param name="numberOfCranes">The amount of cranes you want to make</param>
-        public void InitializeCranes(int numberOfCranes)
-        {
-            for (int i = 0; i <= numberOfCranes; i++)
-            {
-                Crane crane = new($"crane{i}");
-                Cranes.Add(crane);
-            }
-        }
+  
 
         /// <summary>
         /// A method to create docks in the harbor.
@@ -58,12 +46,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="numberOfDock">The amount of docks you want to create</param>
         /// <param name="type">The type of dock you want to create</param>
         /// <param name="size">The size of the dock you're creating</param>
-        public void InitializeDocks(int numberOfDock, DockType type,  Size size)
+        public void InitializeDocks(int numberOfDock, Model dockModel,  Size dockSize)
         {
             for (int i = 0; i <= numberOfDock; i++)
             {
 
-                Dock dock = new($"dock{i}", size, type, Cranes[i]);
+                Dock dock = new($"dock{i}", dockSize, dockModel, new Crane($"crane{i}"));
                 Docks.Add(dock);
                 
 
@@ -79,12 +67,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="shipType">The type of ship you want to create</param>
         /// <param name="numberOfCargos">The amount of cargo on the ship</param>
         /// <param name="CargoWeight">The weight of all the cargo on the ship</param>
-        public void InitializeShips(int numberOfShips, Size shipSize, ShipType shipType,  int numberOfCargos, int CargoWeight = 10)
+        public void InitializeShips(int numberOfShips, Size shipSize, Model shipModel,  int numberOfCargo, int CargoWeight = 10)
         {
             for (int i = 0; i <= numberOfShips; i++)
             {
-                Ship ship = new($"ship{i}", shipType, shipSize);
-                ship.InitializeCargo(numberOfCargos);
+                Ship ship = new($"ship{i}", shipModel, shipSize);
+                ship.InitializeCargo(numberOfCargo);
                 Ships.Add(ship);
             }
 
@@ -158,7 +146,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         public void AddCargoToStorage()
         {
-            foreach (Ship ship in Ships)
+            foreach (Ship ship in DockedShips)
             {
                 foreach (Cargo cargo in ship.Cargo)
                 {

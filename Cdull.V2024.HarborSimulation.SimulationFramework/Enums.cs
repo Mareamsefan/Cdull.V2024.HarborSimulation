@@ -8,7 +8,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Enums
     {
-        public enum ShipType
+        public enum Model
         {
             ContainerShip,
             Bulker,
@@ -25,15 +25,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Large
         }
 
-  
-        public enum DockType
-        {
-            ContainerDock,
-            BulkerDock,
-            TankerDock,
-            LNGCarrierDock,
-            RoRoDock
-        }
+    
 
         public enum RecurringType
         {
