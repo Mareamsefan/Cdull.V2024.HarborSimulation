@@ -18,7 +18,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         private CargoStorage CargoStorage { get; } = new CargoStorage("CargoStorage");
 
-
+        /// <summary>
+        /// A method to create the harbor for the simulation.
+        /// </summary>
+        /// <param name="harborName">Navnet på Havnen</param>
+        /// <param name="harborCargoStorage">Antall lagringsplasser ment for cargo</param>
         public Harbor(string harborName, CargoStorage harborCargoStorage)
         {
             this.Name = harborName;
@@ -26,11 +30,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
           
         }
 
+        /// <summary>
+        /// A method for the user to decide at what time they want to start and stop the simulation.
+        /// </summary>
+        /// <param name="startWatch">The date and time you want the simulation to start.</param>
+        /// <param name="stopWatch">The date and time you want the simulation to stop.</param>
         public void SetUpWatch(DateTime startWatch, DateTime stopWatch) 
         {
             this.Watch = new Watch(startWatch, stopWatch);
         }
 
+        /// <summary>
+        /// A method to create cranes in the harbor, you choose how many with an int number
+        /// </summary>
+        /// <param name="numberOfCranes">The amount of cranes you want to make</param>
         public void InitializeCranes(int numberOfCranes)
         {
             for (int i = 0; i <= numberOfCranes; i++)
@@ -40,6 +53,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
+        /// <summary>
+        /// A method to create docks in the harbor.
+        /// </summary>
+        /// <param name="numberOfDock">The amount of docks you want to create</param>
+        /// <param name="type">The type of dock you want to create</param>
+        /// <param name="size">The size of the dock you're creating</param>
+        public void InitializeDocks(int numberOfDock, DockType type,  DockSize size)
         public void InitializeDocks(int numberOfDock, DockType type,  Size size)
         {
             for (int i = 0; i <= numberOfDock; i++)
@@ -53,17 +73,32 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
+        /// <summary>
+        /// A method to create ships for the simulation. Were using Enum for the ships size and type.
+        /// </summary>
+        /// <param name="numberOfShips">The amount of ships you want to create</param>
+        /// <param name="shipSize">The size of the ships you're creating</param>
+        /// <param name="shipType">The type of ship you want to create</param>
+        /// <param name="numberOfCargos">The amount of cargo on the ship</param>
+        /// <param name="CargoWeight">The weight of all the cargo on the ship</param>
+        public void InitializeShips(int numberOfShips, ShipSize shipSize, ShipType shipType,  int numberOfCargos, int CargoWeight = 10)
         public void InitializeShips(int numberOfShips, Size shipSize, ShipType shipType,  int numberOfCargos, int CargoWeight = 10)
         {
             for (int i = 0; i <= numberOfShips; i++)
             {
                 Ship ship = new($"ship{i}", shipType, shipSize);
-                ship.InitializeCargos(numberOfCargos);
+                ship.InitializeCargo(numberOfCargos);
                 this.Ships.Add(ship);
             }
 
         }
 
+        /// <summary>
+        /// A method to get available docks for the ships that want to dock.
+        /// </summary>
+        /// <param name="shipSize">The size of the ship</param>
+        /// <returns>A dock that has the same size as the ship and is available, if nothing is available, returns null.</returns>
+        public Dock GetAvailableDockOfSize(ShipSize shipSize)
         public Dock AvailableDockOfSize(Size shipSize)
         {
             foreach (Dock dock in this.Docks)
@@ -77,6 +112,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return null;
         }
 
+        /// <summary>
+        /// A method that puts ALL the ships in the simulation into the waiting queue.
+        /// </summary>
         public void QueueShipsToDock()
         {
             foreach (Ship ship in this.Ships)
@@ -85,6 +123,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
         // inkluderer sikring av dock 
+
+        /// <summary>
+        /// A method to dock the ships in the harbor. Docks all the ships that has a dock available
+        /// to them (Checks size of the available docks and then docks the ship)
+        /// </summary>
+        public void DockShips()
         
         public String DockShips()
         {   //kjører så lenge det er noen ship som venter på å docke 
@@ -126,10 +170,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return "koden kjørte ikke";
         }
         
-
-   
-
-
+        /// <summary>
+        /// A method to move cargo from a ship to the harbor.
+        /// </summary>
         public void AddCargoToStorage()
         {
             foreach (Ship ship in this.Ships)
@@ -144,7 +187,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-
+        /// <summary>
+        /// A method to move cargo from the harbor onto a ship.
+        /// </summary>
+        /// <param name="numberOfCargo">The amount of cargo you want to move</param>
+        /// <param name="ship">The ship you want to move the cargo to</param>
         public void AddCargoToShip(int numberOfCargo, Ship ship)
         {
             for (int i = 0; i <= numberOfCargo; i++)
@@ -185,7 +232,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
-
+        /// <summary>
+        /// Prints out information about the harbor, a list of all the docks, ships docked, 
+        /// ships that are waiting in the ship queue, cranes and a list of the cargo storage.
+        /// </summary>
+        /// <returns>A string with all the info</returns>
         public override string ToString()
         {
 

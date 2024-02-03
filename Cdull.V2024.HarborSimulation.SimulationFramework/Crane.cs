@@ -19,6 +19,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             this.isCraneOutOfFuntion = false;
         }
 
+        /// <summary>
+        /// A method to returns information about the crane.
+        /// </summary>
+        /// <returns>The name of the crane.</returns>
         public override string ToString()
         {
 

@@ -23,6 +23,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             this.IsCounting = false; 
         }
 
+        /// <summary>
+        /// A method that starts a timer.
+        /// </summary>
+        public void StartCountingTime()
         public void StartCountingTime(DateTime specificTime)
         {
             if (!IsCounting)
@@ -63,6 +67,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
      
 
         public DateTime StopCountingTime()
+        /// <summary>
+        /// A method that stops the timer if its already been started, if a timer never was started nothing happens.
+        /// </summary>
+        public void StopCountingTime()
         {
             if (IsCounting)
             {
@@ -77,6 +85,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return EndTime;
         }
 
+        /// <summary>
+        /// A method to calculate how much time has gone by between when you started the timer and when it stopped.
+        /// </summary>
+        /// <returns>Returns time</returns>
         public TimeSpan MeasureTimeElapsed()
         {
             TimeSpan elapsedTime = this.EndTime - this.StartTime;
