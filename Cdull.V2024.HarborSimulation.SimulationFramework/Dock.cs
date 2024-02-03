@@ -39,7 +39,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public override string ToString()
         {
 
-            string dockInfo = Name + " " + Size + " " + model + " " + crane;
+            string dockInfo = "Dock: "+ Name + " Size:  " + Size + " Model:  " + model + " Crane:  " + crane + " IsAvailable: " + IsAvailable;
 
             return dockInfo;
         }

@@ -22,7 +22,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             this.StartTime = watchStartTime;
             this.EndTime = watchEndTime;
             this.IsCounting = false;
-            this.CurrentTime = watchStartTime; // Start med StartTime
+            this.CurrentTime = watchStartTime; 
         }
 
         public void AddTime(TimeSpan timeToAdd)

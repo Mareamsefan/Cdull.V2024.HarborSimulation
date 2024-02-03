@@ -39,7 +39,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="weight">The weight of each cargo you're creating.</param>
         public void InitializeCargo(int number, double weight = 10)
         {
-            for (int i = 0; i <= number; i++)
+            for (int i = 0; i < number; i++)
             {
                 Cargo cargo = new($"cargo{i}", weight);
                 Cargo.Add(cargo);
@@ -53,7 +53,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>Name of the ship.</returns>
         public override String ToString()
         {
-            return Name;
+            return "Name: " + Name + " Model: "+ Model + " Size: " + Size + " Has docked: " + HasDocked; 
         }
 
 

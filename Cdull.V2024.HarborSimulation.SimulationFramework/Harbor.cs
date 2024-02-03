@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.Design;
+using System.Text;
 using System.Xml.Schema;
 using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
@@ -9,7 +10,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
 
         private string name; 
-        public Watch Watch { get; set; }
+        public Watch Watch { get; }
         public List<Dock> Docks { get; } = new List<Dock>();
         public List<Ship> Ships { get; } = new List<Ship>();
         public List<Ship> DockedShips { get; } = new List<Ship>();
@@ -33,10 +34,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="startWatch">The date and time you want the simulation to start.</param>
         /// <param name="stopWatch">The date and time you want the simulation to stop.</param>
-        public void SetUpWatch(DateTime startWatch, DateTime stopWatch) 
+        /*public void SetUpWatch(DateTime startWatch, DateTime stopWatch) 
         {
             Watch = new Watch(startWatch, stopWatch);
-        }
+        }*/
 
   
 
@@ -48,7 +49,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="size">The size of the dock you're creating</param>
         public void InitializeDocks(int numberOfDock, Model dockModel,  Size dockSize)
         {
-            for (int i = 0; i <= numberOfDock; i++)
+            for (int i = 0; i < numberOfDock; i++)
             {
 
                 Dock dock = new($"dock{i}", dockSize, dockModel, new Crane($"crane{i}"));
@@ -69,7 +70,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="CargoWeight">The weight of all the cargo on the ship</param>
         public void InitializeShips(int numberOfShips, Size shipSize, Model shipModel,  int numberOfCargo, int CargoWeight = 10)
         {
-            for (int i = 0; i <= numberOfShips; i++)
+            for (int i = 0; i < numberOfShips; i++)
             {
                 Ship ship = new($"ship{i}", shipModel, shipSize);
                 ship.InitializeCargo(numberOfCargo);
@@ -112,35 +113,41 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// A method to dock the ships in the harbor. Docks all the ships that has a dock available
         /// to them (Checks size of the available docks and then docks the ship)
         /// </summary>
-        
-        public String DockShips()
-        {   //kjører så lenge det er noen ship som venter på å docke 
+
+        public void DockShips()
+        {
             while (WaitingShips.Count > 0)
-            {   // henter ut første skip i køen 
+            {
+                bool AllShipsDockedPrinted = false; 
+                if (WaitingShips.Count == 0 && !AllShipsDockedPrinted)
+                {
+                    Console.WriteLine("All ships docked successfully.");
+                    AllShipsDockedPrinted = true;  // Sett indikatoren til true for å unngå flere utskrifter
+                }
+
                 Ship ship = WaitingShips.Peek();
                 Dock availableDock = AvailableDockOfSize(ship.Size);
 
                 if (availableDock is not null)
                 {
-                    Watch.TimeBasedOnSize(ship.Size); 
                     ship.HasDocked = true;
                     ship.DockedBy = availableDock;
                     availableDock.IsAvailable = false;
-                    availableDock.OccupiedBy = ship; 
+                    availableDock.OccupiedBy = ship;
                     ship.History.Add($"{DateTime.Now} + {availableDock.Name}");
                     DockedShips.Add(ship);
                     WaitingShips.Dequeue();
-                    return "docket :)";
                 }
                 else
-                {   //avslutter løkken dersom det ikke er noen docker for dette skipet 
-                    break; 
+                {
+                    
+                    Console.WriteLine("No available dock for this ship.");
+                    break;
                 }
-            
             }
-            return "koden kjørte ikke";
+           
         }
-        
+
         /// <summary>
         /// A method to move cargo from a ship to the harbor.
         /// </summary>
@@ -290,7 +297,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                        $"Dock List: {string.Join(", ", Docks.Select(dock => dock.ToString()))}\n" +
                        $"Ship List: {string.Join(", ", Ships.Select(ship => ship.ToString()))}\n" +
                        $"Ship Queue: {string.Join(", ", WaitingShips.Select(ship => ship.ToString()))}\n" +
-                       $"Crane List: {string.Join(", ", Cranes.Select(crane => crane.ToString()))}\n" +
+                    
                        $"Cargo Storage List: {string.Join(", ", cargoStorage.ToString())}";
 
             return harborInfo;

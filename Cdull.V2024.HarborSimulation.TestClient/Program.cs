@@ -10,13 +10,15 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         static void Main(string[] args)
         {
 
-            Scenario_1(); 
+          /*  Scenario_1(); 
             Scenario_2();
-            Scenario_3();
+            Scenario_3();*/
 
-
-
-
+            IHarborSimulation driver = new Simulation();
+            DateTime startTime = new DateTime(2024, 1, 1);
+            DateTime endTime = new DateTime(2024, 1, 4);
+            driver.Run(startTime, endTime, 2, Enums.Size.Medium, 10, Enums.Model.ContainerShip, 2, Enums.Size.Medium, Enums.Model.ContainerShip);
+            
         }
 
         static void Scenario_1()
@@ -31,15 +33,15 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             DateTime EndTime = new DateTime(2023, 1, 3, 12, 0, 0);
 
             Harbor harbor = new Harbor("Cdull Harbor");
-            harbor.SetUpWatch(startTime, EndTime);
+            //harbor.SetUpWatch(startTime, EndTime);
             Console.WriteLine($"Starttime: {startTime}");
             Console.WriteLine($"Endtime: {EndTime}");
             harbor.Watch.StartCountingTime();
 
             //setter opp noen et ship, og et dockslik at et skip kan docked: 
-            Ship ship = new Ship("SKIPET", Enums.ShipType.ContainerShip, Enums.Size.Small);
+            Ship ship = new Ship("SKIPET", Enums.Model.ContainerShip, Enums.Size.Small);
             Crane crane = new Crane("DOCK CRANE");
-            Dock dock = new Dock("DOCKEN", Enums.Size.Small, Enums.DockType.ContainerDock, crane);
+            Dock dock = new Dock("DOCKEN", Enums.Size.Small, Enums.Model.ContainerShip, crane);
 
             // legger til shipet i harbor
             harbor.Ships.Add(ship);
@@ -72,15 +74,15 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             DateTime EndTime = new DateTime(2023, 1, 3, 12, 0, 0);
 
             Harbor harbor = new Harbor("Cdull Harbor");
-            harbor.SetUpWatch(startTime, EndTime);
+            //harbor.SetUpWatch(startTime, EndTime);
             Console.WriteLine($"Starttime: {startTime}");
             Console.WriteLine($"Endtime: {EndTime}");
             harbor.Watch.StartCountingTime();
 
             //setter opp noen et ship, og et dockslik at et skip kan docked: 
-            Ship ship = new Ship("SKIPET", Enums.ShipType.ContainerShip, Enums.Size.Medium);
+            Ship ship = new Ship("SKIPET", Enums.Model.ContainerShip, Enums.Size.Medium);
             Crane crane = new Crane("DOCK CRANE");
-            Dock dock = new Dock("DOCKEN", Enums.Size.Medium, Enums.DockType.ContainerDock, crane);
+            Dock dock = new Dock("DOCKEN", Enums.Size.Medium, Enums.Model.ContainerShip, crane);
 
             // legger til shipet i harbor
             harbor.Ships.Add(ship);
@@ -111,15 +113,15 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             DateTime EndTime = new DateTime(2023, 1, 3, 12, 0, 0);
 
             Harbor harbor = new Harbor("Cdull Harbor");
-            harbor.SetUpWatch(startTime, EndTime);
+            //harbor.SetUpWatch(startTime, EndTime);
             Console.WriteLine($"Starttime: {startTime}");
             Console.WriteLine($"Endtime: {EndTime}");
             harbor.Watch.StartCountingTime();
 
             //setter opp noen et ship, og et dockslik at et skip kan docked: 
-            Ship ship = new Ship("SKIPET", Enums.ShipType.ContainerShip, Enums.Size.Large);
+            Ship ship = new Ship("SKIPET", Enums.Model.ContainerShip, Enums.Size.Large);
             Crane crane = new Crane("DOCK CRANE");
-            Dock dock = new Dock("DOCKEN", Enums.Size.Large, Enums.DockType.ContainerDock, crane);
+            Dock dock = new Dock("DOCKEN", Enums.Size.Large, Enums.Model.ContainerShip, crane);
 
             // legger til shipet i harbor
             harbor.Ships.Add(ship);
@@ -137,5 +139,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine($"Elapsed time: {elapsedTime}");
             Console.WriteLine($"\n");
         }
+
+       
     }
 }
