@@ -15,9 +15,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Scenario_3();*/
 
             IHarborSimulation driver = new Simulation();
-            DateTime startTime = new DateTime(2024, 1, 1);
-            DateTime endTime = new DateTime(2024, 1, 4);
-            driver.Run(startTime, endTime, 2, Enums.Size.Medium, 10, Enums.Model.ContainerShip, 2, Enums.Size.Medium, Enums.Model.ContainerShip);
+            DateTime startTime = new DateTime(2024, 1, 1, 00, 0, 0);
+            DateTime endTime = new DateTime(2024, 1, 6);
+            driver.Run(startTime, endTime, 3, Enums.Size.Large, 10, Enums.Model.ContainerShip, 3, Enums.Size.Large, Enums.Model.ContainerShip);
             
         }
 
@@ -53,7 +53,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine($"Docks in harbor: {harbor.Docks.Count}");
 
             // docker shipet: 
-            harbor.DockShips();
+            harbor.DockShips(harbor.Watch.CurrentTime);
             Console.WriteLine($"Docked ships in harbor: {harbor.DockedShips.Count}");
             TimeSpan elapsedTime = harbor.Watch.MeasureTimeElapsed();
             Console.WriteLine($"Elapsed time: {elapsedTime}");
@@ -94,7 +94,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine($"Docks in harbor: {harbor.Docks.Count}");
 
             // docker shipet: 
-            harbor.DockShips();
+            harbor.DockShips(harbor.Watch.CurrentTime);
             Console.WriteLine($"Docked ships in harbor: {harbor.DockedShips.Count}");
             TimeSpan elapsedTime = harbor.Watch.MeasureTimeElapsed();
             Console.WriteLine($"Elapsed time: {elapsedTime}"); 
@@ -133,7 +133,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine($"Docks in harbor: {harbor.Docks.Count}");
 
             // docker shipet: 
-            harbor.DockShips();
+            harbor.DockShips(harbor.Watch.CurrentTime);
             Console.WriteLine($"Docked ships in harbor: {harbor.DockedShips.Count}");
             TimeSpan elapsedTime = harbor.Watch.MeasureTimeElapsed();
             Console.WriteLine($"Elapsed time: {elapsedTime}");

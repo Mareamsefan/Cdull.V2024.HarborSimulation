@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +17,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal Size Size { get; }
         internal bool HasDocked { get; set; }
         internal List<Cargo> Cargo { get; } = new List<Cargo>();
-        internal List<String> History { get; } = new List<String>();
-        internal bool isSailing { get; set; }
-        internal Dock? DockedBy { get; set; }
+        internal List<string> History { get; } = new List<String>();
+        internal bool IsSailing { get; set; }
+        internal bool IsWaitingForSailing { get; set; }
+        internal int ShipSpeed { get; private set; }
+        internal Dock? DockedAt { get; set; }
 
 
         public Ship(string shipName, Model shipModel, Size shipSize) {
@@ -28,8 +29,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Model = shipModel;
             Size = shipSize;
             HasDocked = false;
-            DockedBy = null;
-            isSailing = false;
+            DockedAt = null;
+            IsSailing = false;
+            IsWaitingForSailing = false;
+            ShipSpeed = 100; 
         }
 
         /// <summary>

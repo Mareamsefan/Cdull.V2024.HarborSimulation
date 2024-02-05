@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,39 +19,52 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         public void Run(DateTime starttime, DateTime endTime, int numberOfShips, Enums.Size shipSize, int numberOfCargoOnShip, Enums.Model shipModel, int numberOfDocks, Enums.Size dockSize, Enums.Model dockModel)
         {
             var currentTime = starttime;
+            Harbor harbor = new Harbor("Harbor");
+            CargoStorage cargoStorage = new CargoStorage("CargoStorage");
+            harbor.WaitingShips.Clear();
+            harbor.DockedShips.Clear();
+            harbor.Docks.Clear();
+            harbor.Ships.Clear();
+            harbor.SailingShips.Clear();
+            harbor.InitializeDocks(numberOfDocks, dockModel, dockSize);
+            harbor.InitializeShips(numberOfShips, shipSize, shipModel, numberOfCargoOnShip);
 
             while (currentTime < endTime)
             {
-                Thread.Sleep(10);
-                Harbor harbor = new Harbor("Harbor");
-                CargoStorage cargoStorage = new CargoStorage("CargoStorage");
-                harbor.InitializeDocks(numberOfDocks, dockModel, dockSize);
-                harbor.InitializeShips(numberOfShips, shipSize, shipModel, numberOfCargoOnShip);
                 harbor.QueueShipsToDock();
-                harbor.DockShips();
-               
+                
+                harbor.DockShips(currentTime);
+                harbor.AddCargoToStorage();
+                harbor.AddCargoToShip(10);
+              
+                // Geting the ship I want to sail: 
+                foreach (Ship ship in harbor.Ships)
+                {
+                    harbor.Sailing(ship, currentTime, new DateTime(2024, 1, 2), 1); 
+                }
+              
                 if (currentTime.Hour == 0 && currentTime.Minute == 0)
                 {
+                    Console.WriteLine($"\n");
                     Console.WriteLine($"Currentime: {currentTime}");
-                    Console.WriteLine($"Docks in harbor: ");
-                    foreach (Dock dock in harbor.Docks)
-                    {
-                        Console.WriteLine(dock.ToString());
-                    }
-                    Console.WriteLine($"ships waiting to dock to harbor: ");
-                    foreach (Ship ship in harbor.WaitingShips)
-                    {
-                        Console.WriteLine(ship.ToString());
-                    }
-                    Console.WriteLine($"ships docked in harbor: ");
-                    foreach (Ship ship in harbor.DockedShips)
-                    {
-                        Console.WriteLine(ship.ToString());
-                    }
-                }
-     
+                    Console.WriteLine($"Docks in harbor: " + harbor.Docks.Count());
+                 
+                    
+                    Console.WriteLine($"ships waiting to dock to harbor: " + harbor.WaitingShips.Count());
+                    
 
-                //harbor.AddCargoToStorage(); 
+                    Console.WriteLine($"ships docked in harbor: " + harbor.DockedShips.Count());
+                    
+                    foreach (Ship ship in harbor.Ships)
+                    {
+                        foreach (String history in ship.History)
+                        {
+                            Console.WriteLine(history);
+                        }
+                    }
+                    
+                }
+                Thread.Sleep(1);
                 currentTime = currentTime.AddMinutes(1);
 
                 if (currentTime >= endTime)

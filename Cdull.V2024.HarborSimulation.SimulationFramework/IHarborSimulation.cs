@@ -12,9 +12,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
 
         public void Run(DateTime starttime, DateTime endTime, int numberOfShips, Size shipSize, int numberOfCargoOnShip, Model shipModel, int numberOfDocks,
-             Size dockSize, Model dockModel); 
+             Size dockSize, Model dockModel);
 
-
+       // public void SetSailing(); 
     }
 }
 
