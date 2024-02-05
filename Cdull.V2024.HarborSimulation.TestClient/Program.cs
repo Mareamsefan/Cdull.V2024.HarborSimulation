@@ -10,13 +10,15 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         static void Main(string[] args)
         {
 
-            Scenario_1(); 
+          /*  Scenario_1(); 
             Scenario_2();
-            Scenario_3();
+            Scenario_3();*/
 
-
-
-
+            IHarborSimulation driver = new Simulation();
+            DateTime startTime = new DateTime(2024, 1, 1, 00, 0, 0);
+            DateTime endTime = new DateTime(2024, 1, 6);
+            driver.Run(startTime, endTime, 3, Enums.Size.Large, 10, Enums.Model.ContainerShip, 3, Enums.Size.Large, Enums.Model.ContainerShip);
+            
         }
 
         static void Scenario_1()
@@ -31,15 +33,15 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             DateTime EndTime = new DateTime(2023, 1, 3, 12, 0, 0);
 
             Harbor harbor = new Harbor("Cdull Harbor");
-            harbor.SetUpWatch(startTime, EndTime);
+            //harbor.SetUpWatch(startTime, EndTime);
             Console.WriteLine($"Starttime: {startTime}");
             Console.WriteLine($"Endtime: {EndTime}");
             harbor.Watch.StartCountingTime();
 
             //setter opp noen et ship, og et dockslik at et skip kan docked: 
-            Ship ship = new Ship("SKIPET", Enums.ShipType.ContainerShip, Enums.Size.Small);
+            Ship ship = new Ship("SKIPET", Enums.Model.ContainerShip, Enums.Size.Small);
             Crane crane = new Crane("DOCK CRANE");
-            Dock dock = new Dock("DOCKEN", Enums.Size.Small, Enums.DockType.ContainerDock, crane);
+            Dock dock = new Dock("DOCKEN", Enums.Size.Small, Enums.Model.ContainerShip, crane);
 
             // legger til shipet i harbor
             harbor.Ships.Add(ship);
@@ -51,7 +53,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine($"Docks in harbor: {harbor.Docks.Count}");
 
             // docker shipet: 
-            harbor.DockShips();
+            harbor.DockShips(harbor.Watch.CurrentTime);
             Console.WriteLine($"Docked ships in harbor: {harbor.DockedShips.Count}");
             TimeSpan elapsedTime = harbor.Watch.MeasureTimeElapsed();
             Console.WriteLine($"Elapsed time: {elapsedTime}");
@@ -72,15 +74,15 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             DateTime EndTime = new DateTime(2023, 1, 3, 12, 0, 0);
 
             Harbor harbor = new Harbor("Cdull Harbor");
-            harbor.SetUpWatch(startTime, EndTime);
+            //harbor.SetUpWatch(startTime, EndTime);
             Console.WriteLine($"Starttime: {startTime}");
             Console.WriteLine($"Endtime: {EndTime}");
             harbor.Watch.StartCountingTime();
 
             //setter opp noen et ship, og et dockslik at et skip kan docked: 
-            Ship ship = new Ship("SKIPET", Enums.ShipType.ContainerShip, Enums.Size.Medium);
+            Ship ship = new Ship("SKIPET", Enums.Model.ContainerShip, Enums.Size.Medium);
             Crane crane = new Crane("DOCK CRANE");
-            Dock dock = new Dock("DOCKEN", Enums.Size.Medium, Enums.DockType.ContainerDock, crane);
+            Dock dock = new Dock("DOCKEN", Enums.Size.Medium, Enums.Model.ContainerShip, crane);
 
             // legger til shipet i harbor
             harbor.Ships.Add(ship);
@@ -92,7 +94,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine($"Docks in harbor: {harbor.Docks.Count}");
 
             // docker shipet: 
-            harbor.DockShips();
+            harbor.DockShips(harbor.Watch.CurrentTime);
             Console.WriteLine($"Docked ships in harbor: {harbor.DockedShips.Count}");
             TimeSpan elapsedTime = harbor.Watch.MeasureTimeElapsed();
             Console.WriteLine($"Elapsed time: {elapsedTime}"); 
@@ -111,15 +113,15 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             DateTime EndTime = new DateTime(2023, 1, 3, 12, 0, 0);
 
             Harbor harbor = new Harbor("Cdull Harbor");
-            harbor.SetUpWatch(startTime, EndTime);
+            //harbor.SetUpWatch(startTime, EndTime);
             Console.WriteLine($"Starttime: {startTime}");
             Console.WriteLine($"Endtime: {EndTime}");
             harbor.Watch.StartCountingTime();
 
             //setter opp noen et ship, og et dockslik at et skip kan docked: 
-            Ship ship = new Ship("SKIPET", Enums.ShipType.ContainerShip, Enums.Size.Large);
+            Ship ship = new Ship("SKIPET", Enums.Model.ContainerShip, Enums.Size.Large);
             Crane crane = new Crane("DOCK CRANE");
-            Dock dock = new Dock("DOCKEN", Enums.Size.Large, Enums.DockType.ContainerDock, crane);
+            Dock dock = new Dock("DOCKEN", Enums.Size.Large, Enums.Model.ContainerShip, crane);
 
             // legger til shipet i harbor
             harbor.Ships.Add(ship);
@@ -131,11 +133,13 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine($"Docks in harbor: {harbor.Docks.Count}");
 
             // docker shipet: 
-            harbor.DockShips();
+            harbor.DockShips(harbor.Watch.CurrentTime);
             Console.WriteLine($"Docked ships in harbor: {harbor.DockedShips.Count}");
             TimeSpan elapsedTime = harbor.Watch.MeasureTimeElapsed();
             Console.WriteLine($"Elapsed time: {elapsedTime}");
             Console.WriteLine($"\n");
         }
+
+       
     }
 }

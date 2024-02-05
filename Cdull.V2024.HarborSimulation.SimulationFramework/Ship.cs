@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,21 +13,26 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         //kanskje internal? 
         internal string Name {  get; }
         //GJort public
-        internal ShipType Type {  get; }
+        internal Model Model {  get; }
         internal Size Size { get; }
         internal bool HasDocked { get; set; }
         internal List<Cargo> Cargo { get; } = new List<Cargo>();
-        internal List<String> History { get; } = new List<String>();
-        internal bool isSailing { get; set; }
-        internal Dock? DockedBy { get; set; }
+        internal List<string> History { get; } = new List<String>();
+        internal bool IsSailing { get; set; }
+        internal bool IsWaitingForSailing { get; set; }
+        internal int ShipSpeed { get; private set; }
+        internal Dock? DockedAt { get; set; }
 
-        public Ship(string shipName, ShipType shipType, Size shipSize) {
+
+        public Ship(string shipName, Model shipModel, Size shipSize) {
             Name = shipName;   
-            Type = shipType;
+            Model = shipModel;
             Size = shipSize;
             HasDocked = false;
-            DockedBy = null;
-            isSailing = false;
+            DockedAt = null;
+            IsSailing = false;
+            IsWaitingForSailing = false;
+            ShipSpeed = 100; 
         }
 
         /// <summary>
@@ -38,7 +42,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="weight">The weight of each cargo you're creating.</param>
         public void InitializeCargo(int number, double weight = 10)
         {
-            for (int i = 0; i <= number; i++)
+            for (int i = 0; i < number; i++)
             {
                 Cargo cargo = new($"cargo{i}", weight);
                 Cargo.Add(cargo);
@@ -52,7 +56,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>Name of the ship.</returns>
         public override String ToString()
         {
-            return Name;
+            return "Name: " + Name + " Model: "+ Model + " Size: " + Size + " Has docked: " + HasDocked; 
         }
 
 
