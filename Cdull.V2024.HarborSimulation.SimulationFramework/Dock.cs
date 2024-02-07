@@ -15,21 +15,30 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         private Model model; 
         internal bool IsAvailable { get; set; }
-        private Crane crane; 
+        internal List<Crane> Cranes { get; set; } = new List<Crane>(); 
         internal Ship? OccupiedBy {  get; set; }
 
       
         
 
-        public Dock(string dockName, Size dockSize, Model dockModel, Crane dockCrane) {
-                Name = dockName;
-                Size = dockSize; 
-                model = dockModel;
-                crane = dockCrane;
-                IsAvailable = true;
-                OccupiedBy = null; 
-            
-           
+        public Dock(string dockName, Size dockSize, Model dockModel, List<Crane>? dockCranes = null, Crane? dockCrane = null) {
+            Name = dockName;
+            Size = dockSize; 
+            model = dockModel;
+            IsAvailable = true;
+            OccupiedBy = null;
+
+            if (dockCranes != null)
+            {
+                Cranes = dockCranes;
+            }
+            else if(dockCrane != null)
+            {
+                Cranes.Add(dockCrane); 
+            }
+
+
+
         }
 
 
@@ -41,9 +50,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public override string ToString()
         {
 
-            string dockInfo = "Dock: "+ Name + " Size:  " + Size + " Model:  " + model + " Crane:  " + crane + " IsAvailable: " + IsAvailable;
-
-            return dockInfo;
+           return  "\nDock: "+ Name + " Size:  " + Size + " Model:  " + model + "Number of cranes: "+ Cranes.Count() + " IsAvailable: " + IsAvailable +"\n";
         }
 
        
