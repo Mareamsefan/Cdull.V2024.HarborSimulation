@@ -36,15 +36,25 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="numberOfDock">The amount of docks you want to create</param>
         /// <param name="type">The type of dock you want to create</param>
         /// <param name="size">The size of the dock you're creating</param>
-        public void InitializeDocks(int numberOfDock, Model dockModel,  Size dockSize)
+        public void InitializeDocks(int numberOfDock, Model dockModel,  Size dockSize, int numberOfCranes)
         {
             try
             {
                 for (int i = 0; i < numberOfDock; i++)
                 {
-
-                    Dock dock = new($"dock{i}", dockSize, dockModel, new Crane($"crane{i}"));
+                    Dock dock = new($"dock{i}", dockSize, dockModel);
                     Docks.Add(dock);
+                    if (numberOfCranes > 0)
+                    {
+                        for(int z = 0; z < numberOfCranes; z++)
+                        {
+                            Crane crane = new ($"Crane{z}"); 
+                            dock.Cranes.Add(crane);
+                        }
+
+                    }
+                   
+                   
 
 
                 }
