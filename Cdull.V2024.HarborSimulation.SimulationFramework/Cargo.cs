@@ -8,9 +8,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Cargo
     {
-        private string name;
+        internal string name;
         private double weight; 
-        private List<String> history = new List<String>();
+        internal List<String> History { get;  } = new List<String>();
   
         public Cargo(string cargoName, double cargoWeight) 
         {   name = cargoName; 

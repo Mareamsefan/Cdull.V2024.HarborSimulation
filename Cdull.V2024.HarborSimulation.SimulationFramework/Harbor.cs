@@ -228,7 +228,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="numberOfCargo">The amount of cargo you want to move</param>
         /// <param name="ship">The ship you want to move the cargo to</param>
-        public void AddCargoToShips(int numberOfCargo)
+        public void AddCargoToShips(int numberOfCargo, DateTime currentTime)
         {
             try
             {
@@ -242,6 +242,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                             {
                                 ship.Cargo.Add(cargo);
                                 cargoStorage.RemoveCargo(cargo);
+                                cargo.History.Add($"{cargo.name} loaded at {currentTime} on {ship.Name}");
+                              
                             }
 
                         }
