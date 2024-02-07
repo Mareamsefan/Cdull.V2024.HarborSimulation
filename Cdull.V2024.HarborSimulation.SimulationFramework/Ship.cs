@@ -7,7 +7,7 @@ using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-    public class Ship
+    public class Ship 
     {
 
         //kanskje internal? 
@@ -22,6 +22,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal bool IsWaitingForSailing { get; set; }
         internal int ShipSpeed { get; private set; }
         internal Dock? DockedAt { get; set; }
+
+        internal Harbor harbor; 
 
 
         public Ship(string shipName, Model shipModel, Size shipSize) {
@@ -49,6 +51,209 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
 
         }
+
+        public void AddShipToHarbor(Harbor harbor)
+        {
+            if (harbor == null)
+            {
+                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+            }
+            if (HasDocked || DockedAt != null)
+            {
+                throw new InvalidOperationException($"Ship {Name} is already docked or has a dock assigned.");
+            }
+
+            harbor.Ships.Add(this);
+            this.harbor = harbor;
+        }
+
+
+
+        //NY
+        public bool RemoveShipFromDock(Ship ship)
+        {
+            if (harbor == null)
+            {
+                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+            }
+
+            if (ship.DockedAt != null)
+            {
+                Dock dock = ship.DockedAt;
+
+                // Fjern skipet fra dokken
+                dock.OccupiedBy = null;
+
+                // Sett dokken til ledig igjen
+                dock.IsAvailable = true;
+
+                // Fjern skipet fra listen over dockede skip
+                harbor.DockedShips.Remove(ship);
+
+                ship.HasDocked = false;
+                ship.DockedAt = null;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+
+        /// <summary>
+        /// A method to simulate a sailing for a ship.
+        /// </summary>
+        /// <param name="ship">The ship that is sailing</param>
+        /// <param name="sailingStartTime">The time of the departure</param>
+        //trenger vi sailingTimeStop????
+        public void Sailing(Ship ship, DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
+        {
+            if (harbor == null)
+            {
+                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+            }
+
+            if (currentTime == sailingStartTime)
+            {
+
+                if (RemoveShipFromDock(ship))
+                {
+
+                    ship.History.Add($"Started sailing At: {sailingStartTime}");
+                    ship.IsSailing = true;
+                    harbor.SailingShips.Add(ship);
+                }
+
+
+            }
+            else if (currentTime == sailingStartTime.AddDays(numberOfDays))
+            {
+                ship.IsSailing = false;
+                harbor.SailingShips.Remove(ship);
+                harbor.WaitingShips.Enqueue(ship);
+
+            }
+            else
+            {
+                ship.IsWaitingForSailing = true;
+            }
+
+        }
+
+
+        public void RecurringSailing(Ship ship, DateTime currentTime, DateTime endTime, DateTime sailingStartTime, int numberOfDays, RecurringType recurringType)
+        {
+            if (harbor == null)
+            {
+                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+            }
+
+            if (currentTime < endTime)
+            {
+                if (recurringType == Enums.RecurringType.Daily)
+                {
+
+                    if (currentTime >= sailingStartTime.AddDays(1))
+                    {
+
+                        if (RemoveShipFromDock(ship))
+                        {
+
+                            ship.History.Add($"Started sailing At: {sailingStartTime}");
+                            ship.IsSailing = true;
+                            harbor.SailingShips.Add(ship);
+                        }
+
+
+                    }
+                    else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
+                    {
+                        ship.IsSailing = false;
+                        harbor.SailingShips.Remove(ship);
+                        harbor.WaitingShips.Enqueue(ship);
+
+                    }
+                    else
+                    {
+                        ship.IsWaitingForSailing = true;
+                    }
+
+                }
+
+                if (recurringType == Enums.RecurringType.Weekly)
+                {
+
+                    if (currentTime >= sailingStartTime.AddDays(7))
+                    {
+
+                        if (RemoveShipFromDock(ship))
+                        {
+
+                            ship.History.Add($"Started sailing At: {sailingStartTime}");
+                            ship.IsSailing = true;
+                            harbor.SailingShips.Add(ship);
+                        }
+
+
+                    }
+                    else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
+                    {
+                        ship.IsSailing = false;
+                        harbor.SailingShips.Remove(ship);
+                        harbor.WaitingShips.Enqueue(ship);
+
+                    }
+                    else
+                    {
+                        ship.IsWaitingForSailing = true;
+                    }
+
+                }
+
+
+            }
+        }
+
+        public void AddCargoToStorage(Harbor harbor)
+        {
+            if (harbor == null)
+            {
+                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+            }
+
+            foreach (Cargo cargo in Cargo)
+            {
+                harbor.cargoStorage.AddCargo(cargo);
+            }
+
+            Cargo.Clear();
+        }
+        
+        public void AddCargoToShip(int numberOfCargo, Harbor harbor)
+        {
+            if (harbor == null)
+            {
+                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+            }
+
+            for (int i = 0; i < numberOfCargo; i++)
+            {
+                if (harbor.cargoStorage.Cargo.Count > 0)
+                {
+                    Cargo cargo = harbor.cargoStorage.Cargo.First();
+                    Cargo.Add(cargo);
+                    harbor.cargoStorage.RemoveCargo(cargo);
+                }
+                else
+                {
+                    break; // No more cargo available in the harbor
+                }
+            }
+        }
+
 
         /// <summary>
         /// A method that returns the name of the ship.

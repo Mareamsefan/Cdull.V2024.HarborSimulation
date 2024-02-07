@@ -13,6 +13,7 @@ using System.Xml.Schema;
 
 namespace Cdull.V2024.HarborSimulation.TestClient
 {
+
     public class Simulation : IHarborSimulation
     {
       
@@ -35,12 +36,12 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 
                 harbor.DockShips(currentTime);
                 harbor.AddCargoToStorage();
-                harbor.AddCargoToShip(10);
+                harbor.AddCargoToShips(10);
               
                 // Geting the ship I want to sail: 
                 foreach (Ship ship in harbor.Ships)
                 {
-                    harbor.Sailing(ship, currentTime, new DateTime(2024, 1, 2), 1); 
+                    ship.Sailing(ship, currentTime, new DateTime(2024, 1, 2), 1); 
                 }
               
                 if (currentTime.Hour == 0 && currentTime.Minute == 0)
@@ -64,7 +65,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                     }
                     
                 }
-                Thread.Sleep(1);
+                
                 currentTime = currentTime.AddMinutes(1);
 
                 if (currentTime >= endTime)
@@ -79,3 +80,4 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
 
 }
+    

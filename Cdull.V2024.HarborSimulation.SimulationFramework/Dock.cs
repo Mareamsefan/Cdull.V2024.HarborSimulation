@@ -9,15 +9,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Dock
     {
-        // kanksje internal?  
-        public string Name { get; }
-        public Size Size { get; }
+      
+        internal string Name { get; }
+        internal Size Size { get; }
 
         private Model model; 
-        public bool IsAvailable { get; set; }
+        internal bool IsAvailable { get; set; }
         private Crane crane; 
-        public Ship? OccupiedBy {  get; set; }
+        internal Ship? OccupiedBy {  get; set; }
 
+      
         
 
         public Dock(string dockName, Size dockSize, Model dockModel, Crane dockCrane) {
@@ -30,6 +31,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             
            
         }
+
 
         /// <summary>
         /// A method that returns information about the dock, such as name, size, 
