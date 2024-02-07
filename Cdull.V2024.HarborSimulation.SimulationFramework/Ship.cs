@@ -17,13 +17,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal Size Size { get; }
         internal bool HasDocked { get; set; }
         internal List<Cargo> Cargo { get; } = new List<Cargo>();
-        internal List<string> History { get; } = new List<String>();
+        internal DateTime DockedAtTime { get; set; }
+        internal DateTime SailedAtTime { get; set; }
         internal bool IsSailing { get; set; }
         internal bool IsWaitingForSailing { get; set; }
         internal int ShipSpeed { get; private set; }
         internal Dock? DockedAt { get; set; }
 
-        internal Harbor harbor; 
+        internal Harbor Harbor { get; set; }
 
 
         public Ship(string shipName, Model shipModel, Size shipSize) {
@@ -52,19 +53,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        public void AddShipToHarbor(Harbor harbor)
+        public void AddShipToHarbor(Harbor shipHarbor)
         {
-            if (harbor == null)
+            if (shipHarbor == null)
             {
-                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+                throw new ArgumentNullException(nameof(shipHarbor), "Harbor cannot be null.");
             }
             if (HasDocked || DockedAt != null)
             {
                 throw new InvalidOperationException($"Ship {Name} is already docked or has a dock assigned.");
             }
 
-            harbor.Ships.Add(this);
-            this.harbor = harbor;
+            shipHarbor.Ships.Add(this);
+            Harbor = shipHarbor;
         }
 
 
@@ -72,9 +73,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         //NY
         public bool RemoveShipFromDock(Ship ship)
         {
-            if (harbor == null)
+            if (Harbor == null)
             {
-                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+                throw new ArgumentNullException(nameof(Harbor), "Harbor cannot be null.");
             }
 
             if (ship.DockedAt != null)
@@ -88,7 +89,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 dock.IsAvailable = true;
 
                 // Fjern skipet fra listen over dockede skip
-                harbor.DockedShips.Remove(ship);
+                Harbor.DockedShips.Remove(ship);
 
                 ship.HasDocked = false;
                 ship.DockedAt = null;
@@ -111,9 +112,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         //trenger vi sailingTimeStop????
         public void Sailing(Ship ship, DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
         {
-            if (harbor == null)
+            if (Harbor == null)
             {
-                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+                Console.WriteLine("Harbor cannot be null.");
             }
 
             if (currentTime == sailingStartTime)
@@ -122,9 +123,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 if (RemoveShipFromDock(ship))
                 {
 
-                    ship.History.Add($"Started sailing At: {sailingStartTime}");
+                    ship.SailedAtTime = currentTime; 
                     ship.IsSailing = true;
-                    harbor.SailingShips.Add(ship);
+                    Harbor.SailingShips.Add(ship);
                 }
 
 
@@ -132,8 +133,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             else if (currentTime == sailingStartTime.AddDays(numberOfDays))
             {
                 ship.IsSailing = false;
-                harbor.SailingShips.Remove(ship);
-                harbor.WaitingShips.Enqueue(ship);
+                Harbor.SailingShips.Remove(ship);
+                Harbor.WaitingShips.Enqueue(ship);
 
             }
             else
@@ -146,9 +147,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         public void RecurringSailing(Ship ship, DateTime currentTime, DateTime endTime, DateTime sailingStartTime, int numberOfDays, RecurringType recurringType)
         {
-            if (harbor == null)
+            if (Harbor == null)
             {
-                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
+                throw new ArgumentNullException(nameof(Harbor), "Harbor cannot be null.");
             }
 
             if (currentTime < endTime)
@@ -162,9 +163,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         if (RemoveShipFromDock(ship))
                         {
 
-                            ship.History.Add($"Started sailing At: {sailingStartTime}");
+                            ship.SailedAtTime = currentTime;
                             ship.IsSailing = true;
-                            harbor.SailingShips.Add(ship);
+                            Harbor.SailingShips.Add(ship);
                         }
 
 
@@ -172,8 +173,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
                     {
                         ship.IsSailing = false;
-                        harbor.SailingShips.Remove(ship);
-                        harbor.WaitingShips.Enqueue(ship);
+                        Harbor.SailingShips.Remove(ship);
+                        Harbor.WaitingShips.Enqueue(ship);
 
                     }
                     else
@@ -192,9 +193,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         if (RemoveShipFromDock(ship))
                         {
 
-                            ship.History.Add($"Started sailing At: {sailingStartTime}");
+                            ship.SailedAtTime = currentTime;
                             ship.IsSailing = true;
-                            harbor.SailingShips.Add(ship);
+                            Harbor.SailingShips.Add(ship);
                         }
 
 
@@ -202,8 +203,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
                     {
                         ship.IsSailing = false;
-                        harbor.SailingShips.Remove(ship);
-                        harbor.WaitingShips.Enqueue(ship);
+                        Harbor.SailingShips.Remove(ship);
+                        Harbor.WaitingShips.Enqueue(ship);
 
                     }
                     else
