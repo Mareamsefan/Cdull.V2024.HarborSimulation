@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Dock
     {
-      
+
         internal string Name { get; }
         internal Size Size { get; }
 
-        private Model model; 
+        private Model model;
         internal bool IsAvailable { get; set; }
-        internal List<Crane> Cranes { get; set; } = new List<Crane>(); 
-        internal Ship? OccupiedBy {  get; set; }
+        internal List<Crane> Cranes { get; set; } = new List<Crane>();
+        internal Ship? OccupiedBy { get; set; }
 
-      
-        
 
-        public Dock(string dockName, Size dockSize, Model dockModel, List<Crane>? dockCranes = null, Crane? dockCrane = null) {
+
+
+        public Dock(string dockName, Size dockSize, Model dockModel, List<Crane>? dockCranes = null, Crane? dockCrane = null)
+        {
             Name = dockName;
-            Size = dockSize; 
+            Size = dockSize;
             model = dockModel;
             IsAvailable = true;
             OccupiedBy = null;
@@ -32,9 +28,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 Cranes = dockCranes;
             }
-            else if(dockCrane != null)
+            else if (dockCrane != null)
             {
-                Cranes.Add(dockCrane); 
+                Cranes.Add(dockCrane);
             }
 
 
@@ -50,10 +46,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public override string ToString()
         {
 
-           return  "\nDock: "+ Name + " Size:  " + Size + " Model:  " + model + "Number of cranes: "+ Cranes.Count() + " IsAvailable: " + IsAvailable +"\n";
+            return "\nDock: " + Name + " Size:  " + Size + " Model:  " + model + "Number of cranes: " + Cranes.Count() + " IsAvailable: " + IsAvailable + "\n";
         }
 
-       
-  
+
+
     }
 }

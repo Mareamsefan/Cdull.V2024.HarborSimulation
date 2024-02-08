@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+﻿namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class CargoStorage
     {
-        private string name; 
+        private string name;
         // kanksje internal? 
-        public List<Cargo> Cargo {  get; set; } = new List<Cargo>();
+        public List<Cargo> Cargo { get; set; } = new List<Cargo>();
         private bool IsAvailable { get; set; }
 
-        public CargoStorage(string cargoStorageName) {
+        public CargoStorage(string cargoStorageName)
+        {
 
             name = cargoStorageName;
             IsAvailable = true;

@@ -1,42 +1,44 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 // spør marius om det er ok at man henter enums slik og at klassen med enums er public
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-    public class Ship 
+    public class Ship
     {
-
         //kanskje internal? 
-        internal string Name {  get; }
+        internal string Name { get; }
         //GJort public
-        internal Model Model {  get; }
+        internal Model Model { get; }
         internal Size Size { get; }
         internal bool HasDocked { get; set; }
         internal List<Cargo> Cargo { get; } = new List<Cargo>();
-        internal DateTime DockedAtTime { get; set; }
-        internal DateTime SailedAtTime { get; set; }
+        internal string DockedAtTime { get; set; }
+        internal string SailedAtTime { get; set; }
         internal bool IsSailing { get; set; }
+        internal bool IsReadyToSail{ get; set; }
         internal bool IsWaitingForSailing { get; set; }
         internal int ShipSpeed { get; private set; }
         internal Dock? DockedAt { get; set; }
 
-        internal Harbor Harbor { get; set; }
+        internal Harbor Harbor { get; private set; }
 
 
-        public Ship(string shipName, Model shipModel, Size shipSize) {
-            Name = shipName;   
+        public Ship (Harbor shipharbor, string shipName, Model shipModel, Size shipSize)
+        {
+            Harbor = shipharbor; 
+            Name = shipName;
             Model = shipModel;
             Size = shipSize;
             HasDocked = false;
-            DockedAt = null;
             IsSailing = false;
+            DockedAt = null; 
             IsWaitingForSailing = false;
-            ShipSpeed = 100; 
+            DockedAtTime = "";
+            SailedAtTime = "";
+            ShipSpeed = 100;
+            IsReadyToSail = false;
         }
+
 
         /// <summary>
         /// A method to create cargo in the simulation.
@@ -70,153 +72,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
-        //NY
-        public bool RemoveShipFromDock(Ship ship)
-        {
-            if (Harbor == null)
-            {
-                throw new ArgumentNullException(nameof(Harbor), "Harbor cannot be null.");
-            }
 
-            if (ship.DockedAt != null)
-            {
-                Dock dock = ship.DockedAt;
-
-                // Fjern skipet fra dokken
-                dock.OccupiedBy = null;
-
-                // Sett dokken til ledig igjen
-                dock.IsAvailable = true;
-
-                // Fjern skipet fra listen over dockede skip
-                Harbor.DockedShips.Remove(ship);
-
-                ship.HasDocked = false;
-                ship.DockedAt = null;
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-
-
-        /// <summary>
-        /// A method to simulate a sailing for a ship.
-        /// </summary>
-        /// <param name="ship">The ship that is sailing</param>
-        /// <param name="sailingStartTime">The time of the departure</param>
-        //trenger vi sailingTimeStop????
-        public void Sailing(Ship ship, DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
-        {
-            if (Harbor == null)
-            {
-                Console.WriteLine("Harbor cannot be null.");
-            }
-
-            if (currentTime == sailingStartTime)
-            {
-
-                if (RemoveShipFromDock(ship))
-                {
-
-                    ship.SailedAtTime = currentTime; 
-                    ship.IsSailing = true;
-                    Harbor.SailingShips.Add(ship);
-                }
-
-
-            }
-            else if (currentTime == sailingStartTime.AddDays(numberOfDays))
-            {
-                ship.IsSailing = false;
-                Harbor.SailingShips.Remove(ship);
-                Harbor.WaitingShips.Enqueue(ship);
-
-            }
-            else
-            {
-                ship.IsWaitingForSailing = true;
-            }
-
-        }
-
-
-        public void RecurringSailing(Ship ship, DateTime currentTime, DateTime endTime, DateTime sailingStartTime, int numberOfDays, RecurringType recurringType)
-        {
-            if (Harbor == null)
-            {
-                throw new ArgumentNullException(nameof(Harbor), "Harbor cannot be null.");
-            }
-
-            if (currentTime < endTime)
-            {
-                if (recurringType == Enums.RecurringType.Daily)
-                {
-
-                    if (currentTime >= sailingStartTime.AddDays(1))
-                    {
-
-                        if (RemoveShipFromDock(ship))
-                        {
-
-                            ship.SailedAtTime = currentTime;
-                            ship.IsSailing = true;
-                            Harbor.SailingShips.Add(ship);
-                        }
-
-
-                    }
-                    else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
-                    {
-                        ship.IsSailing = false;
-                        Harbor.SailingShips.Remove(ship);
-                        Harbor.WaitingShips.Enqueue(ship);
-
-                    }
-                    else
-                    {
-                        ship.IsWaitingForSailing = true;
-                    }
-
-                }
-
-                if (recurringType == Enums.RecurringType.Weekly)
-                {
-
-                    if (currentTime >= sailingStartTime.AddDays(7))
-                    {
-
-                        if (RemoveShipFromDock(ship))
-                        {
-
-                            ship.SailedAtTime = currentTime;
-                            ship.IsSailing = true;
-                            Harbor.SailingShips.Add(ship);
-                        }
-
-
-                    }
-                    else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
-                    {
-                        ship.IsSailing = false;
-                        Harbor.SailingShips.Remove(ship);
-                        Harbor.WaitingShips.Enqueue(ship);
-
-                    }
-                    else
-                    {
-                        ship.IsWaitingForSailing = true;
-                    }
-
-                }
-
-
-            }
-        }
 
         public void AddCargoToStorage(Harbor harbor)
         {
@@ -232,7 +88,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             Cargo.Clear();
         }
-        
+
         public void AddCargoToShip(int numberOfCargo, Harbor harbor)
         {
             if (harbor == null)
@@ -262,7 +118,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>Name of the ship.</returns>
         public override String ToString()
         {
-            return "Name: " + Name + " Model: "+ Model + " Size: " + Size + " Has docked: " + HasDocked; 
+            return "Name: " + Name + " Model: " + Model + " Size: " + Size + " Has docked: " + HasDocked;
         }
 
 
