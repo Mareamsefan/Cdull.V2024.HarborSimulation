@@ -77,20 +77,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
                     }
 
-
-
-
                 }
-
-
 
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error initializing docks.", e);
             }
-
-
         }
 
         /// <summary>

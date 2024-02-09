@@ -11,7 +11,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
       
 
         void IHarborSimulation.Run(Harbor harbor, DateTime starttime, DateTime endTime, int numberOfShips, 
-            Enums.Size shipSize, int numberOfCargoOnShip, Enums.Model shipModel, int numberOfDocks, int numberOfCranes, Enums.Size dockSize, Enums.Model dockModel)
+            Enums.Size shipSize, int numberOfCargoOnShip, Enums.Model shipModel, int numberOfDocks, int numberOfCranes, 
+            Enums.Size dockSize, Enums.Model dockModel)
         {
             var currentTime = starttime;
             harbor.WaitingShips.Clear();
