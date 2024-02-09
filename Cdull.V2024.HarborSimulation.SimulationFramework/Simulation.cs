@@ -20,7 +20,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.DockedShips.Clear();
             harbor.SailingShips.Clear();
             harbor.InitializeDocks(numberOfDocks, dockModel, dockSize, numberOfCranes);
-            harbor.InitializeShips(harbor, numberOfShips, shipSize, shipModel, numberOfCargoOnShip);
+            harbor.InitializeShips(numberOfShips, shipSize, shipModel, numberOfCargoOnShip);
             Console.WriteLine($"Currentime: {currentTime}");
             Console.WriteLine($"HARBOR SIMULATION STARTED: {harbor.name}");
             harbor.QueueShipsToDock();

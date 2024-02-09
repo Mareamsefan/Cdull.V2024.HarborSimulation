@@ -22,9 +22,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
-        public Ship (Harbor shipharbor, string shipName, Model shipModel, Size shipSize)
+        public Ship (string shipName, Model shipModel, Size shipSize)
         {
-            Harbor = shipharbor; 
             Name = shipName;
             Model = shipModel;
             Size = shipSize;
@@ -54,21 +53,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-
-        public void AddShipToHarbor(Harbor shipHarbor)
-        {
-            if (shipHarbor == null)
-            {
-                throw new ArgumentNullException(nameof(shipHarbor), "Harbor cannot be null.");
-            }
-            if (HasDocked || DockedAt != null)
-            {
-                throw new InvalidOperationException($"Ship {Name} is already docked or has a dock assigned.");
-            }
-
-            shipHarbor.Ships.Add(this);
-            Harbor = shipHarbor;
-        }
 
 
 

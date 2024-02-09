@@ -88,31 +88,31 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         internal void Sailing(DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
         {
-                // Sjekk om skipet er klart for seiling og om det er tid for å starte seilingen
-                if (ship.IsReadyToSail && currentTime == sailingStartTime)
+            // Sjekk om skipet er klart for seiling og om det er tid for å starte seilingen
+            if (ship.IsReadyToSail && currentTime == sailingStartTime)
+            {
+                // Hvis skipet kan fjernes fra dokken
+                if (Harbor.RemoveShipFromDock(ship))
                 {
-                    // Hvis skipet kan fjernes fra dokken
-                    if (Harbor.RemoveShipFromDock(ship))
-                    {
-                        ship.SailedAtTime = currentTime.ToString();
-                        ship.IsSailing = true;
-                        Harbor.SailingShips.Add(ship);
-                    }
-                }
-                // Sjekk om det er tid for skipet å stoppe seilingen
-                else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
-                {
-                    ship.IsSailing = false;
-                    Harbor.SailingShips.Remove(ship);
-                    Harbor.QueueShipsToDock();
-                }
-                else
-                {
-                    ship.IsWaitingForSailing = true;
+                    ship.SailedAtTime = currentTime.ToString();
+                    ship.IsSailing = true;
+                    Harbor.SailingShips.Add(ship);
                 }
             }
+            // Sjekk om det er tid for skipet å stoppe seilingen
+            else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
+            {
+                ship.IsSailing = false;
+                Harbor.SailingShips.Remove(ship);
+                Harbor.QueueShipsToDock();
+            }
+            else
+            {
+                ship.IsWaitingForSailing = true;
+            }
+
 
         }
-
-        
     }
+        
+}
