@@ -14,7 +14,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public Queue<Ship> WaitingShips { get;  } = new Queue<Ship>();
         private Dictionary<DateTime, Harbor> HarborHistory { get; } = new Dictionary<DateTime, Harbor>();
 
-        internal CargoStorage cargoStorage;
+        internal CargoStorage cargoStorage { get; set; }
 
         /// <summary>
         /// A method to create the harbor for the simulation.
@@ -24,7 +24,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public Harbor(string harborName, CargoStorage harborCargoStorage)
         {
             name = harborName;
-
+            cargoStorage = harborCargoStorage;
         }
       
 
