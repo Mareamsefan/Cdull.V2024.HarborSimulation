@@ -20,12 +20,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal int ShipSpeed { get; private set; }
         internal Dock? DockedAt { get; set; }
 
-        internal Harbor Harbor { get; private set; }
 
 
-        public Ship (Harbor shipharbor, string shipName, Model shipModel, Size shipSize)
+        public Ship (string shipName, Model shipModel, Size shipSize)
         {
-            Harbor = shipharbor; 
             Name = shipName;
             Model = shipModel;
             Size = shipSize;
@@ -55,61 +53,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        public void AddShipToHarbor(Harbor shipHarbor)
-        {
-            if (shipHarbor == null)
-            {
-                throw new ArgumentNullException(nameof(shipHarbor), "Harbor cannot be null.");
-            }
-            if (HasDocked || DockedAt != null)
-            {
-                throw new InvalidOperationException($"Ship {Name} is already docked or has a dock assigned.");
-            }
-
-            shipHarbor.Ships.Add(this);
-            Harbor = shipHarbor;
-        }
 
 
 
-
-
-        public void AddCargoToStorage(Harbor harbor)
-        {
-            if (harbor == null)
-            {
-                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
-            }
-
-            foreach (Cargo cargo in Cargo)
-            {
-                harbor.cargoStorage.AddCargo(cargo);
-            }
-
-            Cargo.Clear();
-        }
-
-        public void AddCargoToShip(int numberOfCargo, Harbor harbor)
-        {
-            if (harbor == null)
-            {
-                throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
-            }
-
-            for (int i = 0; i < numberOfCargo; i++)
-            {
-                if (harbor.cargoStorage.Cargo.Count > 0)
-                {
-                    Cargo cargo = harbor.cargoStorage.Cargo.First();
-                    Cargo.Add(cargo);
-                    harbor.cargoStorage.RemoveCargo(cargo);
-                }
-                else
-                {
-                    break; // No more cargo available in the harbor
-                }
-            }
-        }
 
 
         /// <summary>

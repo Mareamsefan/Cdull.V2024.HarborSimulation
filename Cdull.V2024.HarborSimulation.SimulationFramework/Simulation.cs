@@ -11,7 +11,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
       
 
         void IHarborSimulation.Run(Harbor harbor, DateTime starttime, DateTime endTime, int numberOfShips, 
-            Enums.Size shipSize, int numberOfCargoOnShip, Enums.Model shipModel, int numberOfDocks, int numberOfCranes, Enums.Size dockSize, Enums.Model dockModel)
+            Enums.Size shipSize, int numberOfCargoOnShip, Enums.Model shipModel, int numberOfDocks, int numberOfCranes, 
+            Enums.Size dockSize, Enums.Model dockModel)
         {
             var currentTime = starttime;
             harbor.WaitingShips.Clear();
@@ -19,7 +20,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.DockedShips.Clear();
             harbor.SailingShips.Clear();
             harbor.InitializeDocks(numberOfDocks, dockModel, dockSize, numberOfCranes);
-            harbor.InitializeShips(harbor, numberOfShips, shipSize, shipModel, numberOfCargoOnShip);
+            harbor.InitializeShips(numberOfShips, shipSize, shipModel, numberOfCargoOnShip);
             Console.WriteLine($"Currentime: {currentTime}");
             Console.WriteLine($"HARBOR SIMULATION STARTED: {harbor.name}");
             harbor.QueueShipsToDock();

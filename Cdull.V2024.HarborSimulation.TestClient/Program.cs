@@ -18,7 +18,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 5, 10, Enums.Size.Large, Enums.Model.ContainerShip);
 
 
-            Console.WriteLine(harbor_2.HarborHistory);
+            //Console.WriteLine(harbor_2.HarborHistory);
 
             Console.WriteLine(harbor_2.GetHarborHistory(new DateTime(2024, 1, 2)));
 

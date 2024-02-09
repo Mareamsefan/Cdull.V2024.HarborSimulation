@@ -77,20 +77,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
                     }
 
-
-
-
                 }
-
-
 
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error initializing docks.", e);
             }
-
-
         }
 
         /// <summary>
@@ -101,13 +94,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="shipType">The type of ship you want to create</param>
         /// <param name="numberOfCargos">The amount of cargo on the ship</param>
         /// <param name="CargoWeight">The weight of all the cargo on the ship</param>
-        public void InitializeShips(Harbor harbor, int numberOfShips, Size shipSize, Model shipModel, int numberOfCargo, int CargoWeight = 10)
+        public void InitializeShips(int numberOfShips, Size shipSize, Model shipModel, int numberOfCargo, int CargoWeight = 10)
         {
             try
             {
                 for (int i = 0; i < numberOfShips; i++)
                 {
-                    Ship ship = new(harbor, $"ship-{i}", shipModel, shipSize);
+                    Ship ship = new($"ship-{i}", shipModel, shipSize);
                     ship.InitializeCargo(numberOfCargo);
                     Ships.Add(ship);
                 }
