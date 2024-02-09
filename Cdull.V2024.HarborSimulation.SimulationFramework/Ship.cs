@@ -6,7 +6,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     public class Ship
     {
         //kanskje internal? 
-        internal string Name { get; }
+        public string Name { get; }
         //GJort public
         internal Model Model { get; }
         internal Size Size { get; }

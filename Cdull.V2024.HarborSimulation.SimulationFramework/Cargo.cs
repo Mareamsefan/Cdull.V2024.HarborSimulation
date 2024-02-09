@@ -3,13 +3,13 @@
     public class Cargo
     {
         internal string name;
-        private double weight;
+        internal double Weight { get; private set; }
         internal List<String> History { get; } = new List<String>();
 
         public Cargo(string cargoName, double cargoWeight)
         {
             name = cargoName;
-            weight = cargoWeight;
+            Weight = cargoWeight;
 
         }
 
@@ -20,7 +20,7 @@
         public override string ToString()
         {
 
-            string cargoInfo = name + " " + weight;
+            string cargoInfo = name + " " + Weight;
 
             return cargoInfo;
         }

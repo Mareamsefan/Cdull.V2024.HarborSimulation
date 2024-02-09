@@ -1,27 +1,55 @@
-﻿using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿using System.Collections;
+using System.Text;
+using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Harbor
     {
         internal string name;
-        public List<Dock> Docks { get; } = new List<Dock>();
-        public List<Ship> Ships { get; } = new List<Ship>();
-        internal List<Ship> DockedShips { get; } = new List<Ship>();
+        internal List<Dock> Docks { get; } = new List<Dock>();
+        internal List<Ship> Ships { get; } = new List<Ship>();
+        public List<Ship> DockedShips { get; } = new List<Ship>();
         public List<Ship> SailingShips { get; } = new List<Ship>();
-        public Queue<Ship> WaitingShips { get; } = new Queue<Ship>();
+        public Queue<Ship> WaitingShips { get;  } = new Queue<Ship>();
+        private Dictionary<DateTime, Harbor> HarborHistory { get; } = new Dictionary<DateTime, Harbor>();
 
-        internal CargoStorage cargoStorage = new CargoStorage("CargoStorage");
+        internal CargoStorage cargoStorage;
 
         /// <summary>
         /// A method to create the harbor for the simulation.
         /// </summary>
         /// <param name="harborName">Navnet på Havnen</param>
         /// <param name="harborCargoStorage">Antall lagringsplasser ment for cargo</param>
-        public Harbor(string harborName)
+        public Harbor(string harborName, CargoStorage harborCargoStorage)
         {
             name = harborName;
 
+        }
+      
+
+        public Harbor GetHarborHistory(DateTime fromDate)
+        {
+            if (HarborHistory.ContainsKey(fromDate))
+            {
+                return HarborHistory[fromDate].Clone();
+            }
+            else
+            {
+                throw new KeyNotFoundException("Harbor history not found for the given date.");
+            }
+        }
+
+        //Kilde hentet ut : 09/02/2023: https://learn.microsoft.com/en-us/dotnet/api/system.object.memberwiseclone?view=net-8.0
+        private Harbor Clone()
+        {
+            return (Harbor)MemberwiseClone();
+        }
+
+
+        public void SaveHarborHistroy(DateTime timestamp)
+        {
+            HarborHistory[timestamp] = Clone();
         }
 
 
@@ -129,7 +157,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         private bool IsShipInQueue(Ship ship)
         {
-            return WaitingShips.Any(s => s.Name == ship.Name); 
+            foreach(Ship ship_2 in WaitingShips)
+            {
+                if(ship.Name == ship_2.Name)
+                {
+                    return true; 
+                }
+                else
+                {
+                    return false; 
+                }
+            }
+            return false; 
+           //return WaitingShips.Any(s => s.Name == ship.Name);
         }
 
         /// <summary>
@@ -147,21 +187,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 foreach (Ship ship in Ships)
                 {
                     if (!ship.IsSailing && !ship.HasDocked && !IsShipInQueue(ship))
-                    {
+                    {                           
                         WaitingShips.Enqueue(ship);
-
+                   
                     }
-
                 }
-
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error queuing ships to dock.", e);
             }
-
-
         }
+
+
         // inkluderer sikring av dock 
 
         /// <summary>
@@ -190,7 +228,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         availableDock.OccupiedBy = ship;
                         ship.DockedAtTime = currentTime.ToString();
                         DockedShips.Add(ship);
-                        WaitingShips.Dequeue();
+                        WaitingShips.Dequeue(); 
                     }
                     else
                     {
@@ -259,7 +297,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                                 cargoStorage.RemoveCargo(cargo);
                                 cargo.History.Add($"{cargo.name} loaded at {currentTime} on {ship.Name}");
                             }
-                            
+
                             else
                             {
                                 break; // No more cargo available in the harbor
@@ -267,7 +305,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         }
                         ship.IsReadyToSail = true;
                     }
-                 
+
                 }
             }
             catch (Exception e)
@@ -327,7 +365,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 ship.IsSailing = false;
                 SailingShips.Remove(ship);
-                WaitingShips.Enqueue(ship);
+                QueueShipsToDock(); 
             }
             else
             {
@@ -339,7 +377,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
-        public void RecurringSailing(Ship ship, DateTime currentTime, DateTime endTime, DateTime sailingStartTime, int numberOfDays, RecurringType recurringType)
+        public void RecurringSailing(Ship ship, DateTime currentTime, DateTime endTime, 
+            DateTime sailingStartTime, int numberOfDays, RecurringType recurringType)
         {
 
 
@@ -365,7 +404,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     {
                         ship.IsSailing = false;
                         SailingShips.Remove(ship);
-                        WaitingShips.Enqueue(ship);
+                        QueueShipsToDock(); 
 
                     }
                     else
@@ -396,7 +435,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     {
                         ship.IsSailing = false;
                         SailingShips.Remove(ship);
-                        WaitingShips.Enqueue(ship);
+                        QueueShipsToDock(); 
+                        //WaitingShips.Enqueue(ship);
 
                     }
                     else
@@ -408,13 +448,55 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
             }
+
+
+
+
+
         }
-       
 
 
+
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Harbor Name: {name}");
+            sb.AppendLine("Docks:");
+            foreach (var dock in Docks)
+            {
+                sb.AppendLine($" - Dock Name: {dock.Name}, Size: {dock.Size}, Model: {dock.Model}, Available: {dock.IsAvailable}");
+            }
+            sb.AppendLine("Ships:");
+            foreach (var ship in Ships)
+            {
+                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}, Has Docked: {ship.HasDocked}");
+            }
+            sb.AppendLine("Docked Ships:");
+            foreach (var ship in DockedShips)
+            {
+                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}");
+            }
+            sb.AppendLine("Sailing Ships:");
+            foreach (var ship in SailingShips)
+            {
+                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}");
+            }
+            sb.AppendLine("Waiting Ships:");   
+
+
+            foreach (var ship in WaitingShips)
+            {
+                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}");
+            }
+            sb.AppendLine("Cargo Storage:");
+            sb.AppendLine($" - Capacity: {cargoStorage.Capacity}, Occupied Space: {cargoStorage.GetOccupiedSpace()}");
+
+            return sb.ToString();
+        }
     }
-
-
-
-
+    
+    
 }
+
+
