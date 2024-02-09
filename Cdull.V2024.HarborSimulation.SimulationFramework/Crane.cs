@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+﻿namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Crane
     {
         private string name;
         private bool isCraneAvalible;
-        private bool isCraneOutOfFuntion; 
+        private bool isCraneOutOfFuntion;
 
-        public Crane(string craneName) {
+        public Crane(string craneName)
+        {
             name = craneName;
             isCraneAvalible = true;
             isCraneOutOfFuntion = false;

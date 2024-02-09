@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+﻿namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Enums
     {
@@ -12,20 +6,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             ContainerShip,
             Bulker,
-            Tanker, 
-            LNGCarrier, 
+            Tanker,
+            LNGCarrier,
             RoRo
 
         }
 
         public enum Size
         {
-            Small, 
-            Medium, 
+            Small,
+            Medium,
             Large
         }
 
-    
+
 
         public enum RecurringType
         {

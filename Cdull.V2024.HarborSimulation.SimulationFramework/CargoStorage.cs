@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+﻿namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class CargoStorage
     {
-        private string name; 
+        private string name;
         // kanksje internal? 
-        public List<Cargo> Cargo {  get; set; } = new List<Cargo>();
+        public List<Cargo> Cargo { get; set; } = new List<Cargo>();
         private bool IsAvailable { get; set; }
+        public int Capacity { get; }
 
-        public CargoStorage(string cargoStorageName) {
+        public CargoStorage(string cargoStorageName, int cargoStoragecapacity)
+        {
 
             name = cargoStorageName;
             IsAvailable = true;
+            Capacity = cargoStoragecapacity;
         }
 
         /// <summary>
@@ -35,6 +32,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public void RemoveCargo(Cargo cargo)
         {
             Cargo.Remove(cargo);
+        }
+
+
+        public double GetOccupiedSpace()
+        {
+            double occupiedSpace = 0;
+            foreach (var cargo in Cargo)
+            {
+                occupiedSpace += cargo.Weight; // Antar at lastens vekt representerer størrelsen
+            }
+            return occupiedSpace;
         }
     }
 }
