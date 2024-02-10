@@ -14,8 +14,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal List<Cargo> Cargo { get; } = new List<Cargo>();
         internal string DockedAtTime { get; set; }
         internal string SailedAtTime { get; set; }
-        internal bool IsSailing { get; set; }
-        internal bool IsReadyToSail{ get; set; }
+        public bool IsSailing { get; set; }
+        public bool IsReadyToSail{ get; set; }
         internal bool IsWaitingForSailing { get; set; }
         internal int ShipSpeed { get; private set; }
         internal Dock? DockedAt { get; set; }

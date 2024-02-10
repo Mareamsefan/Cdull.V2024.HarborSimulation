@@ -6,12 +6,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Harbor
     {
-        internal string name;
+        public string name;
         internal List<Dock> Docks { get; } = new List<Dock>();
-        internal List<Ship> Ships { get; } = new List<Ship>();
+        public List<Ship> Ships { get; } = new List<Ship>();
         public List<Ship> DockedShips { get; } = new List<Ship>();
         public List<Ship> SailingShips { get; } = new List<Ship>();
-        public Queue<Ship> WaitingShips { get;  } = new Queue<Ship>();
+        internal Queue<Ship> WaitingShips { get; } = new Queue<Ship>();
         private Dictionary<DateTime, Harbor> HarborHistory { get; } = new Dictionary<DateTime, Harbor>();
 
         internal CargoStorage cargoStorage { get; set; }
@@ -30,9 +30,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         public Harbor GetHarborHistory(DateTime fromDate)
         {
-            if (HarborHistory.ContainsKey(fromDate))
+            if (HarborHistory.ContainsKey(fromDate.Date))
             {
-                return HarborHistory[fromDate].Clone();
+                return HarborHistory[fromDate.Date].Clone();
             }
             else
             {
@@ -162,7 +162,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 }
             }
             return false; 
-           //return WaitingShips.Any(s => s.Name == ship.Name);
+      
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 foreach (Ship ship in Ships)
                 {
                     if (!ship.IsSailing && !ship.HasDocked && !IsShipInQueue(ship))
-                    {                           
+                    {
                         WaitingShips.Enqueue(ship);
                    
                     }
@@ -221,7 +221,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         availableDock.OccupiedBy = ship;
                         ship.DockedAtTime = currentTime.ToString();
                         DockedShips.Add(ship);
-                        WaitingShips.Dequeue(); 
+                        WaitingShips.Dequeue();
                     }
                     else
                     {
@@ -343,7 +343,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public void Sailing(Ship ship, DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
         {
             // Sjekk om skipet er klart for seiling og om det er tid for å starte seilingen
-            if (ship.IsReadyToSail && currentTime == sailingStartTime)
+            if (ship.IsReadyToSail && currentTime.Equals(sailingStartTime) && !ship.IsWaitingForSailing)
             {
                 // Hvis skipet kan fjernes fra dokken
                 if (RemoveShipFromDock(ship))
@@ -354,7 +354,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 }
             }
             // Sjekk om det er tid for skipet å stoppe seilingen
-            else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
+            else if (currentTime.Date >= sailingStartTime.AddDays(numberOfDays).Date)
             {
                 ship.IsSailing = false;
                 SailingShips.Remove(ship);
@@ -368,88 +368,28 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
+        /*
 
-
-        public void RecurringSailing(Ship ship, DateTime currentTime, DateTime endTime, 
-            DateTime sailingStartTime, int numberOfDays, RecurringType recurringType)
+        public void RecurringSailing(DateTime startSailing, int numberOfDaysAtSailing, DateTime currentTime, Ship ship, RecurringType dailyOrWeekly)
         {
-
-
-            if (currentTime < endTime)
+            if (dailyOrWeekly.Equals(Enums.RecurringType.Daily))
             {
-                if (recurringType == Enums.RecurringType.Daily)
+                if (startSailing.Date == currentTime.Date && startSailing.Hour == currentTime.Hour && startSailing.Minute == currentTime.Minute)
                 {
-
-                    if (currentTime >= sailingStartTime.AddDays(1))
-                    {
-
-                        if (RemoveShipFromDock(ship))
-                        {
-
-                            ship.SailedAtTime = currentTime.ToString();
-                            ship.IsSailing = true;
-                            SailingShips.Add(ship);
-                        }
-
-
-                    }
-                    else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
-                    {
-                        ship.IsSailing = false;
-                        SailingShips.Remove(ship);
-                        QueueShipsToDock(); 
-
-                    }
-                    else
-                    {
-                        ship.IsWaitingForSailing = true;
-                    }
-
+                    Sailing(ship, currentTime, startSailing, numberOfDaysAtSailing);
                 }
-
-                if (recurringType == Enums.RecurringType.Weekly)
-                {
-
-                    if (currentTime >= sailingStartTime.AddDays(7))
-                    {
-
-                        if (RemoveShipFromDock(ship))
-                        {
-
-                            ship.SailedAtTime = currentTime.ToString();
-                            Console.WriteLine(ship.SailedAtTime);
-                            ship.IsSailing = true;
-                            SailingShips.Add(ship);
-                        }
-
-
-                    }
-                    else if (currentTime >= sailingStartTime.AddDays(numberOfDays))
-                    {
-                        ship.IsSailing = false;
-                        SailingShips.Remove(ship);
-                        QueueShipsToDock(); 
-                        //WaitingShips.Enqueue(ship);
-
-                    }
-                    else
-                    {
-                        ship.IsWaitingForSailing = true;
-                    }
-
-                }
-
-
             }
-
-
-
-
-
+            else if (dailyOrWeekly.Equals(Enums.RecurringType.Weekly))
+            {
+                if (startSailing.DayOfWeek == currentTime.DayOfWeek && startSailing.Hour == currentTime.Hour && startSailing.Minute == currentTime.Minute)
+                {
+                    Sailing(ship, currentTime, startSailing, numberOfDaysAtSailing);
+                }
+            }
         }
 
 
-
+        */
 
         public override string ToString()
         {

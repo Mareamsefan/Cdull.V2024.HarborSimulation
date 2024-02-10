@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-    internal class ShipHandler
+    public class ShipHandler
     {
 
         internal Ship ship { get; private set; }
@@ -19,7 +19,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-
+        /*
         public void AddCargoToStorage()
         {
             if (Harbor == null)
@@ -60,7 +60,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public bool RemoveShipFromDock()
         {
 
-
             if (ship.DockedAt != null)
             {
                 Dock dock = ship.DockedAt;
@@ -86,7 +85,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        internal void Sailing(DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
+        public void SailingOneShip(DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
         {
             // Sjekk om skipet er klart for seiling og om det er tid for å starte seilingen
             if (ship.IsReadyToSail && currentTime == sailingStartTime)
@@ -113,6 +112,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
         }
+        */
     }
+
         
 }

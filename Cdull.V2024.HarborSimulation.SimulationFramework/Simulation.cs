@@ -21,43 +21,45 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.SailingShips.Clear();
             harbor.InitializeDocks(numberOfDocks, dockModel, dockSize, numberOfCranes);
             harbor.InitializeShips(numberOfShips, shipSize, shipModel, numberOfCargoOnShip);
-            Console.WriteLine($"Currentime: {currentTime}");
-            Console.WriteLine($"HARBOR SIMULATION STARTED: {harbor.name}");
             harbor.QueueShipsToDock();
+           
 
             while (currentTime < endTime)
             {
+                harbor.DockShips(currentTime);
+                harbor.AddCargoToStorage();
+                harbor.AddCargoToShips(10, currentTime);
+                
 
-           
+                // Geting the ship I want to sail:
+              /* foreach (Ship ship in harbor.Ships)
+               {
+                    DateTime date = new DateTime(2024, 1, 3);
+                    if (ship.HasDocked && !ship.IsSailing) 
+                    {              
+                       harbor.Sailing(ship, currentTime, new DateTime(2024, 1, 2), 2);                       
+
+                    }
+
+                }*/
 
                 if (currentTime.Hour == 0 && currentTime.Minute == 0)
                 {
 
-                    harbor.SaveHarborHistroy(currentTime);
-                 
-                }
-
-                harbor.DockShips(currentTime);
-
-                harbor.AddCargoToStorage();
-                harbor.AddCargoToShips(10, currentTime);
-
-
-
-
-                // Geting the ship I want to sail:
-                foreach (Ship ship in harbor.Ships)
-                {
-                    if (ship.HasDocked && !ship.IsSailing)
-                    {
-                        for (int i = 0; i > (harbor.Ships.Count / 2); i++)
-                        {
-                            harbor.Sailing(ship, currentTime, new DateTime(2024, 1, 2), 1);
-                        }
-
-                    }
+                    harbor.SaveHarborHistroy(currentTime.Date);
 
                 }
+
+
+
+                /* foreach (Ship ship in harbor.Ships)
+                 {
+                     if (ship.HasDocked && !ship.IsSailing)
+                     {
+                         harbor.RecurringSailing(new DateTime(2024, 1, 2), 1, currentTime, ship, Enums.RecurringType.Daily);
+
+                     }
+                 }*/
 
                 currentTime = currentTime.AddMinutes(1);
             
