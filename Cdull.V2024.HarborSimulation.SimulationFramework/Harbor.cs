@@ -7,7 +7,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class Harbor
     {
-        public string name;
+        internal string name;
+        internal DateTime CurrentTime { get; set; }
+        internal int Location { get; }
         internal List<Dock> Docks { get; } = new List<Dock>();
         internal List<Ship> Ships { get; } = new List<Ship>();
         internal List<Ship> DockedShips { get; } = new List<Ship>();
@@ -25,6 +27,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public Harbor(string harborName, CargoStorage harborCargoStorage)
         {
             name = harborName;
+            Location = 0; 
             this.harborCargoStorage = harborCargoStorage;
         }
       
@@ -218,45 +221,58 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// to them (Checks size of the available docks and then docks the ship)
         /// </summary>
 
-        public void DockShips(DateTime currentTime)
+        public void DockShips()
         {
             try
             {
                 while (WaitingShips.Count > 0)
                 {
-
                     Ship ship = WaitingShips.Peek();
-
                     Dock availableDock = AvailableDockOfSize(ship.Size);
-
 
                     if (availableDock is not null && ship.IsSailing == false)
                     {
+                        
+                        // Beregn avstanden til dokken
+                       // int distanceToDock = ship.CalculateDistanceToDock(availableDock);
 
+                         //Prioriter skipet som er nærmest en ledig dokk
+                        /* foreach (Ship waitingShip in WaitingShips)
+                        {
+                            int distance = waitingShip.CalculateDistanceToDock(availableDock);
+                            if (distance < distanceToDock)
+                            {
+                                ship = waitingShip;
+                                distanceToDock = distance;
+                            }
+                        }*/
+
+                        
+                        // Dokk skipet
                         ship.HasDocked = true;
                         ship.DockedAt = availableDock;
                         availableDock.IsAvailable = false;
                         availableDock.OccupiedBy = ship;
-                        ship.DockedAtTime = currentTime.ToString();
+                        ship.DockedAtTime = CurrentTime.ToString();
                         DockedShips.Add(ship);
                         WaitingShips.Dequeue();
+                        Console.WriteLine(DockedShips.Count + "D");
+                        Console.WriteLine(WaitingShips.Count + "W");
+
                     }
                     else
                     {
-                        WaitingShips.Enqueue(WaitingShips.Dequeue());
+                        //WaitingShips.Enqueue(WaitingShips.Dequeue());
                         break; 
                     }
                 }
-
             }
-
             catch (Exception e)
             {
-                
+                Console.WriteLine("Error docking ships.", e);
             }
-
-
         }
+
 
         /// <summary>
         /// A method to move cargo from a ship to the harbor.
@@ -357,25 +373,23 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-
-
-        public void Sailing(Ship ship, DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
+        public void Sailing(Ship ship, DateTime sailingStartTime, int numberOfDays)
         {
             try
             {
                 // Sjekk om skipet er klart for seiling og om det er tid for å starte seilingen
-                if (ship.IsReadyToSail && currentTime >= sailingStartTime)
+                if (ship.IsReadyToSail && DateTime.Compare(CurrentTime, sailingStartTime) >= 0)
                 {
                     // Hvis skipet kan fjernes fra dokken
                     if (RemoveShipFromDock(ship))
                     {
-                        ship.SailedAtTime = currentTime.ToString();
+                        ship.SailedAtTime = CurrentTime.ToString();
                         ship.IsSailing = true;
                         SailingShips.Add(ship);
                     }
                 }
                 // Sjekk om det er tid for skipet å stoppe seilingen
-                else if (currentTime.Date.Equals(sailingStartTime.AddDays(numberOfDays).Date))
+                else if (CurrentTime == sailingStartTime.AddDays(numberOfDays))
                 {
                     ship.IsSailing = false;
                     SailingShips.Remove(ship);
@@ -385,6 +399,31 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     ship.IsWaitingForSailing = true;
                 }
+
+                // Beveg skipet hvis det seiler
+                if (ship.IsSailing)
+                {
+                    // Beregn avstanden til destinasjonen
+                    int distanceToDestination = CalculateDistanceToDestination(ship);
+
+                    // Beregn hvor langt skipet skal flytte i denne simuleringstrinnet basert på sin fart
+                    int distanceToMove = ship.Speed; // Anta at skipets fart er gitt i kilometer per time (km/h)
+
+                    // Hvis avstanden som gjenstår å reise er mindre enn eller lik den planlagte bevegelsen
+                    if (distanceToDestination <= distanceToMove)
+                    {
+                        // Skipet har nådd sin destinasjon
+                        ship.CurrentLocation = ship.DestinationLocation;
+                        ship.IsSailing = false;
+                        SailingShips.Remove(ship);
+                        QueueShipsToDock();
+                    }
+                    else
+                    {
+                        // Flytt skipet mot destinasjonen
+                        ship.CurrentLocation += distanceToMove;
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -392,6 +431,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
+        // Metode for å beregne avstanden til destinasjonen basert på skipets gjeldende og destinasjonslokasjon
+        private int CalculateDistanceToDestination(Ship ship)
+        {
+            return Math.Abs(ship.DestinationLocation - ship.CurrentLocation);
+        }
 
 
         /*
@@ -422,6 +466,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return name;
         }
 
+        public DateTime GetCurrentTime()
+        {
+            return CurrentTime; 
+        }
+
+        public  void SetCurrentTime(DateTime currentTime)
+        {
+            CurrentTime = currentTime; 
+        }
         public List<Dock> GetDocks()
         {
             return Docks;
@@ -430,6 +483,22 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public List<Ship> GetShips()
         {
             return Ships;
+        }
+
+        public Ship GetOneSpesificShip(string shipName)
+        {
+            Ship shipExist = null; 
+
+            foreach (Ship ship in Ships)
+            {
+                if (ship.Name == shipName)
+                {
+                    shipExist = ship;
+                    break; 
+                }
+            }
+
+            return shipExist;
         }
 
         public List<Ship> GetDockedShips()
@@ -460,31 +529,30 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Harbor Name: {name}");
+            sb.AppendLine($"Harbor Name: {name}" + $" CurrentTime: {CurrentTime}");
             sb.AppendLine("Docks:");
-            foreach (var dock in Docks)
+            foreach (Dock dock in Docks)
             {
                 sb.AppendLine($" - Dock Name: {dock.Name}, Size: {dock.Size}, Model: {dock.Model}, Available: {dock.IsAvailable}");
             }
             sb.AppendLine("Ships:");
-            foreach (var ship in Ships)
+            foreach (Ship ship in Ships)
             {
                 sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}, Has Docked: {ship.HasDocked}");
             }
             sb.AppendLine("Docked Ships:");
-            foreach (var ship in DockedShips)
+            foreach (Ship ship in DockedShips)
             {
                 sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size} IsReadyToSail:{ship.IsReadyToSail}");
             }
             sb.AppendLine("Sailing Ships:");
-            foreach (var ship in SailingShips)
+            foreach (Ship ship in SailingShips)
             {
                 sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}");
             }
             sb.AppendLine("Waiting Ships:");   
 
-
-            foreach (var ship in WaitingShips)
+            foreach (Ship ship in WaitingShips)
             {
                 sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}");
             }

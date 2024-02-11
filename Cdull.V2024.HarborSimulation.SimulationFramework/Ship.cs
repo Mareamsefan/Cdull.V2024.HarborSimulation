@@ -1,4 +1,5 @@
-﻿using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿using System;
+using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 // spør marius om det er ok at man henter enums slik og at klassen med enums er public
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
@@ -17,8 +18,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public bool IsSailing { get; set; }
         public bool IsReadyToSail{ get; set; }
         internal bool IsWaitingForSailing { get; set; }
-        internal int ShipSpeed { get; private set; }
+        internal int Speed { get; private set; }
         internal Dock? DockedAt { get; set; }
+        public int CurrentLocation { get; set; }
+        public int DestinationLocation { get; set; }
 
 
 
@@ -33,11 +36,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             IsWaitingForSailing = false;
             DockedAtTime = "";
             SailedAtTime = "";
-            ShipSpeed = 100;
+            Speed = 100;
             IsReadyToSail = false;
+            CurrentLocation = GenerateRandomDestination(10, 100);
         }
 
-
+        public int GenerateRandomDestination(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max + 1);
+        }
         /// <summary>
         /// A method to create cargo in the simulation.
         /// </summary>
@@ -54,8 +62,31 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
+        public int CalculateDistanceToDock(Dock dock)
+        {
+            return Math.Abs(CurrentLocation - dock.Location);
+        }
 
 
+        // Metode for å sette destinasjonen fra havnen til skipet
+        public void SetDestinationFromHarbor(int harborLocation, int destination)
+        {
+            DestinationLocation = Math.Abs(destination - harborLocation);
+        }
+
+      
+
+        public List<Cargo> GetCargo()
+        {
+            return Cargo;
+        }
+
+
+        public string GetDockedAtTime()
+        {
+            return DockedAtTime; 
+
+        }
 
 
         /// <summary>

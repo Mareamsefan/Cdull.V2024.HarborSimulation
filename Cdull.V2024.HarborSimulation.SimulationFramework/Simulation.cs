@@ -1,90 +1,77 @@
-﻿using Cdull.V2024.HarborSimulation.SimulationFramework;
-using System.ComponentModel.Design;
-
-
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Cdull.V2024.HarborSimulation.SimulationFramework;
 
 namespace Cdull.V2024.HarborSimulation.TestClient
 {
-
     public class Simulation : IHarborSimulation
     {
-      
-
-        void IHarborSimulation.Run(Harbor harbor, DateTime starttime, DateTime endTime, List<Ship> ships, List<Dock> docks)
+   
+        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, DateTime startSailingTime, int numberOfDaysSailing)
         {
-            var currentTime = starttime;
+            // Sett starttidspunktet for simuleringen
+            harbor.SetCurrentTime(startTime);
 
-            // resetting all lists in harbor: 
+            // Tilbakestill alle lister i havnen
             harbor.WaitingShips.Clear();
             harbor.Ships.Clear();
             harbor.Docks.Clear();
             harbor.DockedShips.Clear();
             harbor.SailingShips.Clear();
 
-            // Adding ships and docks to harbor: 
-          
+            // Legg til skip og dokker i havnen
             harbor.Docks.AddRange(docks);
             harbor.Ships.AddRange(ships);
 
 
-            while (currentTime < endTime)
+           /* foreach (Ship ship in harbor.Ships)
             {
+                ship.SetDestinationFromHarbor(harbor.Location, ship.DestinationLocation);
+            }*/
 
-                harbor.DockShips(currentTime);
-                harbor.AddCargoToStorage();
-                harbor.AddCargoToShips(10, currentTime);
+            harbor.QueueShipsToDock();
 
-                harbor.QueueShipsToDock();
+            // Dokk skipene som venter
+            harbor.DockShips();
 
-
-                foreach (Ship ship in harbor.Ships)
-                {
-                    DateTime date = new DateTime(2024, 1, 3);
-                    if (ship.HasDocked && !ship.IsSailing)
-                    {
-                        harbor.Sailing(ship, currentTime, date, 1);
-
-                    }
-
-                }
-
-                // Geting the ship I want to sail:
-
-
-                if (currentTime.Hour == 0 && currentTime.Minute == 0)
-                {
-
-                    harbor.SaveHarborHistroy(currentTime.Date);
-
-                }
-
-
-
-                /* foreach (Ship ship in harbor.Ships)
-                 {
-                     if (ship.HasDocked && !ship.IsSailing)
-                     {
-                         harbor.RecurringSailing(new DateTime(2024, 1, 2), 1, currentTime, ship, Enums.RecurringType.Daily);
-
-                     }
-                 }*/
-
-                currentTime = currentTime.AddMinutes(1);
-            
-                if (currentTime.Date >= endTime.Date)
-                {
-             
-                    break;
-                }
-           
-            }
-
+            // Simuler havneaktiviteter fram til slutttidspunktet
+            while (harbor.GetCurrentTime() < endTime)
+            {
      
-            
+
+                // Lagre havnens tilstand ved midnatt
+                if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0)
+                {
+                    harbor.SaveHarborHistroy(harbor.GetCurrentTime().Date);
+                }
+
+               
 
 
+                // Flytt last fra skip til lagring
+                harbor.AddCargoToStorage();
+
+                // Last skipene som er dokket
+                harbor.AddCargoToShips(10, harbor.GetCurrentTime());
+
+
+                // Legg skipene til en kø for dokking 
+
+                if (harbor.GetCurrentTime() >= startSailingTime)
+                {
+                    foreach (Ship ship in harbor.Ships)
+                    {
+                        if (ship.IsReadyToSail && ship.HasDocked)
+                        {
+                            harbor.Sailing(ship, startSailingTime, numberOfDaysSailing);
+                        }
+                    }
+                }
+
+                // Oppdater tid
+                harbor.SetCurrentTime(harbor.GetCurrentTime().AddMinutes(1));
+            }
         }
     }
-
-
 }
