@@ -10,38 +10,46 @@ namespace Cdull.V2024.HarborSimulation.TestClient
     {
       
 
-        void IHarborSimulation.Run(Harbor harbor, DateTime starttime, DateTime endTime, int numberOfShips, 
-            Enums.Size shipSize, int numberOfCargoOnShip, Enums.Model shipModel, int numberOfDocks, int numberOfCranes, 
-            Enums.Size dockSize, Enums.Model dockModel)
+        void IHarborSimulation.Run(Harbor harbor, DateTime starttime, DateTime endTime, List<Ship> ships, List<Dock> docks)
         {
             var currentTime = starttime;
+
+            // resetting all lists in harbor: 
             harbor.WaitingShips.Clear();
             harbor.Ships.Clear();
+            harbor.Docks.Clear();
             harbor.DockedShips.Clear();
             harbor.SailingShips.Clear();
-            harbor.InitializeDocks(numberOfDocks, dockModel, dockSize, numberOfCranes);
-            harbor.InitializeShips(numberOfShips, shipSize, shipModel, numberOfCargoOnShip);
-            harbor.QueueShipsToDock();
-           
+
+            // Adding ships and docks to harbor: 
+          
+            harbor.Docks.AddRange(docks);
+            harbor.Ships.AddRange(ships);
+
 
             while (currentTime < endTime)
             {
+
                 harbor.DockShips(currentTime);
                 harbor.AddCargoToStorage();
                 harbor.AddCargoToShips(10, currentTime);
-                
 
-                // Geting the ship I want to sail:
-              /* foreach (Ship ship in harbor.Ships)
-               {
+                harbor.QueueShipsToDock();
+
+
+                foreach (Ship ship in harbor.Ships)
+                {
                     DateTime date = new DateTime(2024, 1, 3);
-                    if (ship.HasDocked && !ship.IsSailing) 
-                    {              
-                       harbor.Sailing(ship, currentTime, new DateTime(2024, 1, 2), 2);                       
+                    if (ship.HasDocked && !ship.IsSailing)
+                    {
+                        harbor.Sailing(ship, currentTime, date, 1);
 
                     }
 
-                }*/
+                }
+
+                // Geting the ship I want to sail:
+
 
                 if (currentTime.Hour == 0 && currentTime.Minute == 0)
                 {

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Text;
+using System.Xml.Linq;
 using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
@@ -8,13 +9,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
         public string name;
         internal List<Dock> Docks { get; } = new List<Dock>();
-        public List<Ship> Ships { get; } = new List<Ship>();
-        public List<Ship> DockedShips { get; } = new List<Ship>();
-        public List<Ship> SailingShips { get; } = new List<Ship>();
+        internal List<Ship> Ships { get; } = new List<Ship>();
+        internal List<Ship> DockedShips { get; } = new List<Ship>();
+        internal List<Ship> SailingShips { get; } = new List<Ship>();
         internal Queue<Ship> WaitingShips { get; } = new Queue<Ship>();
         private Dictionary<DateTime, Harbor> HarborHistory { get; } = new Dictionary<DateTime, Harbor>();
 
-        internal CargoStorage cargoStorage { get; set; }
+        internal CargoStorage harborCargoStorage { get; set; }
 
         /// <summary>
         /// A method to create the harbor for the simulation.
@@ -24,7 +25,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public Harbor(string harborName, CargoStorage harborCargoStorage)
         {
             name = harborName;
-            cargoStorage = harborCargoStorage;
+            this.harborCargoStorage = harborCargoStorage;
         }
       
 
@@ -59,31 +60,44 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="numberOfDock">The amount of docks you want to create</param>
         /// <param name="type">The type of dock you want to create</param>
         /// <param name="size">The size of the dock you're creating</param>
-        public void InitializeDocks(int numberOfDock, Model dockModel, Size dockSize, int numberOfCranes)
+        public List<Dock> InitializeDocks(int numberOfDock, Model dockModel, Size dockSize, int numberOfCranes)
         {
+            List<Dock> docks = new List<Dock>();
             try
-            {
+            {            
+
+                if (numberOfDock <= 0)
+                {
+                   throw new ArgumentException("Number of docks should be greater than zero.");
+                    
+                }
+
                 for (int i = 0; i < numberOfDock; i++)
                 {
-                    Dock dock = new($"dock-{i}", dockSize, dockModel);
-                    Docks.Add(dock);
+                    Dock dock = new($"{dockModel}dock-{i}", dockSize, dockModel);
+                    docks.Add(dock);
+                    
                     if (numberOfCranes > 0)
                     {
                         for (int z = 0; z < numberOfCranes; z++)
                         {
                             Crane crane = new($"Crane{z}");
                             dock.Cranes.Add(crane);
+                         
                         }
-
+                    
                     }
-
+                    
                 }
-
+           
             }
+
             catch (Exception e)
             {
                 Console.WriteLine("Error initializing docks.", e);
             }
+            return docks;
+
         }
 
         /// <summary>
@@ -94,22 +108,31 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="shipType">The type of ship you want to create</param>
         /// <param name="numberOfCargos">The amount of cargo on the ship</param>
         /// <param name="CargoWeight">The weight of all the cargo on the ship</param>
-        public void InitializeShips(int numberOfShips, Size shipSize, Model shipModel, int numberOfCargo, int CargoWeight = 10)
+        public List<Ship> InitializeShips(int numberOfShips, Model shipModel, Size shipSize, int numberOfCargo, int CargoWeight = 10)
         {
+            List<Ship> ships = new List<Ship>();
             try
-            {
+            { 
+
+                if (numberOfShips <= 0)
+                {
+                    throw new ArgumentException("Number of ships should be greater than zero.");
+
+                }
                 for (int i = 0; i < numberOfShips; i++)
                 {
-                    Ship ship = new($"ship-{i}", shipModel, shipSize);
+                    Ship ship = new($"{shipModel}ship-{i}", shipModel, shipSize);
                     ship.InitializeCargo(numberOfCargo);
-                    Ships.Add(ship);
+                    ships.Add(ship);
                 }
+               
             }
 
             catch (Exception e)
             {
                 Console.WriteLine("Error initializing ships.", e);
             }
+            return ships;
 
         }
 
@@ -156,13 +179,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     return true; 
                 }
-                else
-                {
-                    return false; 
-                }
             }
             return false; 
-      
         }
 
         /// <summary>
@@ -225,8 +243,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     }
                     else
                     {
-
-                        break;
+                        WaitingShips.Enqueue(WaitingShips.Dequeue());
+                        break; 
                     }
                 }
 
@@ -234,7 +252,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             catch (Exception e)
             {
-                Console.WriteLine("Error docking ships.", e);
+                
             }
 
 
@@ -255,7 +273,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
                     foreach (Cargo cargo in shipCargoCopy)
                     {
-                        cargoStorage.AddCargo(cargo);
+                        harborCargoStorage.AddCargo(cargo);
                         ship.Cargo.Remove(cargo);
                     }
                 }
@@ -283,11 +301,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     {
                         for (int i = 0; i < numberOfCargo; i++)
                         {
-                            if (cargoStorage.Cargo.Count > 0)
+                            if (harborCargoStorage.Cargo.Count > 0)
                             {
-                                Cargo cargo = cargoStorage.Cargo.First();
+                                Cargo cargo = harborCargoStorage.Cargo.First();
                                 ship.Cargo.Add(cargo);
-                                cargoStorage.RemoveCargo(cargo);
+                                harborCargoStorage.RemoveCargo(cargo);
                                 cargo.History.Add($"{cargo.name} loaded at {currentTime} on {ship.Name}");
                             }
 
@@ -340,29 +358,37 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
+
         public void Sailing(Ship ship, DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
         {
-            // Sjekk om skipet er klart for seiling og om det er tid for å starte seilingen
-            if (ship.IsReadyToSail && currentTime.Equals(sailingStartTime) && !ship.IsWaitingForSailing)
+            try
             {
-                // Hvis skipet kan fjernes fra dokken
-                if (RemoveShipFromDock(ship))
+                // Sjekk om skipet er klart for seiling og om det er tid for å starte seilingen
+                if (ship.IsReadyToSail && currentTime >= sailingStartTime)
                 {
-                    ship.SailedAtTime = currentTime.ToString();
-                    ship.IsSailing = true;
-                    SailingShips.Add(ship);
+                    // Hvis skipet kan fjernes fra dokken
+                    if (RemoveShipFromDock(ship))
+                    {
+                        ship.SailedAtTime = currentTime.ToString();
+                        ship.IsSailing = true;
+                        SailingShips.Add(ship);
+                    }
+                }
+                // Sjekk om det er tid for skipet å stoppe seilingen
+                else if (currentTime.Date.Equals(sailingStartTime.AddDays(numberOfDays).Date))
+                {
+                    ship.IsSailing = false;
+                    SailingShips.Remove(ship);
+                    QueueShipsToDock();
+                }
+                else
+                {
+                    ship.IsWaitingForSailing = true;
                 }
             }
-            // Sjekk om det er tid for skipet å stoppe seilingen
-            else if (currentTime.Date >= sailingStartTime.AddDays(numberOfDays).Date)
+            catch (Exception e)
             {
-                ship.IsSailing = false;
-                SailingShips.Remove(ship);
-                QueueShipsToDock(); 
-            }
-            else
-            {
-                ship.IsWaitingForSailing = true;
+                Console.WriteLine("Error in Sailing method.", e);
             }
         }
 
@@ -391,6 +417,46 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         */
 
+        public string GetName()
+        {
+            return name;
+        }
+
+        public List<Dock> GetDocks()
+        {
+            return Docks;
+        }
+
+        public List<Ship> GetShips()
+        {
+            return Ships;
+        }
+
+        public List<Ship> GetDockedShips()
+        {
+            return DockedShips;
+        }
+
+        public List<Ship> GetSailingShips()
+        {
+            return SailingShips;
+        }
+
+        public Queue<Ship> GetWaitingShips()
+        {
+            return WaitingShips;
+        }
+
+        public Dictionary<DateTime, Harbor> GetHarborHistory()
+        {
+            return HarborHistory;
+        }
+
+        public CargoStorage GetCargoStorage()
+        {
+            return harborCargoStorage;
+        }
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -408,7 +474,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             sb.AppendLine("Docked Ships:");
             foreach (var ship in DockedShips)
             {
-                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}");
+                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size} IsReadyToSail:{ship.IsReadyToSail}");
             }
             sb.AppendLine("Sailing Ships:");
             foreach (var ship in SailingShips)
@@ -423,9 +489,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}");
             }
             sb.AppendLine("Cargo Storage:");
-            sb.AppendLine($" - Capacity: {cargoStorage.Capacity}, Occupied Space: {cargoStorage.GetOccupiedSpace()}");
+            sb.AppendLine($" - Capacity: {harborCargoStorage.Capacity}, Occupied Space: {harborCargoStorage.GetOccupiedSpace()}");
 
             return sb.ToString();
+
         }
     }
     

@@ -19,7 +19,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        /*
+        
         public void AddCargoToStorage()
         {
             if (Harbor == null)
@@ -29,7 +29,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             foreach (Cargo cargo in ship.Cargo)
             {
-                Harbor.cargoStorage.AddCargo(cargo);
+                Harbor.harborCargoStorage.AddCargo(cargo);
             }
 
             ship.Cargo.Clear();
@@ -44,11 +44,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             for (int i = 0; i < numberOfCargo; i++)
             {
-                if (Harbor.cargoStorage.Cargo.Count > 0)
+                if (Harbor.harborCargoStorage.Cargo.Count > 0)
                 {
-                    Cargo cargo = Harbor.cargoStorage.Cargo.First();
+                    Cargo cargo = Harbor.harborCargoStorage.Cargo.First();
                     ship.Cargo.Add(cargo);
-                    Harbor.cargoStorage.RemoveCargo(cargo);
+                    Harbor.harborCargoStorage.RemoveCargo(cargo);
                 }
                 else
                 {
@@ -85,7 +85,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        public void SailingOneShip(DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
+
+        public void Sailing(DateTime currentTime, DateTime sailingStartTime, int numberOfDays)
         {
             // Sjekk om skipet er klart for seiling og om det er tid for å starte seilingen
             if (ship.IsReadyToSail && currentTime == sailingStartTime)
@@ -112,7 +113,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
         }
-        */
+        
     }
 
         
