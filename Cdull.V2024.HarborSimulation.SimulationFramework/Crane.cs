@@ -1,25 +1,26 @@
 ﻿namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
+    /// <summary>
+    /// Represents a crane used in harbor to move containers from/to ships/harbor.
+    /// </summary>
     public class Crane
     {
-        private string name;
-        private bool isCraneAvalible;
-        private bool isCraneOutOfFuntion;
-
-        public Crane(string craneName)
-        {
-            name = craneName;
-            isCraneAvalible = true;
-            isCraneOutOfFuntion = false;
-        }
+        private string Name { get; set; }
+        internal int Speed { get; set; }
+        private bool IsCraneAvalible {  get; set; }
+        private bool IsCraneOutOfFuntion { get; set; }
 
         /// <summary>
-        /// A method to returns information about the crane.
+        /// Initializes a new instance of the Crane class with the specified name.
         /// </summary>
-        /// <returns>The name of the crane.</returns>
-        public override string ToString()
+        /// <param name="craneName">The name of the crane.</param>
+        public Crane(string craneName)
         {
-            return $"Crane Name: {name}";
+            Name = craneName;
+            IsCraneAvalible = true;
+            IsCraneOutOfFuntion = false;
+            Speed = 100; 
         }
+
     }
 }

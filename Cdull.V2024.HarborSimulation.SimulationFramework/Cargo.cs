@@ -1,29 +1,26 @@
 ﻿namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
+    /// <summary>
+    /// Represents cargo that can be loaded onto ships in the harbor simulation.
+    /// </summary>
     public class Cargo
     {
-        internal string name;
+        internal string Name { get; set; }
         internal double Weight { get; private set; }
         internal List<String> History { get; } = new List<String>();
 
+        /// <summary>
+        /// Initializes a new instance of Cargo class with the specified name and weight.
+        /// </summary>
+        /// <param name="cargoName">The name of the cargo.</param>
+        /// <param name="cargoWeight">The weight of the cargo.</param>
         public Cargo(string cargoName, double cargoWeight)
         {
-            name = cargoName;
+            Name = cargoName;
             Weight = cargoWeight;
 
         }
 
-        /// <summary>
-        /// A method that returns information about the cargo, such as name and weight in tons.
-        /// </summary>
-        /// <returns>Info about the cargo.</returns>
-        public override string ToString()
-        {
-
-            string cargoInfo = name + " " + Weight;
-
-            return cargoInfo;
-        }
 
     }
 }

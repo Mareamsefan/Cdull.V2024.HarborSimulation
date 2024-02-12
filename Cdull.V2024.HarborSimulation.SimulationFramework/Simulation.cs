@@ -1,80 +1,74 @@
-﻿using Cdull.V2024.HarborSimulation.SimulationFramework;
-using System.ComponentModel.Design;
-
-
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Cdull.V2024.HarborSimulation.SimulationFramework;
+using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.TestClient
 {
-
+    /// <summary>
+    /// Represents the simulation of a harbor.
+    /// </summary>
     public class Simulation : IHarborSimulation
     {
-      
-
-        void IHarborSimulation.Run(Harbor harbor, DateTime starttime, DateTime endTime, int numberOfShips, 
-            Enums.Size shipSize, int numberOfCargoOnShip, Enums.Model shipModel, int numberOfDocks, int numberOfCranes, 
-            Enums.Size dockSize, Enums.Model dockModel)
+   
+        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks,
+            DateTime startSailingTime, int numberOfDaysSailing, bool IsRecurringSailing, RecurringType recurringType)
         {
-            var currentTime = starttime;
+            
+            harbor.SetCurrentTime(startTime);
+
+       
             harbor.WaitingShips.Clear();
             harbor.Ships.Clear();
+            harbor.Docks.Clear();
             harbor.DockedShips.Clear();
             harbor.SailingShips.Clear();
-            harbor.InitializeDocks(numberOfDocks, dockModel, dockSize, numberOfCranes);
-            harbor.InitializeShips(numberOfShips, shipSize, shipModel, numberOfCargoOnShip);
-            Console.WriteLine($"Currentime: {currentTime}");
-            Console.WriteLine($"HARBOR SIMULATION STARTED: {harbor.name}");
-            harbor.QueueShipsToDock();
 
-            while (currentTime < endTime)
+      
+            harbor.Docks.AddRange(docks);
+            harbor.Ships.AddRange(ships);
+
+
+            foreach (Ship ship in harbor.Ships)
             {
-
-           
-
-                if (currentTime.Hour == 0 && currentTime.Minute == 0)
-                {
-
-                    harbor.SaveHarborHistroy(currentTime);
-                 
-                }
-
-                harbor.DockShips(currentTime);
-
-                harbor.AddCargoToStorage();
-                harbor.AddCargoToShips(10, currentTime);
-
-
-
-
-                // Geting the ship I want to sail:
-                foreach (Ship ship in harbor.Ships)
-                {
-                    if (ship.HasDocked && !ship.IsSailing)
-                    {
-                        for (int i = 0; i > (harbor.Ships.Count / 2); i++)
-                        {
-                            harbor.Sailing(ship, currentTime, new DateTime(2024, 1, 2), 1);
-                        }
-
-                    }
-
-                }
-
-                currentTime = currentTime.AddMinutes(1);
-            
-                if (currentTime.Date >= endTime.Date)
-                {
-             
-                    break;
-                }
-           
+                ship.SetDestinationFromHarbor(harbor.Location, ship.DestinationLocation);
             }
 
-     
+            while (harbor.GetCurrentTime() < endTime)
+            {
+        
+                if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0)
+                {
+                    harbor.SaveHarborHistory(harbor.GetCurrentTime());
+                }
+
+                harbor.QueueShipsToDock();
+
+    
+                harbor.DockShips();
+
+
+         
+                harbor.AddCargoToStorage();
+
+              
+                harbor.AddCargoToShips(10);
+
+                if (IsRecurringSailing)
+                {
+                    harbor.RecurringSailing(startSailingTime, endTime, numberOfDaysSailing, recurringType);
+                }
+                else if (!IsRecurringSailing)
+                {
+                    harbor.Sailing(startSailingTime, numberOfDaysSailing);
+
+                }
+
+
             
-
-
+                harbor.SetCurrentTime(harbor.GetCurrentTime().AddMinutes(1));
+            }
         }
     }
-
-
 }
