@@ -98,13 +98,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
         /// <summary>
-        /// Sets the destination of the ship from a harbor location.
+        /// Sets the destination location of the ship relative to a specified location.
         /// </summary>
-        /// <param name="harborLocation">The location of the harbor.</param>
-        /// <param name="destination">The destination location.</param>
-        public void SetDestinationFromHarbor(int harborLocation, int destination)
+        /// <param name="Location">The current location, such as harbor, dock, or sailing point.</param>
+        /// <param name="destination">The desired destination location.</param>
+        /// <remarks>
+        /// This method calculates the distance from the current location to the destination location and sets it as the ship's new destination.
+        /// The current location and destination are provided as parameters, and the absolute difference between them determines the distance.
+        /// </remarks>
+        public void SetDestinationLocationFrom (int Location, int destination)
         {
-            DestinationLocation = Math.Abs(destination - harborLocation);
+            DestinationLocation = Math.Abs(destination - Location);
         }
 
         /// <summary>

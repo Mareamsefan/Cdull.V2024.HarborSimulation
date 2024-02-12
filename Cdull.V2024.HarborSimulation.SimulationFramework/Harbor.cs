@@ -245,11 +245,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
         /// <summary>
-        /// Docks the ships in the harbor.
+        /// Attempts to dock ships waiting in the queue to available docks in the harbor.
         /// </summary>
         /// <remarks>
-        /// This method docks all ships that have an available dock of appropriate size. It checks the size of the available docks,
-        /// and then docks the ship if conditions are met.
+        /// This method iterates through the ships in the waiting queue and attempts to dock them to available docks in the harbor. 
+        /// It checks if there is an available dock of the appropriate size for each ship and if the ship is not currently sailing.
+        /// If a ship successfully docks, it is removed from the queue and added to the list of docked ships.
+        /// If there are no available docks or the ship is currently sailing, it remains in the queue.
         /// </remarks>
         public void DockShips()
         {
@@ -261,7 +263,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     Dock availableDock = AvailableDockOfSize(ship.Size);
 
                     if (availableDock is not null && ship.IsSailing == false)
-                    { 
+                    {
+                        ship.SetDestinationLocationFrom(ship.CurrentLocation, Location); 
                         ship.Move();
 
                         if (ship.HasReachedDestination)
@@ -395,8 +398,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="numberOfDays">The duration of sailing in days.</param>
         /// <remarks>
         /// This method iterates through all ships in the harbor. If a ship is ready to sail and the current time matches
-        /// the specified sailing start time, the ship is removed from its dock and marked as sailing. If the current time
-        /// matches the end of the sailing period, the ship is marked as not sailing, and it's queued to dock again.
+        /// the specified sailing start time, the ship is removed from its dock and marked as sailing. It then moves towards
+        /// the specified sailing destination location. If the ship reaches its destination, it's marked as sailing.
+        /// If the current time matches the end of the sailing period, the ship is marked as not sailing, and it's queued to dock again.
         /// If the ship is not ready to sail or the current time is between the start and end of the sailing period,
         /// the ship is marked as waiting for sailing.
         /// </remarks>
@@ -404,6 +408,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             try
             {
+                int sailingDestination = 1000;
                 foreach (Ship ship in Ships)
                 {
                     DateTime sailTimeIsOver = sailingStartTime.AddDays(numberOfDays);
@@ -411,12 +416,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     {
                         if (RemoveShipFromDock(ship))
                         {
+                            ship.SetDestinationLocationFrom(ship.CurrentLocation, sailingDestination);
+                            ship.Move();
                             ship.SailedAtTime = CurrentTime.ToString();
                             ship.IsSailing = true;
                             SailingShips.Add(ship);
                         }
                     }
-                    else if (CurrentTime.CompareTo(sailTimeIsOver) == 0)
+                    else if (CurrentTime.CompareTo(sailTimeIsOver) == 0 && ship.HasReachedDestination)
                     {
                         ship.IsSailing = false;
                         SailingShips.Remove(ship);
