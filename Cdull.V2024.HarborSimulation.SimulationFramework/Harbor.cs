@@ -19,7 +19,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal List<Ship> SailingShips { get; set; } = new List<Ship>();
         internal Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
         internal Dictionary<DateTime, Harbor> HarborHistory { get; set; } = new Dictionary<DateTime, Harbor>();
-        internal CargoStorage harborCargoStorage { get; set; }
+        internal CargoStorage CargoStorage { get; set; }
 
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             Name = harborName;
             Location = 0; 
-            this.harborCargoStorage = harborCargoStorage;
+            CargoStorage = harborCargoStorage;
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         //(Manole, 2021) (https://paulsebastian.codes/a-solution-to-deep-cloning-in-csharp)
         public Harbor DeepClone()
         {
-            Harbor clonedHarbor = new Harbor(Name, harborCargoStorage);
+            Harbor clonedHarbor = new Harbor(Name, CargoStorage);
 
             clonedHarbor.CurrentTime = CurrentTime;
             clonedHarbor.Location = Location;
@@ -304,15 +304,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     foreach (Cargo cargo in ship.Cargo.ToList())
                     {
-                        if(harborCargoStorage.GetOccupiedSpace() > 0)
-                        {
-                            harborCargoStorage.AddCargo(cargo);
-                            ship.Cargo.Remove(cargo);
-                        }
-                        else
-                        {
-                            harborCargoStorage.IsAvailable = false; 
-                        }
+                       
+                        CargoStorage.AddCargo(cargo);
+                        CargoStorage.OccupySpace(cargo); 
+                        ship.Cargo.Remove(cargo);
+                        
                     }
                 }
             }
@@ -341,11 +337,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     {
                         for (int i = 0; i < numberOfCargo; i++)
                         {
-                            if (harborCargoStorage.Cargo.Count > 0)
+                            if (CargoStorage.Cargo.Count > 0)
                             {
-                                Cargo cargo = harborCargoStorage.Cargo.First();
+                                Cargo cargo = CargoStorage.Cargo.First();
                                 ship.Cargo.Add(cargo);
-                                harborCargoStorage.RemoveCargo(cargo);
+                                CargoStorage.RemoveCargo(cargo);
+                                CargoStorage.deOccupySpace(cargo); 
                                 cargo.History.Add($"{cargo.Name} loaded at {CurrentTime} on {ship.Name}");
                             }
                             else
@@ -518,7 +515,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             stringBuilder.AppendLine($"Docked Ships: {DockedShips.Count}");
             stringBuilder.AppendLine($"Sailing Ships: {SailingShips.Count}");
             stringBuilder.AppendLine($"Waiting Ships: {WaitingShips.Count}");
-            stringBuilder.AppendLine($"Cargo Storage: Capacity: {harborCargoStorage.Capacity}, Occupied Space: {harborCargoStorage.GetOccupiedSpace()}\n");
+            stringBuilder.AppendLine($"Cargo Storage: Capacity: {CargoStorage.Capacity}, Occupied Space: {CargoStorage.GetOccupiedSpace()}\n");
             return stringBuilder.ToString();
         }
 
