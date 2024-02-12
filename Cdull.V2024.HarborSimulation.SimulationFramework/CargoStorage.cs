@@ -76,7 +76,7 @@
         /// </remarks>
         public void deOccupySpace(Cargo cargo)
         {
-            if (OccupiedSpace <= Capacity)
+            if (OccupiedSpace <= Capacity && OccupiedSpace > 0)
             {
                 OccupiedSpace -= cargo.Weight;
                 IsAvailable = true;

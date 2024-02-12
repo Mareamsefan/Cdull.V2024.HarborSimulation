@@ -10,58 +10,15 @@ namespace HarborSimulationTest
     {
         static void Main(string[] args)
         {
-            /*// Opprett en instans av Harbor-klassen
-            Harbor harbor = new Harbor("Test Harbor", new CargoStorage("CargoStorage", 100));
-
-            // Opprett noen dokker
-            List<Dock> docks = harbor.InitializeDocks(5, Model.ContainerShip, Size.Large, 2);
-            docks.AddRange(harbor.InitializeDocks(5, Model.RoRo, Size.Large, 10));
-
-            // Opprett noen skip
-            List<Ship> ships = harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 10);
-            ships.AddRange(harbor.InitializeShips(5, Model.RoRo, Size.Large, 10));
-           
-            IHarborSimulation driver = new Simulation();
-
-            // Sett start- og slutttidspunkter for simuleringen
-            DateTime startTime = new DateTime(2024, 1, 1);
-            DateTime endTime = new DateTime(2024, 1, 15);
-
-            
-
-            DateTime startSailingTime = new DateTime(2024, 1, 1);
-
-
-
-            // Kjør simuleringen
-            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, Enums.RecurringType.Daily);
-
-
           
-
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 1)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 2)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 3)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 5)));
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 6)));
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 7)));
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 8)));
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 9)));
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 10)));
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 11)));
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 12)));
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 14)));
-            */
             Console.WriteLine("Scenario 1: ");
             Scenario_1();
+
             Console.WriteLine("Scenario 2: ");
             Scenario_2();
+
+            Console.WriteLine("Scenario 3: ");
+            Scenario_3();
 
         }
 
@@ -137,7 +94,7 @@ namespace HarborSimulationTest
 
 
             // Runing the simulation: 
-            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, Enums.RecurringType.Daily);
+            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, Enums.RecurringType.Weekly);
 
 
             //Printing out harbor history to view harborstate: 
@@ -149,6 +106,60 @@ namespace HarborSimulationTest
 
             Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
 
+
+        }
+
+        public static void Scenario_3() {
+
+
+            // Opprett en instans av Harbor-klassen
+           Harbor harbor = new Harbor("Test Harbor", new CargoStorage("CargoStorage", 100));
+
+           // Opprett noen dokker
+           List<Dock> docks = harbor.InitializeDocks(5, Model.ContainerShip, Size.Large, 2);
+           docks.AddRange(harbor.InitializeDocks(5, Model.RoRo, Size.Large, 10));
+
+           // Opprett noen skip
+           List<Ship> ships = harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 10);
+           ships.AddRange(harbor.InitializeShips(5, Model.RoRo, Size.Large, 10));
+
+           IHarborSimulation driver = new Simulation();
+
+           // Sett start- og slutttidspunkter for simuleringen
+           DateTime startTime = new DateTime(2024, 1, 1);
+           DateTime endTime = new DateTime(2024, 1, 15);
+
+
+
+           DateTime startSailingTime = new DateTime(2024, 1, 1);
+
+
+
+           // Kjør simuleringen
+           driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, Enums.RecurringType.Daily);
+
+
+
+
+
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 1)));
+
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 2)));
+
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 3)));
+
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
+
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 5)));
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 6)));
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 7)));
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 8)));
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 9)));
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 10)));
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 11)));
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 12)));
+           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 14)));
+           
 
         }
     }
