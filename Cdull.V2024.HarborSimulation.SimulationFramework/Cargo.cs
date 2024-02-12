@@ -21,6 +21,15 @@
 
         }
 
+        /// <summary>
+        /// Retrieves the history of the cargo.
+        /// </summary>
+        /// <returns>A list of strings representing the cargo's history.</returns>
+        public List<string> GetCargoHistory()
+        {
+            return History;
+        }
+
 
     }
 }

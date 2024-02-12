@@ -495,6 +495,51 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
         /// <summary>
+        /// Gets the list of docks in the harbor.
+        /// </summary>
+        /// <returns>The list of docks.</returns>
+        public List<Dock> GetDocks()
+        {
+            return Docks;
+        }
+
+        /// <summary>
+        /// Gets the list of ships in the harbor.
+        /// </summary>
+        /// <returns>The list of ships.</returns>
+        public List<Ship> GetShips()
+        {
+            return Ships;
+        }
+
+        /// <summary>
+        /// Gets the list of ships currently docked in the harbor.
+        /// </summary>
+        /// <returns>The list of docked ships.</returns>
+        public List<Ship> GetDockedShips()
+        {
+            return DockedShips;
+        }
+
+        /// <summary>
+        /// Gets the list of ships currently sailing from the harbor.
+        /// </summary>
+        /// <returns>The list of sailing ships.</returns>
+        public List<Ship> GetSailingShips()
+        {
+            return SailingShips;
+        }
+
+        /// <summary>
+        /// Gets the queue of ships waiting to dock in the harbor.
+        /// </summary>
+        /// <returns>The queue of waiting ships.</returns>
+        public Queue<Ship> GetWaitingShips()
+        {
+            return WaitingShips;
+        }
+
+        /// <summary>
         /// Retrieves the current time of the harbor simulation.
         /// </summary>
         /// <returns>The current time of the harbor simulation.</returns>
