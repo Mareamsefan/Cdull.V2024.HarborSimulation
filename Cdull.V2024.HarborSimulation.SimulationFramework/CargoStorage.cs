@@ -10,6 +10,7 @@
         internal List<Cargo> Cargo { get; set; } = new List<Cargo>();
         internal bool IsAvailable { get; set; }
         internal int Capacity { get; set; }
+        internal double OccupiedSpace{ get; set;  }
 
 
         /// <summary>
@@ -44,17 +45,51 @@
         }
 
         /// <summary>
-        /// Calculates the occupied space in the cargo storage based on the weight of the stored cargo.
+        /// Occupies space in the cargo storage by adding the weight of the provided cargo.
+        /// </summary>
+        /// <param name="cargo">The cargo to occupy space for.</param>
+        /// <remarks>
+        /// This method adds the weight of the provided cargo to the occupied space of the cargo storage.
+        /// If the occupied space exceeds the capacity of the cargo storage, it marks the storage as unavailable.
+        /// </remarks>
+
+        public void OccupySpace(Cargo cargo)
+        {
+            if(OccupiedSpace < Capacity)
+            {
+                OccupiedSpace += cargo.Weight;
+            }
+            else
+            {
+                IsAvailable = false; 
+            }    
+            
+        }
+
+        /// <summary>
+        /// Frees up space in the cargo storage by subtracting the weight of the provided cargo.
+        /// </summary>
+        /// <param name="cargo">The cargo to free up space for.</param>
+        /// <remarks>
+        /// This method subtracts the weight of the provided cargo from the occupied space of the cargo storage.
+        /// If the occupied space becomes less than or equal to the capacity of the cargo storage, it marks the storage as available.
+        /// </remarks>
+        public void deOccupySpace(Cargo cargo)
+        {
+            if (OccupiedSpace <= Capacity)
+            {
+                OccupiedSpace -= cargo.Weight;
+                IsAvailable = true;
+            }
+
+        }
+        /// <summary>
+        /// Returns the occupied space in the cargo storage based on the weight of the stored cargo.
         /// </summary>
         /// <returns>The total weight of the cargo stored in the cargo storage.</returns>
         public double GetOccupiedSpace()
-        {
-            double occupiedSpace = 0;
-            foreach (var cargo in Cargo)
-            {
-                occupiedSpace += cargo.Weight;
-            }
-            return occupiedSpace;
+        {       
+            return OccupiedSpace;
         }
     }
 }

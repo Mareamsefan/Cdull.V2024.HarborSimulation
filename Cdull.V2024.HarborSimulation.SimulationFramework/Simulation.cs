@@ -13,7 +13,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
     {
    
         public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks,
-            DateTime startSailingTime, int numberOfDaysSailing, bool IsRecurringSailing, RecurringType recurringType)
+            DateTime startSailingTime, int numberOfDaysSailing, bool IsRecurringSailing, RecurringType? recurringType=null)
         {
             
             harbor.SetCurrentTime(startTime);
@@ -55,18 +55,18 @@ namespace Cdull.V2024.HarborSimulation.TestClient
               
                 harbor.AddCargoToShips(10);
 
-                if (IsRecurringSailing)
+                if (IsRecurringSailing && recurringType != null)
                 {
-                    harbor.RecurringSailing(startSailingTime, endTime, numberOfDaysSailing, recurringType);
+                  
+                    harbor.RecurringSailing(startSailingTime, endTime, numberOfDaysSailing, recurringType.Value);
                 }
-                else if (!IsRecurringSailing)
+                else
                 {
                     harbor.Sailing(startSailingTime, numberOfDaysSailing);
-
                 }
 
 
-            
+
                 harbor.SetCurrentTime(harbor.GetCurrentTime().AddMinutes(1));
             }
         }

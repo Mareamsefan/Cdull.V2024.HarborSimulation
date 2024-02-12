@@ -17,7 +17,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="IsRecurringSailing">bool indicating whether sailing is recurring.</param>
         /// <param name="recurringType">The type of recurring sailing (daily or weekly).</param>
         public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, 
-            DateTime startSailingTime, int numberOfDaysSailing, bool IsRecurringSailing, RecurringType recurringType);
+            DateTime startSailingTime, int numberOfDaysSailing, bool IsRecurringSailing, RecurringType? recurringType=null);
 
 
 
