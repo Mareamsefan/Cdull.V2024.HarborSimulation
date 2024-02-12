@@ -12,7 +12,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal bool IsAvailable { get; set; }
         internal List<Crane> Cranes { get; set; } = new List<Crane>();
         internal Ship? OccupiedBy { get; set; }
-        public int Location { get; }
 
 
 
@@ -23,7 +22,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Model = dockModel;
             IsAvailable = true;
             OccupiedBy = null;
-            Location = 0;
+
             if (dockCranes != null)
             {
                 Cranes = dockCranes;

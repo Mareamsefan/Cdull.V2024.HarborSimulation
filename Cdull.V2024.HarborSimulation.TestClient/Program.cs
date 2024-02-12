@@ -15,30 +15,32 @@ namespace HarborSimulationTest
 
             // Opprett noen dokker
             List<Dock> docks = harbor.InitializeDocks(5, Model.ContainerShip, Size.Large, 2);
+            docks.AddRange(harbor.InitializeDocks(5, Model.RoRo, Size.Large, 10));
 
             // Opprett noen skip
             List<Ship> ships = harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 10);
-
+            ships.AddRange(harbor.InitializeShips(5, Model.RoRo, Size.Large, 10));
            
             IHarborSimulation driver = new Simulation();
 
             // Sett start- og slutttidspunkter for simuleringen
-            DateTime startTime = new DateTime(2024, 1, 1, 0, 0, 0);
-            DateTime endTime = new DateTime(2024, 1, 5, 0, 0, 0);
+            DateTime startTime = new DateTime(2024, 1, 1);
+            DateTime endTime = new DateTime(2024, 1, 15);
 
             
 
-            DateTime startSailingTime = new DateTime(2024, 1, 2, 0, 0, 0); 
+            DateTime startSailingTime = new DateTime(2024, 1, 1);
+
+
 
             // Kjør simuleringen
-            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 2);
+            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1);
 
-            foreach(Ship ship  in harbor.GetShips()) {
-                Console.WriteLine(ship.GetDockedAtTime()); 
-            }
+
           
+       
 
-            
+
             Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 1)));
 
             Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 2)));
@@ -46,9 +48,13 @@ namespace HarborSimulationTest
             Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 3)));
 
             Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
-            
 
-
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 5)));
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 6)));
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 7)));
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 8)));
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 9)));
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 14)));
         }
     }
 }

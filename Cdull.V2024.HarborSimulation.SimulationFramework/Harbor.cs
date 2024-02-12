@@ -9,13 +9,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
         internal string name;
         internal DateTime CurrentTime { get; set; }
-        internal int Location { get; }
+        internal int Location { get; set; }
         internal List<Dock> Docks { get; } = new List<Dock>();
         internal List<Ship> Ships { get; } = new List<Ship>();
         internal List<Ship> DockedShips { get; } = new List<Ship>();
         internal List<Ship> SailingShips { get; } = new List<Ship>();
-        internal Queue<Ship> WaitingShips { get; } = new Queue<Ship>();
-        private Dictionary<DateTime, Harbor> HarborHistory { get; } = new Dictionary<DateTime, Harbor>();
+        internal Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
+        internal Dictionary<DateTime, Harbor> HarborHistory { get; } = new Dictionary<DateTime, Harbor>();
 
         internal CargoStorage harborCargoStorage { get; set; }
 
@@ -32,30 +32,53 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
       
 
-        public Harbor GetHarborHistory(DateTime fromDate)
-        {
+         public Harbor GetHarborHistory(DateTime fromDate)
+         {
             if (HarborHistory.ContainsKey(fromDate.Date))
             {
-                return HarborHistory[fromDate.Date].Clone();
+                return HarborHistory[fromDate.Date].DeepClone();
             }
             else
             {
                 throw new KeyNotFoundException("Harbor history not found for the given date.");
             }
-        }
+         }
 
         //Kilde hentet ut : 09/02/2023: https://learn.microsoft.com/en-us/dotnet/api/system.object.memberwiseclone?view=net-8.0
         private Harbor Clone()
         {
             return (Harbor)MemberwiseClone();
         }
-
-
-        public void SaveHarborHistroy(DateTime timestamp)
+        public Harbor DeepClone()
         {
-            HarborHistory[timestamp] = Clone();
+            Harbor clonedHarbor = new Harbor(name, harborCargoStorage);
+
+            clonedHarbor.CurrentTime = CurrentTime;
+            clonedHarbor.Location = Location;
+
+            // Kopier lister og køer
+            clonedHarbor.Docks.AddRange(Docks.Select(dock => new Dock(dock.Name, dock.Size, dock.Model)));
+            clonedHarbor.Ships.AddRange(Ships.Select(ship => new Ship(ship.Name, ship.Model, ship.Size)));
+            clonedHarbor.DockedShips.AddRange(DockedShips.Select(ship => new Ship(ship.Name, ship.Model, ship.Size)));
+            clonedHarbor.SailingShips.AddRange(SailingShips.Select(ship => new Ship(ship.Name, ship.Model, ship.Size)));
+            clonedHarbor.WaitingShips = new Queue<Ship>(WaitingShips);
+
+            // Kopier historikk
+            foreach (var entry in HarborHistory)
+            {
+                clonedHarbor.HarborHistory[entry.Key] = entry.Value.DeepClone();
+            }
+
+            return clonedHarbor;
         }
 
+
+
+        public void SaveHarborHistory(DateTime timestamp)
+        {
+            HarborHistory[timestamp] = DeepClone();
+        }
+        
 
         /// <summary>
         /// A method to create docks in the harbor.
@@ -203,7 +226,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     if (!ship.IsSailing && !ship.HasDocked && !IsShipInQueue(ship))
                     {
                         WaitingShips.Enqueue(ship);
-                   
+                        Console.WriteLine(DockedShips.Count + "D-q");
+                        Console.WriteLine(WaitingShips.Count + "W-q");
                     }
                 }
             }
@@ -231,38 +255,27 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     Dock availableDock = AvailableDockOfSize(ship.Size);
 
                     if (availableDock is not null && ship.IsSailing == false)
-                    {
-                        
-                        // Beregn avstanden til dokken
-                       // int distanceToDock = ship.CalculateDistanceToDock(availableDock);
+                    { 
+                        ship.Move();
 
-                         //Prioriter skipet som er nærmest en ledig dokk
-                        /* foreach (Ship waitingShip in WaitingShips)
+                        if (ship.ReachedDestination)
                         {
-                            int distance = waitingShip.CalculateDistanceToDock(availableDock);
-                            if (distance < distanceToDock)
-                            {
-                                ship = waitingShip;
-                                distanceToDock = distance;
-                            }
-                        }*/
-
-                        
-                        // Dokk skipet
-                        ship.HasDocked = true;
-                        ship.DockedAt = availableDock;
-                        availableDock.IsAvailable = false;
-                        availableDock.OccupiedBy = ship;
-                        ship.DockedAtTime = CurrentTime.ToString();
-                        DockedShips.Add(ship);
-                        WaitingShips.Dequeue();
-                        Console.WriteLine(DockedShips.Count + "D");
-                        Console.WriteLine(WaitingShips.Count + "W");
+                            ship.HasDocked = true;
+                            ship.DockedAt = availableDock;
+                            availableDock.IsAvailable = false;
+                            availableDock.OccupiedBy = ship;
+                            ship.DockedAtTime = CurrentTime.ToString();
+                            DockedShips.Add(ship);
+                            WaitingShips.Dequeue();
+                            Console.WriteLine(DockedShips.Count + "D-d");
+                            Console.WriteLine(WaitingShips.Count + "W-d");
+                        }
+                       
 
                     }
                     else
                     {
-                        //WaitingShips.Enqueue(WaitingShips.Dequeue());
+                        WaitingShips.Enqueue(WaitingShips.Dequeue());
                         break; 
                     }
                 }
@@ -289,8 +302,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
                     foreach (Cargo cargo in shipCargoCopy)
                     {
-                        harborCargoStorage.AddCargo(cargo);
-                        ship.Cargo.Remove(cargo);
+                        if(harborCargoStorage.GetOccupiedSpace() > 0)
+                        {
+                            harborCargoStorage.AddCargo(cargo);
+                            ship.Cargo.Remove(cargo);
+
+                        }
+                       
                     }
                 }
             }
@@ -307,7 +325,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="numberOfCargo">The amount of cargo you want to move</param>
         /// <param name="ship">The ship you want to move the cargo to</param>
-        public void AddCargoToShips(int numberOfCargo, DateTime currentTime)
+        public void AddCargoToShips(int numberOfCargo)
         {
             try
             {
@@ -322,7 +340,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                                 Cargo cargo = harborCargoStorage.Cargo.First();
                                 ship.Cargo.Add(cargo);
                                 harborCargoStorage.RemoveCargo(cargo);
-                                cargo.History.Add($"{cargo.name} loaded at {currentTime} on {ship.Name}");
+                                cargo.History.Add($"{cargo.name} loaded at {CurrentTime} on {ship.Name}");
                             }
 
                             else
@@ -341,11 +359,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
-
-        //NY
         public bool RemoveShipFromDock(Ship ship)
         {
-
 
             if (ship.DockedAt != null)
             {
@@ -373,93 +388,73 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-        public void Sailing(Ship ship, DateTime sailingStartTime, int numberOfDays)
+        public void Sailing(DateTime sailingStartTime, int numberOfDays)
         {
             try
             {
-                // Sjekk om skipet er klart for seiling og om det er tid for å starte seilingen
-                if (ship.IsReadyToSail && DateTime.Compare(CurrentTime, sailingStartTime) >= 0)
+                foreach (Ship ship in Ships)
                 {
-                    // Hvis skipet kan fjernes fra dokken
-                    if (RemoveShipFromDock(ship))
+                    DateTime sailTimeIsOver = sailingStartTime.AddDays(numberOfDays);
+
+                    if (ship.IsReadyToSail && CurrentTime.CompareTo(sailingStartTime) == 0 && !ship.IsSailing)
                     {
-                        ship.SailedAtTime = CurrentTime.ToString();
-                        ship.IsSailing = true;
-                        SailingShips.Add(ship);
+                        Console.WriteLine("TID FOR SEILING KOMMER");
+
+                        // Hvis skipet kan fjernes fra dokken
+                        if (RemoveShipFromDock(ship))
+                        {
+                            ship.SailedAtTime = CurrentTime.ToString();
+                            ship.IsSailing = true;
+                            SailingShips.Add(ship);
+                        }
                     }
-                }
-                // Sjekk om det er tid for skipet å stoppe seilingen
-                else if (CurrentTime == sailingStartTime.AddDays(numberOfDays))
-                {
-                    ship.IsSailing = false;
-                    SailingShips.Remove(ship);
-                    QueueShipsToDock();
-                }
-                else
-                {
-                    ship.IsWaitingForSailing = true;
-                }
-
-                // Beveg skipet hvis det seiler
-                if (ship.IsSailing)
-                {
-                    // Beregn avstanden til destinasjonen
-                    int distanceToDestination = CalculateDistanceToDestination(ship);
-
-                    // Beregn hvor langt skipet skal flytte i denne simuleringstrinnet basert på sin fart
-                    int distanceToMove = ship.Speed; // Anta at skipets fart er gitt i kilometer per time (km/h)
-
-                    // Hvis avstanden som gjenstår å reise er mindre enn eller lik den planlagte bevegelsen
-                    if (distanceToDestination <= distanceToMove)
+                    // Sjekk om det er tid for skipet å stoppe seilingen
+                    else if (CurrentTime.CompareTo(sailTimeIsOver) == 0)
                     {
-                        // Skipet har nådd sin destinasjon
-                        ship.CurrentLocation = ship.DestinationLocation;
                         ship.IsSailing = false;
                         SailingShips.Remove(ship);
                         QueueShipsToDock();
                     }
                     else
                     {
-                        // Flytt skipet mot destinasjonen
-                        ship.CurrentLocation += distanceToMove;
+                        ship.IsWaitingForSailing = true;
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error in Sailing method.", e);
+                Console.WriteLine("Error in Sailing method: " + e.Message);
             }
         }
 
-        // Metode for å beregne avstanden til destinasjonen basert på skipets gjeldende og destinasjonslokasjon
         private int CalculateDistanceToDestination(Ship ship)
         {
             return Math.Abs(ship.DestinationLocation - ship.CurrentLocation);
         }
 
 
-        /*
-
-        public void RecurringSailing(DateTime startSailing, int numberOfDaysAtSailing, DateTime currentTime, Ship ship, RecurringType dailyOrWeekly)
+        public void RecurringSailing(DateTime startSailing, int numberOfDaysAtSailing, RecurringType dailyOrWeekly)
         {
             if (dailyOrWeekly.Equals(Enums.RecurringType.Daily))
             {
-                if (startSailing.Date == currentTime.Date && startSailing.Hour == currentTime.Hour && startSailing.Minute == currentTime.Minute)
+                if (startSailing.Date == CurrentTime.Date && startSailing.Hour == CurrentTime.Hour && startSailing.Minute == CurrentTime.Minute)
                 {
-                    Sailing(ship, currentTime, startSailing, numberOfDaysAtSailing);
+                    Sailing(startSailing, numberOfDaysAtSailing);
                 }
             }
             else if (dailyOrWeekly.Equals(Enums.RecurringType.Weekly))
             {
-                if (startSailing.DayOfWeek == currentTime.DayOfWeek && startSailing.Hour == currentTime.Hour && startSailing.Minute == currentTime.Minute)
+                var weekly = startSailing.AddDays(7);
+               
+                if (weekly.Date == CurrentTime.Date && weekly.Hour == CurrentTime.Hour && weekly.Minute == CurrentTime.Minute)
                 {
-                    Sailing(ship, currentTime, startSailing, numberOfDaysAtSailing);
+                    Sailing(weekly, numberOfDaysAtSailing);
                 }
             }
         }
 
 
-        */
+        
 
         public string GetName()
         {
@@ -471,7 +466,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return CurrentTime; 
         }
 
-        public  void SetCurrentTime(DateTime currentTime)
+        public DateTime GetCurrentTimeCopy()
+        {
+            return new DateTime(CurrentTime.Ticks);
+        }
+
+
+        public void SetCurrentTime(DateTime currentTime)
         {
             CurrentTime = currentTime; 
         }
@@ -485,21 +486,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return Ships;
         }
 
-        public Ship GetOneSpesificShip(string shipName)
-        {
-            Ship shipExist = null; 
-
-            foreach (Ship ship in Ships)
-            {
-                if (ship.Name == shipName)
-                {
-                    shipExist = ship;
-                    break; 
-                }
-            }
-
-            return shipExist;
-        }
+      
 
         public List<Ship> GetDockedShips()
         {
@@ -516,11 +503,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return WaitingShips;
         }
 
-        public Dictionary<DateTime, Harbor> GetHarborHistory()
-        {
-            return HarborHistory;
-        }
-
+      
         public CargoStorage GetCargoStorage()
         {
             return harborCargoStorage;
@@ -530,37 +513,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Harbor Name: {name}" + $" CurrentTime: {CurrentTime}");
-            sb.AppendLine("Docks:");
-            foreach (Dock dock in Docks)
-            {
-                sb.AppendLine($" - Dock Name: {dock.Name}, Size: {dock.Size}, Model: {dock.Model}, Available: {dock.IsAvailable}");
-            }
-            sb.AppendLine("Ships:");
-            foreach (Ship ship in Ships)
-            {
-                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}, Has Docked: {ship.HasDocked}");
-            }
-            sb.AppendLine("Docked Ships:");
-            foreach (Ship ship in DockedShips)
-            {
-                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size} IsReadyToSail:{ship.IsReadyToSail}");
-            }
-            sb.AppendLine("Sailing Ships:");
-            foreach (Ship ship in SailingShips)
-            {
-                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}");
-            }
-            sb.AppendLine("Waiting Ships:");   
-
-            foreach (Ship ship in WaitingShips)
-            {
-                sb.AppendLine($" - Ship Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}");
-            }
-            sb.AppendLine("Cargo Storage:");
-            sb.AppendLine($" - Capacity: {harborCargoStorage.Capacity}, Occupied Space: {harborCargoStorage.GetOccupiedSpace()}");
-
+            sb.AppendLine($"Total Ships: {Ships.Count}");
+            sb.AppendLine($"Docked Ships: {DockedShips.Count}");
+            sb.AppendLine($"Sailing Ships: {SailingShips.Count}");
+            sb.AppendLine($"Waiting Ships: {WaitingShips.Count}");
+            sb.AppendLine($"Cargo Storage: Capacity: {harborCargoStorage.Capacity}, Occupied Space: {harborCargoStorage.GetOccupiedSpace()}\n");
             return sb.ToString();
-
         }
     }
     

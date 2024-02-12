@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 // spør marius om det er ok at man henter enums slik og at klassen med enums er public
 
@@ -23,6 +24,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public int CurrentLocation { get; set; }
         public int DestinationLocation { get; set; }
 
+        public bool ReachedDestination { get; set; } 
+        
+
 
 
         public Ship (string shipName, Model shipModel, Size shipSize)
@@ -36,15 +40,35 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             IsWaitingForSailing = false;
             DockedAtTime = "";
             SailedAtTime = "";
-            Speed = 100;
+            Speed = GetSpeedFromModel(shipModel);
             IsReadyToSail = false;
-            CurrentLocation = GenerateRandomDestination(10, 100);
+            CurrentLocation =  GenerateRandomDestination(100, 1000); 
         }
 
         public int GenerateRandomDestination(int min, int max)
         {
             Random random = new Random();
             return random.Next(min, max + 1);
+        }
+
+
+        private int GetSpeedFromModel(Enums.Model model)
+        {
+            switch (model)
+            {
+                case Enums.Model.ContainerShip:
+                    return 30; 
+                case Enums.Model.Bulker:
+                    return 40; 
+                case Enums.Model.Tanker:
+                    return 50; 
+                case Enums.Model.LNGCarrier:
+                    return 45; 
+                case Enums.Model.RoRo:
+                    return 35;
+                default: 
+                    return 0; //skal ikke gå siden man må velge shipType
+            }
         }
         /// <summary>
         /// A method to create cargo in the simulation.
@@ -62,19 +86,26 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-        public int CalculateDistanceToDock(Dock dock)
-        {
-            return Math.Abs(CurrentLocation - dock.Location);
-        }
-
-
         // Metode for å sette destinasjonen fra havnen til skipet
         public void SetDestinationFromHarbor(int harborLocation, int destination)
         {
             DestinationLocation = Math.Abs(destination - harborLocation);
         }
 
-      
+        public void Move()
+        {
+            // Beregn ny posisjon basert på hastigheten
+            int newLocation = CurrentLocation + ((Speed * 1000) / 60); // Anta at hastigheten er i km/t og konverter til meter/minutt
+
+            // Oppdater skipets posisjon
+            CurrentLocation = Math.Min(DestinationLocation, newLocation);
+
+
+            if (CurrentLocation >= DestinationLocation)
+            {
+                ReachedDestination = true; 
+            }
+        }
 
         public List<Cargo> GetCargo()
         {
@@ -88,7 +119,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
+        public int GetSpeed()
+        {
+            return Speed;
 
+        }
+
+        public int GetCurrentLocation()
+        {
+            return CurrentLocation;
+
+        }
         /// <summary>
         /// A method that returns the name of the ship.
         /// </summary>

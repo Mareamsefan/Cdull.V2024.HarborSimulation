@@ -3,6 +3,7 @@
     public class Crane
     {
         private string name;
+        internal int Speed { get; set; }
         private bool isCraneAvalible;
         private bool isCraneOutOfFuntion;
 
@@ -11,7 +12,10 @@
             name = craneName;
             isCraneAvalible = true;
             isCraneOutOfFuntion = false;
+            Speed = 100; // kan flytte 100 craner i timen 
         }
+
+
 
         /// <summary>
         /// A method to returns information about the crane.
