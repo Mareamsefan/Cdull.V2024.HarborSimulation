@@ -13,7 +13,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal Model Model { get; set; }
         internal Size Size { get; set; }
         internal bool HasDocked { get; set; }
-        internal List<Cargo> Cargo { get; } = new List<Cargo>();
+        internal List<Cargo> Cargo { get; } = new List<Cargo>(); 
+        internal List<string> History { get; } = new List<String>();
         internal string DockedAtTime { get; set; }
         internal string SailedAtTime { get; set; }
         public bool IsSailing { get; set; }
@@ -110,6 +111,25 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             DestinationLocation = Math.Abs(destination - Location);
         }
+
+        /// <summary>
+        /// Retrieves the history of the ship.
+        /// </summary>
+        /// <returns>A list of strings representing the ship's history.</returns>
+        public List<string> GetShipHistory()
+        {
+            return History;
+        }
+
+        /// <summary>
+        /// Retrieves the cargo carried by the ship.
+        /// </summary>
+        /// <returns>A list of Cargo objects representing the ship's cargo.</returns>
+        public List<Cargo> GetShipCargo()
+        {
+            return Cargo;
+        }
+
 
         /// <summary>
         /// Moves the ship towards its destination.

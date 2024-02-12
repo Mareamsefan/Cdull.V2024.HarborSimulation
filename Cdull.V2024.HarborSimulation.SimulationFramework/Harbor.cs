@@ -273,6 +273,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                             ship.DockedAt = availableDock;
                             availableDock.IsAvailable = false;
                             availableDock.OccupiedBy = ship;
+                            ship.History.Add($"{ship.Name} Docked at {CurrentTime} on {ship.DockedAt.Name}");
                             ship.DockedAtTime = CurrentTime.ToString();
                             DockedShips.Add(ship);
                             WaitingShips.Dequeue();
@@ -403,12 +404,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// If the current time matches the end of the sailing period, the ship is marked as not sailing, and it's queued to dock again.
         /// If the ship is not ready to sail or the current time is between the start and end of the sailing period,
         /// the ship is marked as waiting for sailing.
+        /// SailingDestination represents meters so 10 000m. 
         /// </remarks>
         public void Sailing(DateTime sailingStartTime, int numberOfDays)
         {
             try
             {
-                int sailingDestination = 1000;
+                int sailingDestination = 10000;
                 foreach (Ship ship in Ships)
                 {
                     DateTime sailTimeIsOver = sailingStartTime.AddDays(numberOfDays);
@@ -490,6 +492,51 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 Console.WriteLine("Error in RecurringSailing method: " + e.Message);
             }
+        }
+
+        /// <summary>
+        /// Gets the list of docks in the harbor.
+        /// </summary>
+        /// <returns>The list of docks.</returns>
+        public List<Dock> GetDocks()
+        {
+            return Docks;
+        }
+
+        /// <summary>
+        /// Gets the list of ships in the harbor.
+        /// </summary>
+        /// <returns>The list of ships.</returns>
+        public List<Ship> GetShips()
+        {
+            return Ships;
+        }
+
+        /// <summary>
+        /// Gets the list of ships currently docked in the harbor.
+        /// </summary>
+        /// <returns>The list of docked ships.</returns>
+        public List<Ship> GetDockedShips()
+        {
+            return DockedShips;
+        }
+
+        /// <summary>
+        /// Gets the list of ships currently sailing from the harbor.
+        /// </summary>
+        /// <returns>The list of sailing ships.</returns>
+        public List<Ship> GetSailingShips()
+        {
+            return SailingShips;
+        }
+
+        /// <summary>
+        /// Gets the queue of ships waiting to dock in the harbor.
+        /// </summary>
+        /// <returns>The queue of waiting ships.</returns>
+        public Queue<Ship> GetWaitingShips()
+        {
+            return WaitingShips;
         }
 
         /// <summary>
