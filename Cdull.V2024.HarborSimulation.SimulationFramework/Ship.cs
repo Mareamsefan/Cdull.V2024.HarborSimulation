@@ -13,7 +13,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal Model Model { get; set; }
         internal Size Size { get; set; }
         internal bool HasDocked { get; set; }
-        internal List<Cargo> Cargo { get; } = new List<Cargo>();
+        internal List<Cargo> Cargo { get; } = new List<Cargo>(); 
+        internal List<String> History { get; } = new List<String>();
         internal string DockedAtTime { get; set; }
         internal string SailedAtTime { get; set; }
         public bool IsSailing { get; set; }

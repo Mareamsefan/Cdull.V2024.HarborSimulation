@@ -273,6 +273,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                             ship.DockedAt = availableDock;
                             availableDock.IsAvailable = false;
                             availableDock.OccupiedBy = ship;
+                            ship.History.Add($"{ship.Name} Docked at {CurrentTime} on {ship.DockedAt.Name}");
                             ship.DockedAtTime = CurrentTime.ToString();
                             DockedShips.Add(ship);
                             WaitingShips.Dequeue();
@@ -403,12 +404,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// If the current time matches the end of the sailing period, the ship is marked as not sailing, and it's queued to dock again.
         /// If the ship is not ready to sail or the current time is between the start and end of the sailing period,
         /// the ship is marked as waiting for sailing.
+        /// SailingDestination represents meters so 10 000m. 
         /// </remarks>
         public void Sailing(DateTime sailingStartTime, int numberOfDays)
         {
             try
             {
-                int sailingDestination = 1000;
+                int sailingDestination = 10000;
                 foreach (Ship ship in Ships)
                 {
                     DateTime sailTimeIsOver = sailingStartTime.AddDays(numberOfDays);

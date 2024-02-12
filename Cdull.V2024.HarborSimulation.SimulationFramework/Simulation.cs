@@ -52,6 +52,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
               
                 harbor.AddCargoToShips(10);
 
+
                 if (IsRecurringSailing && recurringType != null)
                 {
                   
