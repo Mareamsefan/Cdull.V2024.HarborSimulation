@@ -1,17 +1,17 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
-// spør marius om det er ok at man henter enums slik og at klassen med enums er public
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
+    /// <summary>
+    /// Represents a ship in the harbor simulation.
+    /// </summary>
     public class Ship
     {
-        //kanskje internal? 
-        public string Name { get; }
-        //GJort public
-        internal Model Model { get; }
-        internal Size Size { get; }
+        internal string Name { get; set; }
+        internal Model Model { get; set; }
+        internal Size Size { get; set; }
         internal bool HasDocked { get; set; }
         internal List<Cargo> Cargo { get; } = new List<Cargo>();
         internal string DockedAtTime { get; set; }
@@ -21,14 +21,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal bool IsWaitingForSailing { get; set; }
         internal int Speed { get; private set; }
         internal Dock? DockedAt { get; set; }
-        public int CurrentLocation { get; set; }
-        public int DestinationLocation { get; set; }
+        internal int CurrentLocation { get; set; }
+        internal int DestinationLocation { get; set; }
+        internal bool HasReachedDestination { get; set; }
 
-        public bool ReachedDestination { get; set; } 
-        
-
-
-
+        /// <summary>
+        /// Initializes a new instance of the Ship class.
+        /// </summary>
+        /// <param name="shipName">The name of the ship.</param>
+        /// <param name="shipModel">The model of the ship.</param>
+        /// <param name="shipSize">The size of the ship.</param>
         public Ship (string shipName, Model shipModel, Size shipSize)
         {
             Name = shipName;
@@ -44,14 +46,23 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             IsReadyToSail = false;
             CurrentLocation =  GenerateRandomDestination(100, 1000); 
         }
-
+        /// <summary>
+        /// Generates a random destination for the ship.
+        /// </summary>
+        /// <param name="min">The minimum destination value.</param>
+        /// <param name="max">The maximum destination value.</param>
+        /// <returns>The randomly generated destination.</returns>
         public int GenerateRandomDestination(int min, int max)
         {
             Random random = new Random();
             return random.Next(min, max + 1);
         }
 
-
+        /// <summary>
+        /// Gets the speed of the ship based on its model.
+        /// </summary>
+        /// <param name="model">The model of the ship.</param>
+        /// <returns>The speed of the ship.</returns>
         private int GetSpeedFromModel(Enums.Model model)
         {
             switch (model)
@@ -67,14 +78,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 case Enums.Model.RoRo:
                     return 35;
                 default: 
-                    return 0; //skal ikke gå siden man må velge shipType
+                    return 0; 
             }
         }
+
         /// <summary>
-        /// A method to create cargo in the simulation.
+        /// Initializes cargo on the ship.
         /// </summary>
-        /// <param name="number">The amount of cargo you want to create.</param>
-        /// <param name="weight">The weight of each cargo you're creating.</param>
+        /// <param name="number">The number of cargo to initialize.</param>
+        /// <param name="weight">The weight of each cargo.</param>
         public void InitializeCargo(int number, double weight = 10)
         {
             for (int i = 0; i < number; i++)
@@ -85,58 +97,29 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-
-        // Metode for å sette destinasjonen fra havnen til skipet
+        /// <summary>
+        /// Sets the destination of the ship from a harbor location.
+        /// </summary>
+        /// <param name="harborLocation">The location of the harbor.</param>
+        /// <param name="destination">The destination location.</param>
         public void SetDestinationFromHarbor(int harborLocation, int destination)
         {
             DestinationLocation = Math.Abs(destination - harborLocation);
         }
 
+        /// <summary>
+        /// Moves the ship towards its destination.
+        /// </summary>
         public void Move()
-        {
-            // Beregn ny posisjon basert på hastigheten
-            int newLocation = CurrentLocation + ((Speed * 1000) / 60); // Anta at hastigheten er i km/t og konverter til meter/minutt
+        {    
+            int newLocation = CurrentLocation + ((Speed * 1000) / 60); 
 
-            // Oppdater skipets posisjon
             CurrentLocation = Math.Min(DestinationLocation, newLocation);
-
 
             if (CurrentLocation >= DestinationLocation)
             {
-                ReachedDestination = true; 
+                HasReachedDestination = true; 
             }
-        }
-
-        public List<Cargo> GetCargo()
-        {
-            return Cargo;
-        }
-
-
-        public string GetDockedAtTime()
-        {
-            return DockedAtTime; 
-
-        }
-
-        public int GetSpeed()
-        {
-            return Speed;
-
-        }
-
-        public int GetCurrentLocation()
-        {
-            return CurrentLocation;
-
-        }
-        /// <summary>
-        /// A method that returns the name of the ship.
-        /// </summary>
-        /// <returns>Name of the ship.</returns>
-        public override String ToString()
-        {
-            return "Name: " + Name + " Model: " + Model + " Size: " + Size + " Has docked: " + HasDocked;
         }
 
 
