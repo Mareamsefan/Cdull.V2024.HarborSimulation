@@ -30,10 +30,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.Ships.AddRange(ships);
 
 
-            foreach (Ship ship in harbor.Ships)
-            {
-                ship.SetDestinationFromHarbor(harbor.Location, ship.DestinationLocation);
-            }
+           
 
             while (harbor.GetCurrentTime() < endTime)
             {

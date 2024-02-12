@@ -87,11 +87,11 @@ namespace HarborSimulationTest
             DateTime endTime = new DateTime(2024, 1, 5);
 
             // Made a startTime for when sailing starts for all ships in harbor non-recurring sailing: 
-            DateTime startSailingTime = new DateTime(2024, 1, 2);
+            DateTime startSailingTime = new DateTime(2024, 1, 1);
 
 
             // Runing the simulation: 
-            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, false);
+            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 2, false);
 
             
             //Printing out harbor history to view harborstate: 
