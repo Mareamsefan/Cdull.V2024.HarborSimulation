@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
@@ -64,19 +64,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="model">The model of the ship.</param>
         /// <returns>The speed of the ship.</returns>
-        private int GetSpeedFromModel(Enums.Model model)
+        private int GetSpeedFromModel(Model model)
         {
             switch (model)
             {
-                case Enums.Model.ContainerShip:
+                case Model.ContainerShip:
                     return 30; 
-                case Enums.Model.Bulker:
+                case Model.Bulker:
                     return 40; 
-                case Enums.Model.Tanker:
+                case Model.Tanker:
                     return 50; 
-                case Enums.Model.LNGCarrier:
+                case Model.LNGCarrier:
                     return 45; 
-                case Enums.Model.RoRo:
+                case Model.RoRo:
                     return 35;
                 default: 
                     return 0; 

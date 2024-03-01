@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
 using Cdull.V2024.HarborSimulation.TestClient;
-using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace HarborSimulationTest
 {
@@ -20,7 +19,48 @@ namespace HarborSimulationTest
             Console.WriteLine("Scenario 3: ");
             Scenario_3();
 
+
+            Harbor harbor = new Harbor("ExceptiontestHarbor", new CargoStorage("cargo", 1000));
+
+            List<Dock> docks = harbor.InitializeDocks(5, Model.ContainerShip, Size.Large, 2);
+
+
+            // Made a list of 5 ships of the same Type and Size: 
+            List<Ship> ships = harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 100);
+
+            //Made a instance of our simulation - class that implements IHarborSimulation interface:  
+            IHarborSimulation driver = new Simulation();
+
+            // Made a startTime and a endTime for mye simulation: 
+            DateTime startTime = new DateTime(2024, 1, 1);
+            DateTime endTime = new DateTime(2024, 1, 5);
+
+            // Made a startTime for when sailing starts for all ships in harbor non-recurring sailing: 
+            DateTime startSailingTime = new DateTime(2024, 1, 1);
+
+            harbor.ShipDeparted += Harbor_ShipDeparted;
+
+            // Runing the simulation: 
+            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 2, false);
+
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 1)));
+
+
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 2)));
+
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 3)));
+
+            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
+
+          
+
         }
+
+        private static void Harbor_ShipDeparted(object? sender, ShipDepartureEventArgs e)
+        {
+            Console.WriteLine($"Ship '{e.DepartedShip}' left harbor.");
+        }
+
 
         public static void Scenario_1()
         {
@@ -95,7 +135,7 @@ namespace HarborSimulationTest
 
 
             // Runing the simulation: 
-            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, Enums.RecurringType.Weekly);
+            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, RecurringType.Weekly);
 
 
             //Printing out harbor history to view harborstate: 
@@ -137,7 +177,7 @@ namespace HarborSimulationTest
 
 
            // Kjør simuleringen seiler dagilig 
-           driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, Enums.RecurringType.Daily);
+           driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, RecurringType.Daily);
            // Det er en liten feil i weekly-logikken så den funker midlertidgi ikke, derfor tester vi den heller ikke
 
 
