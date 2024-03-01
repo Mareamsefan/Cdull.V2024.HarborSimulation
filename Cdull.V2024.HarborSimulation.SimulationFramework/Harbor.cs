@@ -154,8 +154,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 for (int i = 0; i < numberOfShips; i++)
                 {
                     Ship ship = new($"{shipModel}ship-{i}", shipModel, shipSize);
-                    ship.InitializeCargo(numberOfCargo);
-                    ships.Add(ship);
+
+                    // Sjekk om skipet allerede finnes før du legger det til
+                    if (!ships.Any(s => s.Name == ship.Name))
+                    {
+                        ships.Add(ship);
+                        ship.InitializeCargo(numberOfCargo);
+                    }
                 }    
             }
             catch (Exception e)
@@ -306,36 +311,35 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
         /// <summary>
-        /// Moves cargo from docked ships to the harbor's cargo storage.
+        /// Moves cargo <cargo cref="Cargo"></Cargo>from docked ships to the harbor's cargo storage.
         /// </summary>
         /// <remarks>
-        /// This method iterates through all docked ships and their cargo. It attempts to add each cargo item to the harbor's cargo storage if there is available space.
-        /// If the harbor's cargo storage is full, it marks the storage as unavailable.
+        /// This method iterates through all docked ships in the harbor and their respective cargo items.
+        /// It attempts to add each cargo item to the harbor's cargo storage if there is available space.
+        /// If the harbor's cargo storage is full, it marks the storage as unavailable by throwing an exception.
         /// </remarks>
+        /// <exception cref="AddCargoToStorageException">Thrown when there is not enough space in CargoStorage to add all cargo from the ship.</exception>
         public void AddCargoToStorage()
         {
-            try
+            foreach (Ship ship in DockedShips)
             {
-                foreach (Ship ship in DockedShips.ToList())
+                while (ship.Cargo.Any())
                 {
-                    foreach (Cargo cargo in ship.Cargo.ToList())
+                    Cargo cargo = ship.Cargo.First();
+
+                    if (CargoStorage.Capacity > ship.Cargo.Count)
                     {
-                        if (CargoStorage.Capacity > ship.Cargo.Count) 
-                        {
-                            CargoStorage.AddCargo(cargo);
-                            CargoStorage.OccupySpace(cargo);
-                            ship.Cargo.Remove(cargo);
-                        }
-                        else
-                        {
-                            throw new AddCargoToStorageException("Not enough space in CargoStorage to add all cargo from the ship.");
-                        }
+                        CargoStorage.AddCargo(cargo);
+                        CargoStorage.OccupySpace(cargo);
+                        ship.Cargo.Remove(cargo);
                     }
+                    else
+                    {
+                        throw new AddCargoToStorageException("Not enough space in CargoStorage to add all cargo from the ship.");
+                    }
+
                 }
-            }
-            catch (Exception exception)
-            {
-                throw new AddCargoToStorageException("Error adding cargo to storage.", exception);
+
             }
         }
 

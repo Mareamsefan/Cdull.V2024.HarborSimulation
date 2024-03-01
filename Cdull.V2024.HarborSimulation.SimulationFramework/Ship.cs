@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.Text;
 
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
@@ -113,15 +114,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
         /// <summary>
-        /// Retrieves the history of the ship.
-        /// </summary>
-        /// <returns>A list of strings representing the ship's history.</returns>
-        public List<string> GetShipHistory()
-        {
-            return History;
-        }
-
-        /// <summary>
         /// Retrieves the cargo carried by the ship.
         /// </summary>
         /// <returns>A list of Cargo objects representing the ship's cargo.</returns>
@@ -145,6 +137,38 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 HasReachedDestination = true; 
             }
         }
+
+        /// <summary>
+        /// Gets the ship's history as a formatted string.
+        /// </summary>
+        /// <returns>A string representing the ship's history.</returns>
+        public string GetShipHistory()
+        {
+            // Opprett en StringBuilder for å bygge opp den formaterte strengen
+            StringBuilder sb = new StringBuilder();
+
+            // Legg til tittel på historien
+            sb.AppendLine("Ship History:");
+
+            // Legg til hver hendelse i historien
+            foreach (string eventDescription in History)
+            {
+                sb.AppendLine(eventDescription);
+            }
+
+            // Returner den formaterte strengen
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Returns a string representation of the ship with only its name and model.
+        /// </summary>
+        /// <returns>A string representing the ship's name and model.</returns>
+        public override string ToString()
+        {
+            return $"Ship Name: {Name}, Model: {Model}";
+        }
+
 
 
     }
