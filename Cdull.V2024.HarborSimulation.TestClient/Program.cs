@@ -51,7 +51,7 @@ namespace HarborSimulationTest
             Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 3)));
 
             Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
-
+        
           
 
         }
