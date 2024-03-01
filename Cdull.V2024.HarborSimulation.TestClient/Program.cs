@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
 using Cdull.V2024.HarborSimulation.TestClient;
@@ -9,51 +10,38 @@ namespace HarborSimulationTest
     {
         static void Main(string[] args)
         {
-          
-            Console.WriteLine("Scenario 1: ");
-            Scenario_1();
-
-            Console.WriteLine("Scenario 2: ");
-            Scenario_2();
-
-            Console.WriteLine("Scenario 3: ");
-            Scenario_3();
 
 
             Harbor harbor = new Harbor("ExceptiontestHarbor", new CargoStorage("cargo", 1000));
 
-            List<Dock> docks = harbor.InitializeDocks(5, Model.ContainerShip, Size.Large, 2);
+            List<Dock> docks = harbor.InitializeDocks(10, Model.ContainerShip, Size.Large, 2);
 
 
             // Made a list of 5 ships of the same Type and Size: 
             List<Ship> ships = harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 100);
-
+            ships.AddRange(harbor.InitializeShips(5, Model.LNGCarrier, Size.Medium, 50)); 
             //Made a instance of our simulation - class that implements IHarborSimulation interface:  
             IHarborSimulation driver = new Simulation();
 
             // Made a startTime and a endTime for mye simulation: 
             DateTime startTime = new DateTime(2024, 1, 1);
-            DateTime endTime = new DateTime(2024, 1, 5);
+            DateTime endTime = new DateTime(2024, 1, 10);
 
             // Made a startTime for when sailing starts for all ships in harbor non-recurring sailing: 
-            DateTime startSailingTime = new DateTime(2024, 1, 1);
+            DateTime startSailingTime = new DateTime(2024, 1, 2);
 
             harbor.ShipDeparted += Harbor_ShipDeparted;
 
             // Runing the simulation: 
-            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 2, false);
+            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 2000, false);
 
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 1)));
+            //Tester at den nye generiske historikk klassen funker for ship og harbor. 
+            HistoryHandler  historyHandler = HistoryHandler.GetInstance();
+  
 
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 2)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 3)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
-        
-          
-
+            Console.WriteLine(historyHandler.GetHarborHistory(new DateTime(2024, 1, 2)));
+            Ship ship = harbor.GetShips().First();
+            Console.WriteLine(historyHandler.GetShipHistory(ship));
         }
 
         private static void Harbor_ShipDeparted(object? sender, ShipDepartureEventArgs e)
@@ -61,143 +49,5 @@ namespace HarborSimulationTest
             Console.WriteLine($"Ship '{e.DepartedShip}' left harbor.");
         }
 
-
-        public static void Scenario_1()
-        {
-            //Scenario 1: Making docklist and shiplist of same type and size: 
-
-            // Made an instance of harbor: 
-            Harbor harbor = new Harbor("Test Harbor", new CargoStorage("CargoStorage", 1000));
-
-            // Made a list of 5 docks of the same Type and Size: 
-            List<Dock> docks = harbor.InitializeDocks(5, Model.ContainerShip, Size.Large, 2);
-
-
-            // Made a list of 5 ships of the same Type and Size: 
-            List<Ship> ships = harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 100);
-           
-            //Made a instance of our simulation - class that implements IHarborSimulation interface:  
-            IHarborSimulation driver = new Simulation();
-
-            // Made a startTime and a endTime for mye simulation: 
-            DateTime startTime = new DateTime(2024, 1, 1);
-            DateTime endTime = new DateTime(2024, 1, 5);
-
-            // Made a startTime for when sailing starts for all ships in harbor non-recurring sailing: 
-            DateTime startSailingTime = new DateTime(2024, 1, 1);
-
-
-            // Runing the simulation: 
-            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 2, false);
-
-            
-            //Printing out harbor history to view harborstate: 
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 1)));
-
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 2)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 3)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
-
-   
-
-        }
-
-        public static void Scenario_2()
-        {
-            //Scenario 1: Making docklist and shiplist of different types and sizes: 
-
-            // Made an instance of harbor: 
-            Harbor harbor = new Harbor("Test Harbor", new CargoStorage("CargoStorage", 1000));
-
-            // Made a list of 15 docks of different Types and Sizes: 
-            List<Dock> docks = harbor.InitializeDocks(5, Model.ContainerShip, Size.Large, 2);
-            docks.AddRange(harbor.InitializeDocks(5, Model.RoRo, Size.Medium, 1));
-            docks.AddRange(harbor.InitializeDocks(5, Model.Bulker, Size.Large, 2));
-
-            // Made a list of 20 ships of the Types and Sizes: 
-            List<Ship> ships = harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 10);
-            ships.AddRange(harbor.InitializeShips(5, Model.RoRo, Size.Medium, 50));
-            ships.AddRange(harbor.InitializeShips(5, Model.Bulker, Size.Large, 50));
-            ships.AddRange(harbor.InitializeShips(5, Model.LNGCarrier, Size.Large, 50));
-
-            //Made a instance of our simulation - class that implements IHarborSimulation interface:  
-            IHarborSimulation driver = new Simulation();
-
-            // Made a startTime and a endTime for mye simulation: 
-            DateTime startTime = new DateTime(2024, 1, 1);
-            DateTime endTime = new DateTime(2024, 1, 5);
-
-            // Made a startTime for when sailing starts for all ships in harbor recurring sailing: 
-            DateTime startSailingTime = new DateTime(2024, 1, 2);
-
-
-            // Runing the simulation: 
-            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, RecurringType.Weekly);
-
-
-            //Printing out harbor history to view harborstate: 
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 1)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 2)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 3)));
-
-            Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
-
-
-        }
-
-        public static void Scenario_3() {
-
-
-            // Opprett en instans av Harbor-klassen
-           Harbor harbor = new Harbor("Test Harbor", new CargoStorage("CargoStorage", 100));
-
-           // Opprett noen dokker
-           List<Dock> docks = harbor.InitializeDocks(5, Model.ContainerShip, Size.Large, 2);
-           docks.AddRange(harbor.InitializeDocks(5, Model.RoRo, Size.Large, 10));
-
-           // Opprett noen skip
-           List<Ship> ships = harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 10);
-           ships.AddRange(harbor.InitializeShips(5, Model.RoRo, Size.Large, 10));
-
-           IHarborSimulation driver = new Simulation();
-
-           // Sett start- og slutttidspunkter for simuleringen
-           DateTime startTime = new DateTime(2024, 1, 1);
-           DateTime endTime = new DateTime(2024, 1, 7);
-
-
-
-           DateTime startSailingTime = new DateTime(2024, 1, 1);
-
-
-
-           // Kjør simuleringen seiler dagilig 
-           driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 1, true, RecurringType.Daily);
-           // Det er en liten feil i weekly-logikken så den funker midlertidgi ikke, derfor tester vi den heller ikke
-
-
-
-
-           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 1)));
-
-           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 2)));
-
-           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 3)));
-
-           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 4)));
-
-           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 5)));
-
-           Console.WriteLine(harbor.GetHarborHistory(new DateTime(2024, 1, 6)));
-
-
-           
-
-        }
     }
 }
