@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Text;
 using System.Xml.Linq;
-using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
@@ -183,7 +182,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 foreach (Dock dock in Docks)
                 {
-                    if (dock.Size.Equals(shipSize) && dock.IsAvailable)
+                    if(shipSize < Size.Medium && dock.IsAvailable)
+                    {
+                        return dock; 
+                    }
+
+                    else if (shipSize.Equals(Size.Medium) && !dock.Size.Equals(Size.Small) && dock.IsAvailable)
+                    {
+                        return dock;
+                    }
+
+                    else if(shipSize.Equals(Size.Large) && dock.Size.Equals(Size.Large) && dock.IsAvailable)
                     {
                         return dock;
                     }
@@ -311,17 +320,22 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     foreach (Cargo cargo in ship.Cargo.ToList())
                     {
-                       
-                        CargoStorage.AddCargo(cargo);
-                        CargoStorage.OccupySpace(cargo); 
-                        ship.Cargo.Remove(cargo);
-                        
+                        if (CargoStorage.Capacity > ship.Cargo.Count) 
+                        {
+                            CargoStorage.AddCargo(cargo);
+                            CargoStorage.OccupySpace(cargo);
+                            ship.Cargo.Remove(cargo);
+                        }
+                        else
+                        {
+                            throw new AddCargoToStorageException("Not enough space in CargoStorage to add all cargo from the ship.");
+                        }
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine("Error adding cargo to storage.", e);
+                throw new AddCargoToStorageException("Error adding cargo to storage.", exception);
             }
         }
 
@@ -470,14 +484,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             try
             {
-                if (dailyOrWeekly.Equals(Enums.RecurringType.Daily))
+                if (dailyOrWeekly.Equals(RecurringType.Daily))
                 {
                     if (startSailing.Date == CurrentTime.Date && startSailing.Hour == CurrentTime.Hour && startSailing.Minute == CurrentTime.Minute)
                     {
                         Sailing(startSailing, numberOfDaysAtSailing);
                     }
                 }
-                else if (dailyOrWeekly.Equals(Enums.RecurringType.Weekly))
+                else if (dailyOrWeekly.Equals(RecurringType.Weekly))
                 {
                     var weekly = startSailing;
                     int weekCounter = 1;

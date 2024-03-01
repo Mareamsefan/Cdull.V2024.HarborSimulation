@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
-using static Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.TestClient
 {
