@@ -19,6 +19,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal List<Ship> SailingShips { get; set; } = new List<Ship>();
         internal Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
         internal Dictionary<DateTime, Harbor> HarborHistory { get; set; } = new Dictionary<DateTime, Harbor>();
+
+        public event EventHandler<ShipDepartureEventArgs> ShipDeparted;
+
         internal CargoStorage CargoStorage { get; set; }
 
 
@@ -423,6 +426,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                             ship.SailedAtTime = CurrentTime.ToString();
                             ship.IsSailing = true;
                             SailingShips.Add(ship);
+                            RaiseShipDeparted(ship);
                         }
                     }
                     else if (CurrentTime.CompareTo(sailTimeIsOver) == 0 && ship.HasReachedDestination)
@@ -441,6 +445,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 Console.WriteLine("Error in Sailing method: " + e.Message);
             }
+        }
+        private void RaiseShipDeparted(Ship departedShip)
+        {
+            ShipDeparted?.Invoke(this, new ShipDepartureEventArgs(departedShip));
         }
 
         /// <summary>
