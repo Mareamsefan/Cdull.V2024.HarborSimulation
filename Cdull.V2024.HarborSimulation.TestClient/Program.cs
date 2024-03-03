@@ -10,8 +10,6 @@ namespace HarborSimulationTest
     {
         static void Main(string[] args)
         {
-
-
             Harbor harbor = new Harbor("ExceptiontestHarbor", new CargoStorage("cargo", 1000));
 
             List<Dock> docks = harbor.InitializeDocks(10, Model.ContainerShip, Size.Large, 2);
@@ -32,8 +30,13 @@ namespace HarborSimulationTest
 
             harbor.ShipDeparted += Harbor_ShipDeparted;
 
+            Sailing sailing = Sailing.GetInstance();
+            sailing.ScheduleSailing(Model.ContainerShip, new DateTime(2024, 1, 2), RecurringType.Weekly);
+            sailing.ScheduleSailing(Model.LNGCarrier, new DateTime(2024, 1, 2), RecurringType.Daily);
+
+
             // Runing the simulation: 
-            driver.Run(harbor, startTime, endTime, ships, docks, startSailingTime, 2000, false);
+            driver.Run(harbor, startTime, endTime, ships, docks, 2000);
 
             //Tester at den nye generiske historikk klassen funker for ship og harbor. 
             HistoryHandler  historyHandler = HistoryHandler.GetInstance();
@@ -41,6 +44,7 @@ namespace HarborSimulationTest
 
             Console.WriteLine(historyHandler.GetHarborHistory(new DateTime(2024, 1, 2)));
             Ship ship = harbor.GetShips().First();
+
             Console.WriteLine(historyHandler.GetShipHistory(ship));
         }
 
