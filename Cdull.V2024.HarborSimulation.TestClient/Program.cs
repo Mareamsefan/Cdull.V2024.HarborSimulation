@@ -31,12 +31,12 @@ namespace HarborSimulationTest
             harbor.ShipDeparted += Harbor_ShipDeparted;
 
             Sailing sailing = Sailing.GetInstance();
-            sailing.ScheduleSailing(Model.ContainerShip, new DateTime(2024, 1, 2), RecurringType.Weekly);
-            sailing.ScheduleSailing(Model.LNGCarrier, new DateTime(2024, 1, 2), RecurringType.Daily);
+            sailing.ScheduleSailing(Model.ContainerShip, new DateTime(2024, 1, 2),2000, RecurringType.Weekly);
+            sailing.ScheduleSailing(Model.LNGCarrier, new DateTime(2024, 1, 2), 4000, RecurringType.Daily);
 
 
             // Runing the simulation: 
-            driver.Run(harbor, startTime, endTime, ships, docks, 2000);
+            driver.Run(harbor, startTime, endTime, ships, docks);
 
             //Tester at den nye generiske historikk klassen funker for ship og harbor. 
             HistoryHandler  historyHandler = HistoryHandler.GetInstance();
@@ -44,8 +44,9 @@ namespace HarborSimulationTest
 
             Console.WriteLine(historyHandler.GetHarborHistory(new DateTime(2024, 1, 2)));
             Ship ship = harbor.GetShips().First();
-
+            Ship ship2 = harbor.GetShips().Last();
             Console.WriteLine(historyHandler.GetShipHistory(ship));
+            Console.WriteLine(historyHandler.GetShipHistory(ship2));
         }
 
         private static void Harbor_ShipDeparted(object? sender, ShipDepartureEventArgs e)

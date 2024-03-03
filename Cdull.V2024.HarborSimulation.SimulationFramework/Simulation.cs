@@ -11,8 +11,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
     public class Simulation : IHarborSimulation
     {
    
-        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, 
-            int destinationLocation)
+        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks)
         {
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
             harbor.SetCurrentTime(startTime);
@@ -53,7 +52,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
                 Sailing sailing = Sailing.GetInstance();
 
-                sailing.StartScheduledSailings(harbor, destinationLocation, historyHandler);
+                sailing.StartScheduledSailings(harbor, historyHandler);
 
 
                 harbor.SetCurrentTime(harbor.GetCurrentTime().AddMinutes(1));

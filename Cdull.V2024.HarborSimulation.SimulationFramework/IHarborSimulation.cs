@@ -16,8 +16,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="destinationLocation">The destination location that the ships will be sailing to(km).</param>
         /// <param name="IsRecurringSailing">bool indicating whether sailing is recurring.</param>
         /// <param name="recurringType">The type of recurring sailing (daily or weekly).</param>
-        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks,
-             int destinationLocation);
+        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks);
 
 
 
