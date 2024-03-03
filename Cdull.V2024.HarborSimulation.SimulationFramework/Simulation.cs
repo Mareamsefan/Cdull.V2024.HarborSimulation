@@ -27,9 +27,6 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.Docks.AddRange(docks);
             harbor.Ships.AddRange(ships);
 
-
-           
-
             while (harbor.GetCurrentTime() < endTime)
             {
         

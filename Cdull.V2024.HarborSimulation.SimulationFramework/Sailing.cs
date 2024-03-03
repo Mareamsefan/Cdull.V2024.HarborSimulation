@@ -7,6 +7,8 @@ public class Sailing
     private static readonly Sailing instance = new Sailing();
     private Dictionary<Model, List<(DateTime, int, RecurringType)>> ScheduledSailings { get; }
 
+
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Sailing"/> class.
     /// </summary>
