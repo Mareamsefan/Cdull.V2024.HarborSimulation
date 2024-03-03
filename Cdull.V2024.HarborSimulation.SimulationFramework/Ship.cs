@@ -134,7 +134,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             if (CurrentLocation >= DestinationLocation)
             {
-                HasReachedDestination = true; 
+                HasReachedDestination = true;
+                
             }
         }
 
