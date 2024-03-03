@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Text;
 using System.Xml.Linq;
-
+using Cdull.V2024.HarborSimulation.SimulationFramework.ShipEvents;
+    
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     /// <summary>
@@ -18,8 +19,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal List<Ship> SailingShips { get; set; } = new List<Ship>();
         internal Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
 
+        public event EventHandler<ShipDepartureEventArgs> DepartedShip;
 
-        public event EventHandler<ShipDepartureEventArgs> ShipDeparted;
+        public event EventHandler<ShipArrivalEventArgs> ArrivedShip;
 
         internal CargoStorage CargoStorage { get; set; }
 
@@ -196,6 +198,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     if (!ship.IsSailing && !ship.HasDocked && !IsShipInQueue(ship))
                     {
                         WaitingShips.Enqueue(ship);
+                        RaiseShipArrived(ship); 
                     }
                 }
             }
@@ -356,7 +359,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
      
         internal void RaiseShipDeparted(Ship departedShip)
         {
-            ShipDeparted?.Invoke(this, new ShipDepartureEventArgs(departedShip));
+            DepartedShip?.Invoke(this, new ShipDepartureEventArgs(departedShip));
+        }
+
+        internal void RaiseShipArrived(Ship arrivedShip)
+        {
+            ArrivedShip?.Invoke(this, new ShipArrivalEventArgs(arrivedShip));
         }
 
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
+using Cdull.V2024.HarborSimulation.SimulationFramework.ShipEvents;
 using Cdull.V2024.HarborSimulation.TestClient;
 
 namespace HarborSimulationTest
@@ -28,7 +29,8 @@ namespace HarborSimulationTest
             // Made a startTime for when sailing starts for all ships in harbor non-recurring sailing: 
             DateTime startSailingTime = new DateTime(2024, 1, 2);
 
-            harbor.ShipDeparted += Harbor_ShipDeparted;
+            harbor.DepartedShip += Harbor_ShipDeparted;
+            harbor.ArrivedShip += Harbor_ShipArrived;
 
             Sailing sailing = Sailing.GetInstance();
             sailing.ScheduleSailing(Model.ContainerShip, new DateTime(2024, 1, 2),2000, RecurringType.Weekly);
@@ -51,8 +53,13 @@ namespace HarborSimulationTest
 
         private static void Harbor_ShipDeparted(object? sender, ShipDepartureEventArgs e)
         {
-            Console.WriteLine($"Ship '{e.DepartedShip}' left harbor.");
+            Console.WriteLine($"Ship '{e.DepartedShip}' departed harbor.");
         }
 
+        private static void Harbor_ShipArrived(object? sender, ShipArrivalEventArgs e)
+        {
+
+            Console.WriteLine($"Ship '{e.ArrivedShip}' arrived harbor.");
+        }
     }
 }
