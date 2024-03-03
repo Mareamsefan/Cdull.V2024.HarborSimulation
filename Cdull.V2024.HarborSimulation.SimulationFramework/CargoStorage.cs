@@ -30,7 +30,7 @@
         /// A method to add cargo to the cargo storage in the harbor simulation.
         /// </summary>
         /// <param name="cargo">The cargo object thats being added</param>
-        public void AddCargo(Cargo cargo)
+        internal void AddCargo(Cargo cargo)
         {
             Cargo.Add(cargo);
         }
@@ -39,7 +39,7 @@
         /// A method to remove the cargo from the cargo storage in the harbor simulation.
         /// </summary>
         /// <param name="cargo">The cargo object thats being removed</param>
-        public void RemoveCargo(Cargo cargo)
+        internal void RemoveCargo(Cargo cargo)
         {
             Cargo.Remove(cargo);
         }
@@ -53,7 +53,7 @@
         /// If the occupied space exceeds the capacity of the cargo storage, it marks the storage as unavailable.
         /// </remarks>
 
-        public void OccupySpace(Cargo cargo)
+        internal void OccupySpace(Cargo cargo)
         {
             if(OccupiedSpace < Capacity)
             {
@@ -74,7 +74,7 @@
         /// This method subtracts the weight of the provided cargo from the occupied space of the cargo storage.
         /// If the occupied space becomes less than or equal to the capacity of the cargo storage, it marks the storage as available.
         /// </remarks>
-        public void deOccupySpace(Cargo cargo)
+        internal void deOccupySpace(Cargo cargo)
         {
             if (OccupiedSpace <= Capacity && OccupiedSpace > 0)
             {

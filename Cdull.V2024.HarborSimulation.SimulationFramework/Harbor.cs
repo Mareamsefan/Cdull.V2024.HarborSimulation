@@ -121,7 +121,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>
         /// The available dock of the specified size if found; otherwise, null.
         /// </returns>
-        public Dock AvailableDockOfSize(Size shipSize)
+        internal Dock AvailableDockOfSize(Size shipSize)
         {
             if (Docks.Count == 0)
             {
@@ -162,7 +162,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>
         /// True if the ship is found in the waiting queue; otherwise, false.
         /// </returns>
-        private bool IsShipInQueue(Ship ship)
+        internal bool IsShipInQueue(Ship ship)
         {
             foreach(Ship otherShip in WaitingShips)
             {
@@ -183,7 +183,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </remarks>
         /// <exception cref="ArgumentNullException">Thrown when the list of ships is empty.</exception>
      
-        public void QueueShipsToDock()
+        internal void QueueShipsToDock()
         {
             if (Ships.Count == 0)
             {
@@ -214,7 +214,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// If a ship successfully docks, it is removed from the queue and added to the list of docked ships.
         /// If there are no available docks or the ship is currently sailing, it remains in the queue.
         /// </remarks>
-        public void DockShips()
+        internal void DockShips()
         {
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
             while (WaitingShips.Count > 0)
@@ -258,8 +258,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// It attempts to add each cargo item to the harbor's cargo storage if there is available space.
         /// If the harbor's cargo storage is full, it marks the storage as unavailable by throwing an exception.
         /// </remarks>
-        /// <exception cref="AddCargoToStorageException">Thrown when there is not enough space in CargoStorage to add all cargo from the ship.</exception>
-        public void AddCargoToStorage()
+        /// <exception cref="NotEnoughSpaceInStorage">Thrown when there is not enough space in CargoStorage to add all cargo from the ship.</exception>
+        internal void AddCargoToStorage()
         {
             foreach (Ship ship in DockedShips)
             {
@@ -275,7 +275,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     }
                     else
                     {
-                        throw new AddCargoToStorageException("Not enough space in CargoStorage to add all cargo from the ship.");
+                        throw new NotEnoughSpaceInStorage("Not enough space in CargoStorage to add all cargo from the ship.");
                     }
 
                 }
@@ -292,7 +292,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// It removes cargo items from the harbor's storage and adds them to the ship's cargo list.
         /// The method also updates cargo history with loading information.
         /// </remarks>
-        public void AddCargoToShips(int numberOfCargo)
+        internal void AddCargoToShips(int numberOfCargo)
         {
             try
             {
@@ -335,7 +335,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// updates the dock's occupied status, removes the ship from the list of docked ships, and resets ship properties
         /// related to docking. If the ship is not docked, it returns false.
         /// </remarks>
-        public bool RemoveShipFromDock(Ship ship)
+        internal bool RemoveShipFromDock(Ship ship)
         {
             if (ship.DockedAt != null)
             {

@@ -47,7 +47,7 @@ public class Sailing
     /// </summary>
     /// <param name="harbor">The harbor instance where the sailings occur.</param>
     /// <param name="historyHandler">The history handler for recording sailing events.</param>
-    public void StartScheduledSailings(Harbor harbor, HistoryHandler historyHandler)
+    internal void StartScheduledSailings(Harbor harbor, HistoryHandler historyHandler)
     {
         foreach (var kvp in ScheduledSailings)
         {

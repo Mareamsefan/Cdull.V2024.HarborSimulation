@@ -33,7 +33,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="date">The date for which harbor history is saved.</param>
         /// <param name="harbor">The harbor instance to be saved in the history.</param>
-        public void SaveHarborHistory(DateTime date, Harbor harbor)
+        internal void SaveHarborHistory(DateTime date, Harbor harbor)
         {
             date = date.Date;
             harborHistory.Add(date, harbor);
