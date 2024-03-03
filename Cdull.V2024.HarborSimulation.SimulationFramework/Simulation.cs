@@ -11,8 +11,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
     public class Simulation : IHarborSimulation
     {
    
-        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks,
-            DateTime startSailingTime, int destinationLocation, bool IsRecurringSailing, RecurringType? recurringType=null)
+        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, 
+            int destinationLocation)
         {
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
             harbor.SetCurrentTime(startTime);
@@ -51,17 +51,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
               
                 harbor.AddCargoToShips(10);
 
+                Sailing sailing = Sailing.GetInstance();
 
-                if (IsRecurringSailing && recurringType != null)
-                {
-                  
-                   // harbor.RecurringSailing(startSailingTime, endTime, numberOfDaysSailing, recurringType.Value);
-                }
-                else
-                {
-                    harbor.Sailing(startSailingTime, destinationLocation);
-                }
-
+                sailing.StartScheduledSailings(harbor, destinationLocation, historyHandler);
 
 
                 harbor.SetCurrentTime(harbor.GetCurrentTime().AddMinutes(1));

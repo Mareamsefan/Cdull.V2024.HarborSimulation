@@ -353,114 +353,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
-        /// <summary>
-        /// Initiates the sailing process for ships.
-        /// </summary>
-        /// <param name="sailingStartTime">The starting time for sailing.</param>
-        /// <param name="numberOfDays">The duration of sailing in days.</param>
-        /// <remarks>
-        /// This method iterates through all ships in the harbor. If a ship is ready to sail and the current time matches
-        /// the specified sailing start time, the ship is removed from its dock and marked as sailing. It then moves towards
-        /// the specified sailing destination location. If the ship reaches its destination, it's marked as sailing.
-        /// If the current time matches the end of the sailing period, the ship is marked as not sailing, and it's queued to dock again.
-        /// If the ship is not ready to sail or the current time is between the start and end of the sailing period,
-        /// the ship is marked as waiting for sailing.
-        /// SailingDestination represents meters so 10 000m. 
-        /// </remarks>
-        public void Sailing(DateTime sailingStartTime, int destinationLocation)
-        {
-            try
-            {
-                HistoryHandler historyHandler = HistoryHandler.GetInstance();
-                foreach (Ship ship in Ships)
-                {
-                    if (ship.IsReadyToSail && CurrentTime.CompareTo(sailingStartTime) == 0 && !ship.IsSailing)
-                    {
-                        if (RemoveShipFromDock(ship))
-                        {
-                            ship.SetDestinationLocationFrom(ship.CurrentLocation, destinationLocation);
-                            ship.Move();
-                            ship.SailedAtTime = CurrentTime.ToString();
-                            historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Sailed at {CurrentTime} to destination:{ship.DestinationLocation}");
-                            ship.IsSailing = true;
-                            SailingShips.Add(ship);
-                            RaiseShipDeparted(ship);
-                        }
-                    }
-                    else if (ship.HasReachedDestination)
-                    {
-                        ship.IsSailing = false;
-                        SailingShips.Remove(ship);
-                        QueueShipsToDock();
-                    }
-                    else
-                    {
-                        ship.IsWaitingForSailing = true;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error in Sailing method: " + e.Message);
-            }
-        }
-        private void RaiseShipDeparted(Ship departedShip)
+     
+        internal void RaiseShipDeparted(Ship departedShip)
         {
             ShipDeparted?.Invoke(this, new ShipDepartureEventArgs(departedShip));
         }
 
-        /// <summary>
-        /// Initiates recurring sailing operations based on the specified schedule.
-        /// </summary>
-        /// <param name="startSailing">The starting time for the first sailing operation.</param>
-        /// <param name="endTime">The end time for the recurring sailing operations.</param>
-        /// <param name="numberOfDaysAtSailing">The duration of sailing in days for each operation.</param>
-        /// <param name="dailyOrWeekly">Specifies whether the sailing should occur daily or weekly.</param>
-        /// <remarks>
-        /// This method schedules recurring sailing operations based on the specified parameters.
-        /// If <paramref name="dailyOrWeekly"/> is set to Enums.RecurringType.Daily/>,
-        /// the method checks if the current time matches the <paramref name="startSailing"/> time and initiates sailing accordingly.
-        /// If <paramref name="dailyOrWeekly"/> is set to Enums.RecurringType.Weekly/>,
-        /// the method schedules sailing operations weekly and iterates until the <paramref name="endTime"/>.
-        /// It calculates the weekly sailing times and initiates sailing accordingly.
-        /// </remarks>
-        /// 
-        /*
-        public void RecurringSailing(DateTime startSailing, DateTime endTime, int destinationLocation, RecurringType dailyOrWeekly)
-        {
-            try
-            {
-                if (dailyOrWeekly.Equals(RecurringType.Daily))
-                {
-                    if (startSailing.Date == CurrentTime.Date && startSailing.Hour == CurrentTime.Hour && startSailing.Minute == CurrentTime.Minute)
-                    {
-                        Sailing(startSailing, destinationLocation);
-                    }
-                }
-                else if (dailyOrWeekly.Equals(RecurringType.Weekly))
-                {
-                    var weekly = startSailing;
-                    int weekCounter = 1;
-
-                    while (CurrentTime <= endTime && weekly <= endTime)
-                    {
-                        weekly = weekly.AddDays(7 * weekCounter);
-
-                        if (weekly.Date == CurrentTime.Date && weekly.Hour == CurrentTime.Hour && weekly.Minute == CurrentTime.Minute)
-                        {
-                            Sailing(weekly, numberOfDaysAtSailing);
-                            weekCounter++;
-                            Console.WriteLine(weekCounter);
-                            Console.WriteLine(weekly);
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error in RecurringSailing method: " + e.Message);
-            }
-        }*/
 
         /// <summary>
         /// Gets the list of docks in the harbor.
