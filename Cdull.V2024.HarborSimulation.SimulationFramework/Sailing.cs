@@ -1,24 +1,37 @@
 ﻿using Cdull.V2024.HarborSimulation.SimulationFramework;
-
+/// <summary>
+/// Represents the scheduling and execution of ship sailings.
+/// </summary>
 public class Sailing
 {
-    private static Sailing instance;
+    private static readonly Sailing instance = new Sailing();
     private Dictionary<Model, List<(DateTime, int, RecurringType)>> ScheduledSailings { get; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Sailing"/> class.
+    /// </summary>
     private Sailing()
     {
         ScheduledSailings = new Dictionary<Model, List<(DateTime, int, RecurringType)>>();
     }
 
+    /// <summary>
+    /// Gets the singleton instance of the <see cref="Sailing"/> class.
+    /// </summary>
+    /// <returns>The singleton instance of the <see cref="Sailing"/> class.</returns>
+    /// https://csharpindepth.com/articles/singleton (hentet: 03.03.2024)
     public static Sailing GetInstance()
     {
-        if (instance == null)
-        {
-            instance = new Sailing();
-        }
         return instance;
     }
 
+    /// <summary>
+    /// Schedules a sailing for a specific ship model.
+    /// </summary>
+    /// <param name="shipModel">The model of the ship.</param>
+    /// <param name="sailingTime">The time at which the sailing is scheduled to occur.</param>
+    /// <param name="destinationLocation">The destination location of the sailing.</param>
+    /// <param name="recurringType">The type of recurring sailing, if any.</param>
     public void ScheduleSailing(Model shipModel, DateTime sailingTime, int destinationLocation, RecurringType recurringType)
     {
         if (!ScheduledSailings.ContainsKey(shipModel))
@@ -29,6 +42,11 @@ public class Sailing
         ScheduledSailings[shipModel].Add((sailingTime, destinationLocation, recurringType));
     }
 
+    /// <summary>
+    /// Starts scheduled sailings based on the current time and recurring schedule.
+    /// </summary>
+    /// <param name="harbor">The harbor instance where the sailings occur.</param>
+    /// <param name="historyHandler">The history handler for recording sailing events.</param>
     public void StartScheduledSailings(Harbor harbor, HistoryHandler historyHandler)
     {
         foreach (var kvp in ScheduledSailings)
