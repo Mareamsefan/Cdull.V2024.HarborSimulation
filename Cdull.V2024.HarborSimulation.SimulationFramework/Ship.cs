@@ -89,7 +89,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="number">The number of cargo to initialize.</param>
         /// <param name="weight">The weight of each cargo.</param>
-        public void InitializeCargo(int number, double weight = 10)
+        internal void InitializeCargo(int number, double weight = 10)
         {
             for (int i = 0; i < number; i++)
             {
@@ -108,7 +108,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// This method calculates the distance from the current location to the destination location and sets it as the ship's new destination.
         /// The current location and destination are provided as parameters, and the absolute difference between them determines the distance.
         /// </remarks>
-        public void SetDestinationLocationFrom (int Location, int destination)
+        internal void SetDestinationLocationFrom (int Location, int destination)
         {
             DestinationLocation = Math.Abs(destination - Location);
         }
@@ -126,7 +126,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <summary>
         /// Moves the ship towards its destination.
         /// </summary>
-        public void Move()
+        internal void Move()
         {    
             int newLocation = CurrentLocation + ((Speed * 1000) / 60); 
 
@@ -137,28 +137,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 HasReachedDestination = true;
                 
             }
-        }
-
-        /// <summary>
-        /// Gets the ship's history as a formatted string.
-        /// </summary>
-        /// <returns>A string representing the ship's history.</returns>
-        public string GetShipHistory()
-        {
-            // Opprett en StringBuilder for å bygge opp den formaterte strengen
-            StringBuilder sb = new StringBuilder();
-
-            // Legg til tittel på historien
-            sb.AppendLine("Ship History:");
-
-            // Legg til hver hendelse i historien
-            foreach (string eventDescription in History)
-            {
-                sb.AppendLine(eventDescription);
-            }
-
-            // Returner den formaterte strengen
-            return sb.ToString();
         }
 
         /// <summary>
