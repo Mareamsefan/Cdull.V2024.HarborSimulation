@@ -244,7 +244,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 if (availableDock is not null && !ship.IsSailing)
                 {
                     ship.SetDestinationLocationFrom(ship.CurrentLocation, Location);
-                    ship.Move();
+                    ship.CalculateMovement(this);
 
                     if (ship.HasReachedDestination)
                     {
