@@ -32,13 +32,15 @@ namespace HarborSimulationTest
 
             harbor.DepartedShip += Harbor_ShipDeparted;
             harbor.ArrivedShip += Harbor_ShipArrived;
+            harbor.CompletedUnloadingShip += Harbor_ShipCompletedUnloading;
+            harbor.CompletedloadingShip += Harbor_ShipCompletedLoading;
 
             Sailing sailing = Sailing.GetInstance();
             sailing.ScheduleSailing(harbor, Model.ContainerShip, new DateTime(2024, 1, 2),50, RecurringType.Weekly);
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
 
-            // Runing the simulation: 
+            // Running the simulation: 
             driver.Run(harbor, startTime, endTime, ships, docks);
 
             //Tester at den nye generiske historikk klassen funker for ship og harbor. 
@@ -67,6 +69,17 @@ namespace HarborSimulationTest
         {
 
             Console.WriteLine($"Ship '{e.ArrivedShip}' arrived harbor.");
+        }
+
+        private static void Harbor_ShipCompletedUnloading(object? sender, ShipUnloadingEventArgs e)
+        {
+
+            Console.WriteLine($"Ship '{e.CompletedUnloadingShip}' completed unloading cargo.");
+        }
+        private static void Harbor_ShipCompletedLoading(object? sender, ShipLoadingEventArgs e)
+        {
+
+            Console.WriteLine($"Ship '{e.CompletedLoadingShip}' completed loading cargo.");
         }
     }
 }
