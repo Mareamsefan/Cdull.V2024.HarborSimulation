@@ -35,12 +35,10 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                     historyHandler.SaveHarborHistory(harbor.GetCurrentTime(), harbor); 
                 }
 
-                harbor.QueueShipsToDock();
-
-    
-                harbor.DockShips();
-
-
+                if (harbor.QueueShipsToDock())
+                {
+                    harbor.DockShips();
+                }
          
                 harbor.AddCargoToStorage();
 

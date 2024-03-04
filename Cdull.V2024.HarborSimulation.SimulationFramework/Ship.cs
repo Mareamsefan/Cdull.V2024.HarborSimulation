@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Text;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
@@ -10,7 +11,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     /// </summary>
     public class Ship
     {
-        internal string Name { get; set; }
+        public string Name { get; set; }
         internal Model Model { get; set; }
         internal Size Size { get; set; }
         internal bool HasDocked { get; set; }
@@ -127,15 +128,28 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Moves the ship towards its destination.
         /// </summary>
         internal void Move()
-        {    
-            int newLocation = CurrentLocation + ((Speed * 1000) / 60); 
+        {
+            int newLocation = CurrentLocation + ((Speed * 1000) / 60);
+            int destinationInMeters = DestinationLocation * 1000;
 
-            CurrentLocation = Math.Min(DestinationLocation, newLocation);
+            CurrentLocation = Math.Min(destinationInMeters, newLocation);
 
-            if (CurrentLocation >= DestinationLocation)
-            {
+            if (CurrentLocation >= destinationInMeters)
+            { 
                 HasReachedDestination = true;
-                
+            }
+        }
+
+        internal void CalculateMovement(Harbor harbor)
+        {
+            int distance = Math.Abs(DestinationLocation - CurrentLocation);
+            double time = (double)distance / Speed; // Beregn tid i timer basert på avstand og fart
+
+            DateTime elapsedTime = harbor.GetCurrentTime().AddHours(time); // Legg til tiden det tar å nå destinasjonen
+
+            if (harbor.GetCurrentTime() >= elapsedTime)
+            {
+                Move(); // Utfør bevegelsen hvis nåværende tid er større eller lik forventet ankomsttid
             }
         }
 

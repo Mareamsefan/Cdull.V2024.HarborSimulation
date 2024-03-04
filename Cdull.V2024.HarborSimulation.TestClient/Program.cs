@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
-using Cdull.V2024.HarborSimulation.SimulationFramework.ShipEvents;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Events;
 using Cdull.V2024.HarborSimulation.TestClient;
 
 namespace HarborSimulationTest
@@ -11,7 +12,7 @@ namespace HarborSimulationTest
     {
         static void Main(string[] args)
         {
-            Harbor harbor = new Harbor("ExceptiontestHarbor", new CargoStorage("cargo", 1000));
+            Harbor harbor = new Harbor("ExceptiontestHarbor", new CargoStorage("cargo", 10000));
 
             List<Dock> docks = harbor.InitializeDocks(10, Model.ContainerShip, Size.Large, 2);
 
@@ -33,8 +34,8 @@ namespace HarborSimulationTest
             harbor.ArrivedShip += Harbor_ShipArrived;
 
             Sailing sailing = Sailing.GetInstance();
-            sailing.ScheduleSailing(Model.ContainerShip, new DateTime(2024, 1, 2),2000, RecurringType.Weekly);
-            sailing.ScheduleSailing(Model.LNGCarrier, new DateTime(2024, 1, 2), 4000, RecurringType.Daily);
+            sailing.ScheduleSailing(harbor, Model.ContainerShip, new DateTime(2024, 1, 2),50, RecurringType.Weekly);
+            sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
 
             // Runing the simulation: 
@@ -43,12 +44,18 @@ namespace HarborSimulationTest
             //Tester at den nye generiske historikk klassen funker for ship og harbor. 
             HistoryHandler  historyHandler = HistoryHandler.GetInstance();
   
-
+           
             Console.WriteLine(historyHandler.GetHarborHistory(new DateTime(2024, 1, 2)));
-            Ship ship = harbor.GetShips().First();
+            Ship ship1 = harbor.GetShips().First();
             Ship ship2 = harbor.GetShips().Last();
-            Console.WriteLine(historyHandler.GetShipHistory(ship));
+            Console.WriteLine(historyHandler.GetShipHistory(ship1));
             Console.WriteLine(historyHandler.GetShipHistory(ship2));
+            foreach(Ship ship in harbor.GetShips())
+            {
+
+                Console.WriteLine(historyHandler.GetShipHistory(ship));
+            }
+       
         }
 
         private static void Harbor_ShipDeparted(object? sender, ShipDepartureEventArgs e)
