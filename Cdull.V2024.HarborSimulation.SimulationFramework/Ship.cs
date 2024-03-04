@@ -127,9 +127,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <summary>
         /// Moves the ship towards its destination.
         /// </summary>
+        /// <remarks>
+        /// This method calculates the new location of the ship based on its speed and updates its current location.
+        /// If the ship reaches its destination, the HasReachedDestination property is set to true.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown when the speed of the ship is negative.</exception>
         internal void Move()
         {
             int newLocation = CurrentLocation + ((Speed * 1000) / 60);
+
             int destinationInMeters = DestinationLocation * 1000;
 
             CurrentLocation = Math.Min(destinationInMeters, newLocation);
@@ -140,16 +146,30 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
+        /// <summary>
+        /// Calculates the movement of the ship based on its destination and current time.
+        /// </summary>
+        /// <param name="harbor">The harbor where the ship is located.</param>
+        /// <remarks>
+        /// This method calculates the time required for the ship to reach its destination based on its speed.
+        /// If the current time exceeds the estimated arrival time, the ship is moved towards its destination.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown when the ship's speed is zero.</exception>
         internal void CalculateMovement(Harbor harbor)
         {
             int distance = Math.Abs(DestinationLocation - CurrentLocation);
-            double time = (double)distance / Speed; // Beregn tid i timer basert på avstand og fart
 
-            DateTime elapsedTime = harbor.GetCurrentTime().AddHours(time); // Legg til tiden det tar å nå destinasjonen
+            if (Speed == 0)
+            {
+                throw new InvalidOperationException("Ship speed cannot be zero.");
+            }
+            double time = (double)distance / Speed; 
+
+            DateTime elapsedTime = harbor.GetCurrentTime().AddHours(time); 
 
             if (harbor.GetCurrentTime() >= elapsedTime)
             {
-                Move(); // Utfør bevegelsen hvis nåværende tid er større eller lik forventet ankomsttid
+                Move(); 
             }
         }
 
