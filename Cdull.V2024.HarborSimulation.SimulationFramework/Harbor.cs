@@ -21,9 +21,24 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal List<Ship> SailingShips { get; set; } = new List<Ship>();
         internal Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
 
+        /// <summary>
+        /// Event raised when a ship departs from the harbor.
+        /// </summary>
         public event EventHandler<ShipDepartureEventArgs> DepartedShip;
-
+        /// <summary>
+        /// Event raised when a ship arrives at the harbor.
+        /// </summary>
         public event EventHandler<ShipArrivalEventArgs> ArrivedShip;
+        /// <summary>
+        /// Event raised when a ship completes unloading at the harbor.
+        /// </summary>
+        public event EventHandler<ShipUnloadingEventArgs> CompletedUnloadingShip;
+        /// <summary>
+        /// Event raised when a ship completes loading at the harbor.
+        /// </summary>
+        public event EventHandler<ShipLoadingEventArgs> CompletedloadingShip;
+
+
 
         internal CargoStorage CargoStorage { get; set; }
 
@@ -286,18 +301,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
         /// <summary>
-        /// Moves cargo from docked ships to the cargo storage in the harbor.
+        /// Adds cargo from docked ships to the cargo storage in the harbor.
         /// </summary>
+        /// <returns>True if cargo is successfully added to the storage; otherwise, false.</returns>
         /// <remarks>
-        /// This method iterates through all docked ships in the harbor and their respective cargo items.
-        /// It attempts to add each cargo item to the cargo storage if there is available space.
-        /// If the cargo storage capacity allows, it adds all cargo items from the docked ships to the storage.
-        /// If the cargo storage capacity is exceeded, it throws a <see cref="StorageSpaceException"/>.
+        /// This method checks for docked ships and unloads cargo from them into the cargo storage.
+        /// It removes cargo items from the ships and adds them to the cargo storage.
+        /// The method also raises an event when unloading is completed for a ship.
         /// </remarks>
         /// <exception cref="InvalidOperationException">Thrown when there are no docked ships in the harbor.</exception>
-        /// <exception cref="StorageSpaceException">Thrown when there is not enough space in the cargo storage to add all cargo from the docked ships.</exception>
-
-        internal void AddCargoToStorage()
+        /// <exception cref="StorageSpaceException">Thrown when there is not enough space in the cargo storage to add all cargo from the ship.</exception>
+        internal bool AddCargoToStorage()
         {
             if (DockedShips.Any())
             {
@@ -307,7 +321,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     throw new InvalidOperationException("No docked ships in harbor to unload cargo from.");
                 }
 
-                if (ship.Cargo.Any())
+                if (ship.Cargo.Any() && !ship.IsUnloadingCompleted)
                 {
                     int totalCargoCount = ship.Cargo.Count;
                     if (CargoStorage.GetOccupiedSpace() + totalCargoCount <= CargoStorage.Capacity)
@@ -318,6 +332,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                             CargoStorage.OccupySpace(cargo);
                             ship.Cargo.Remove(cargo);
                         }
+                
+                        ship.IsUnloadingCompleted = true;
+                        if (ship.IsUnloadingCompleted)
+                        {
+                            RaiseShipCompletedUnloading(ship);
+                        }
+                        return true; 
                     }
                     else
                     {
@@ -325,6 +346,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     }
                 }
             }
+            return false;
         }
 
 
@@ -339,7 +361,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </remarks>
         /// <exception cref="ArgumentException">Thrown when the number of cargo to add is not greater than zero.</exception>
         /// <exception cref="InsufficientCargoException">Thrown when there is not enough cargo in the cargo storage.</exception>
-
         internal void AddCargoToShips(int numberOfCargo)
         {
             if (numberOfCargo <= 0)
@@ -353,7 +374,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     for (int i = 0; i < numberOfCargo; i++)
                     {
-                        if (CargoStorage.Cargo.Count > 0)
+                        if (CargoStorage.Cargo.Count > 0 && !ship.IsLoadingCompleted)
                         {
                             Cargo cargo = CargoStorage.Cargo.First();
                             ship.Cargo.Add(cargo);
@@ -367,6 +388,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         }
                     }
                     ship.IsReadyToSail = true;
+                    ship.IsLoadingCompleted = true;
+                    if (ship.IsUnloadingCompleted)
+                    {
+                        RaiseShipCompletedLoading(ship);
+                    }
+                    
                 }
                 
             }
@@ -420,17 +447,41 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
-     
+        /// <summary>
+        /// Raises the DepartedShip event.
+        /// </summary>
+        /// <param name="departedShip">The ship that has departed.</param>
         internal void RaiseShipDeparted(Ship departedShip)
         {
             DepartedShip?.Invoke(this, new ShipDepartureEventArgs(departedShip));
         }
 
+        /// <summary>
+        /// Raises the ArrivedShip event.
+        /// </summary>
+        /// <param name="arrivedShip">The ship that has arrived.</param>
         internal void RaiseShipArrived(Ship arrivedShip)
         {
             ArrivedShip?.Invoke(this, new ShipArrivalEventArgs(arrivedShip));
         }
 
+        /// <summary>
+        /// Raises the CompletedUnloadingShip event.
+        /// </summary>
+        /// <param name="completedUnloadingShip">The ship that has completed unloading.</param>
+        internal void RaiseShipCompletedUnloading(Ship completedUnloadingShip)
+        {
+            CompletedUnloadingShip?.Invoke(this, new ShipUnloadingEventArgs(completedUnloadingShip));
+        }
+
+        /// <summary>
+        /// Raises the CompletedLoadingShip event.
+        /// </summary>
+        /// <param name="completedLoadingShip">The ship that has completed loading.</param>
+        internal void RaiseShipCompletedLoading(Ship completedLoadingShip)
+        {
+            CompletedloadingShip?.Invoke(this, new ShipLoadingEventArgs(completedLoadingShip));
+        }
 
         /// <summary>
         /// Gets the list of docks in the harbor.

@@ -70,11 +70,13 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 {
                     harbor.DockShips();
                 }
-         
-                harbor.AddCargoToStorage();
+                
 
-              
-                harbor.AddCargoToShips(10);
+                if (harbor.AddCargoToStorage())
+                {
+                    harbor.AddCargoToShips(10);
+                }
+
 
                 Sailing sailing = Sailing.GetInstance();
 

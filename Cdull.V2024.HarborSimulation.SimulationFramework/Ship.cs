@@ -27,6 +27,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal int CurrentLocation { get; set; }
         internal int DestinationLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
+        internal bool IsLoadingCompleted { get; set; }
+        internal bool IsUnloadingCompleted { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the Ship class.
