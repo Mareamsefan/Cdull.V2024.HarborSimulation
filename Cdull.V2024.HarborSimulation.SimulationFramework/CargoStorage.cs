@@ -27,21 +27,36 @@
         }
 
         /// <summary>
-        /// A method to add cargo to the cargo storage in the harbor simulation.
+        /// Adds the specified cargo to the cargo storage.
         /// </summary>
-        /// <param name="cargo">The cargo object thats being added</param>
+        /// <param name="cargo">The cargo object to be added.</param>
+        /// <remarks>
+        /// This method adds the specified cargo to the cargo storage if it is not already present.
+        /// </remarks>
         internal void AddCargo(Cargo cargo)
         {
-            Cargo.Add(cargo);
+            if (!Cargo.Contains(cargo))
+            {
+                Cargo.Add(cargo);
+            }
+               
         }
 
+
         /// <summary>
-        /// A method to remove the cargo from the cargo storage in the harbor simulation.
+        /// Removes the specified cargo from the cargo storage.
         /// </summary>
-        /// <param name="cargo">The cargo object thats being removed</param>
+        /// <param name="cargo">The cargo object to be removed.</param>
+        /// <remarks>
+        /// This method removes the specified cargo from the cargo storage if it exists.
+        /// </remarks>
         internal void RemoveCargo(Cargo cargo)
         {
-            Cargo.Remove(cargo);
+            if (Cargo.Contains(cargo))
+            {
+                Cargo.Remove(cargo);
+            }
+               
         }
 
         /// <summary>
@@ -57,7 +72,7 @@
         {
             if(OccupiedSpace < Capacity)
             {
-                OccupiedSpace += cargo.Weight;
+                OccupiedSpace += 1;
             }
             else
             {
@@ -74,11 +89,12 @@
         /// This method subtracts the weight of the provided cargo from the occupied space of the cargo storage.
         /// If the occupied space becomes less than or equal to the capacity of the cargo storage, it marks the storage as available.
         /// </remarks>
+
         internal void deOccupySpace(Cargo cargo)
         {
             if (OccupiedSpace <= Capacity && OccupiedSpace > 0)
             {
-                OccupiedSpace -= cargo.Weight;
+                OccupiedSpace -= 1;
                 IsAvailable = true;
             }
 

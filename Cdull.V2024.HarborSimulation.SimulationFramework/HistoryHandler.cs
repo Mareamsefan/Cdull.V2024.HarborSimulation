@@ -22,7 +22,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Gets the singleton instance of the <see cref="HistoryHandler"/> class.
         /// </summary>
         /// <returns>The singleton instance of the <see cref="HistoryHandler"/> class.</returns>
-        /// https://csharpindepth.com/articles/singleton (hentet: 03.03.2024)
+        /// https://csharpindepth.com/articles/singleton (hentet: 03.03.2024) (Skeet.Jon, 2019)
         public static HistoryHandler GetInstance()
         {
             return instance;
