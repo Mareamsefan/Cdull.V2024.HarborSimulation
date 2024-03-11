@@ -45,7 +45,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             }
 
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
-            CargoHandler cargoHandler = new CargoHandler(harbor); 
+            CargoHandler cargoHandler = new CargoHandler(harbor);
             harbor.SetCurrentTime(startTime);
 
        
@@ -75,7 +75,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
                 if (cargoHandler.AddCargoToStorage())
                 {
-                    cargoHandler.AddCargoToShips(10);
+                   cargoHandler.AddCargoToShips(10);
                 }
 
 
