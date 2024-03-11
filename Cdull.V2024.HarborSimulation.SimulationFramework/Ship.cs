@@ -148,7 +148,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return $"Ship Name: {Name}, Model: {Model}";
         }
 
-
+        
 
     }
 }
