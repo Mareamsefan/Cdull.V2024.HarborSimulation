@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Text;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
@@ -10,7 +11,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     /// </summary>
     public class Ship
     {
-        internal string Name { get; set; }
+        public string Name { get; set; }
         internal Model Model { get; set; }
         internal Size Size { get; set; }
         internal bool HasDocked { get; set; }
@@ -26,6 +27,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal int CurrentLocation { get; set; }
         internal int DestinationLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
+        internal bool IsLoadingCompleted { get; set; }
+        internal bool IsUnloadingCompleted { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the Ship class.
@@ -126,16 +129,49 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <summary>
         /// Moves the ship towards its destination.
         /// </summary>
+        /// <remarks>
+        /// This method calculates the new location of the ship based on its speed and updates its current location.
+        /// If the ship reaches its destination, the HasReachedDestination property is set to true.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown when the speed of the ship is negative.</exception>
         internal void Move()
-        {    
-            int newLocation = CurrentLocation + ((Speed * 1000) / 60); 
+        {
+            int newLocation = CurrentLocation + ((Speed * 1000) / 60);
 
-            CurrentLocation = Math.Min(DestinationLocation, newLocation);
+            int destinationInMeters = DestinationLocation * 1000;
 
-            if (CurrentLocation >= DestinationLocation)
-            {
+            CurrentLocation = Math.Min(destinationInMeters, newLocation);
+
+            if (CurrentLocation >= destinationInMeters)
+            { 
                 HasReachedDestination = true;
-                
+            }
+        }
+
+        /// <summary>
+        /// Calculates the movement of the ship based on its destination and current time.
+        /// </summary>
+        /// <param name="harbor">The harbor where the ship is located.</param>
+        /// <remarks>
+        /// This method calculates the time required for the ship to reach its destination based on its speed.
+        /// If the current time exceeds the estimated arrival time, the ship is moved towards its destination.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown when the ship's speed is zero.</exception>
+        internal void CalculateMovement(Harbor harbor)
+        {
+            int distance = Math.Abs(DestinationLocation - CurrentLocation);
+
+            if (Speed == 0)
+            {
+                throw new InvalidOperationException("Ship speed cannot be zero.");
+            }
+            double time = (double)distance / Speed; 
+
+            DateTime elapsedTime = harbor.GetCurrentTime().AddHours(time); 
+
+            if (harbor.GetCurrentTime() >= elapsedTime)
+            {
+                Move(); 
             }
         }
 

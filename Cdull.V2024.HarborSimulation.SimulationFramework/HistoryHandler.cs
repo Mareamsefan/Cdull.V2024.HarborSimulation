@@ -22,7 +22,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Gets the singleton instance of the <see cref="HistoryHandler"/> class.
         /// </summary>
         /// <returns>The singleton instance of the <see cref="HistoryHandler"/> class.</returns>
-        /// https://csharpindepth.com/articles/singleton (hentet: 03.03.2024)
+        /// https://csharpindepth.com/articles/singleton (hentet: 03.03.2024) (Skeet.Jon, 2019)
         public static HistoryHandler GetInstance()
         {
             return instance;
@@ -65,27 +65,40 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine("Ship History:");
+            sb.AppendLine("Ship History for all ships:");
 
-            foreach (var history in shipHistory)
+            foreach (var shipEvent in shipHistory)
             {
-                sb.AppendLine(history.eventDescription);
+                sb.AppendLine(shipEvent.eventDescription);
             }
 
             return sb.ToString();
         }
+
+
 
         /// <summary>
         /// Retrieves the history of a specific ship.
         /// </summary>
         /// <param name="ship">The ship for which history is retrieved.</param>
         /// <returns>A string containing the history of the specified ship.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the ship parameter is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when there is no history available for the specified ship.</exception>
         public string GetShipHistory(Ship ship)
         {
-            StringBuilder sb = new StringBuilder();
+            if (ship == null)
+            {
+                throw new ArgumentNullException(nameof(ship), "Ship parameter cannot be null.");
+            }
 
             var shipEvents = shipHistory.Where(history => history.shipName == ship.Name);
 
+            if (!shipEvents.Any())
+            {
+                throw new InvalidOperationException($"No history available for ship '{ship.Name}'.");
+            }
+
+            StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Ship History for {ship.Name}:");
 
             foreach (var shipEvent in shipEvents)
@@ -96,15 +109,23 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return sb.ToString();
         }
 
+
         /// <summary>
         /// Adds a new event to the history of a specific ship.
         /// </summary>
         /// <param name="ship">The ship for which the event is recorded.</param>
         /// <param name="eventDescription">The description of the event.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the ship parameter is null.</exception>
         public void AddEventToShipHistory(Ship ship, string eventDescription)
         {
+            if (ship == null)
+            {
+                throw new ArgumentNullException(nameof(ship), "Ship parameter cannot be null.");
+            }
+
             var newEvent = (ship: ship.Name, eventDescription: eventDescription);
             shipHistory.Add(newEvent);
         }
+
     }
 }

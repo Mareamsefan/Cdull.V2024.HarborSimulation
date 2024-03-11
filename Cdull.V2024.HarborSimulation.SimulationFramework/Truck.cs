@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-    public class IExceptions
+    internal class Truck
     {
+        int id;
+        public int Id { get { return id; } }
 
-      
+        
     }
 }

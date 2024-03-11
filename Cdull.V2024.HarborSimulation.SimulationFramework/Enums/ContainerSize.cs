@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Enums
 {
     /// <summary>
-    /// Represents the size categories of ships and docks.
+    /// Represents the size categories of cargo containers.
     /// </summary>
-    public enum Size
+    public enum ContainerSize
     {
-        Small,
-        Medium,
+        Small, 
         Large
     }
 }
