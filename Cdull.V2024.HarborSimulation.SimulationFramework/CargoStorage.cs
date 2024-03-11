@@ -76,7 +76,7 @@
         /// </summary>
         /// <param name="cargo">The cargo to occupy space for.</param>
         /// <remarks>
-        /// This method adds the weight of the provided cargo to the occupied space of the cargo storage.
+        /// This method adds one element of the provided cargo to the occupied space of the cargo storage.
         /// If the occupied space exceeds the capacity of the cargo storage, it marks the storage as unavailable.
         /// </remarks>
         /// <exception cref="InvalidOperationException">Thrown when the cargo storage capacity is exceeded.</exception>
@@ -99,7 +99,7 @@
         /// </summary>
         /// <param name="cargo">The cargo to free up space for.</param>
         /// <remarks>
-        /// This method subtracts the weight of the provided cargo from the occupied space of the cargo storage.
+        /// This method subtracts one element of the provided cargo from the occupied space of the cargo storage.
         /// If the occupied space becomes less than or equal to the capacity of the cargo storage, it marks the storage as available.
         /// </remarks>
         /// <exception cref="InvalidOperationException">Thrown when the occupied space or capacity is invalid.</exception>

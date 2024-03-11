@@ -58,25 +58,23 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
         /// <summary>
-        /// Retrieves the history of a specific ship.
+        /// Retrieves the history of all ships.
         /// </summary>
-        /// <param name="ship">The ship for which history is retrieved.</param>
-        /// <returns>A string containing the history of the specified ship.</returns>
-        public string GetShipsHistory(Ship ship)
+        /// <returns>A string containing the history of all ships.</returns>
+        public string GetShipsHistory()
         {
             StringBuilder sb = new StringBuilder();
 
-            var shipEvents = shipHistory.Where(history => history.shipName == ship.Name);
+            sb.AppendLine("Ship History for all ships:");
 
-            sb.AppendLine($"Ship History for {ship.Name}:");
-
-            foreach (var shipEvent in shipEvents)
+            foreach (var shipEvent in shipHistory)
             {
                 sb.AppendLine(shipEvent.eventDescription);
             }
 
             return sb.ToString();
         }
+
 
 
         /// <summary>
