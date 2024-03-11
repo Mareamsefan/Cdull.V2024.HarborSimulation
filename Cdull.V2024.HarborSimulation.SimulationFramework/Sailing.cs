@@ -130,5 +130,21 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
+        /// <summary>
+        /// Checks all scheduled sailings for a specific ship model.
+        /// </summary>
+        /// <param name="shipModel">The model of the ship to check sailings for.</param>
+        /// <returns>A list of scheduled sailings for the specified ship model.</returns>
+        public List<(DateTime, int, RecurringType)> CheckScheduledSailings(Model shipModel)
+        {
+            if (!ScheduledSailings.ContainsKey(shipModel))
+            {
+                // Returner en tom liste hvis det ikke er noen planlagte seilaser for denne skipstypen
+                return new List<(DateTime, int, RecurringType)>();
+            }
+
+            return ScheduledSailings[shipModel];
+        }
+
     }
 }
