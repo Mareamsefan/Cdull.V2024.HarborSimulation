@@ -33,7 +33,7 @@ namespace HarborSimulationTest
 
             // Setter starttid og sluttid for simuleringen.
             DateTime startTime = new DateTime(2024, 1, 1);
-            DateTime endTime = new DateTime(2024, 1, 10);
+            DateTime endTime = new DateTime(2024, 1, 15);
 
             // Setter starttidspunkt for seiling for alle skip i havnen som ikke har en gjentakende seilingsplan.
             DateTime startSailingTime = new DateTime(2024, 1, 2);
@@ -69,11 +69,16 @@ namespace HarborSimulationTest
             // Henter det siste skipet i havnen og skriver ut historikk for det.
             Ship ship2 = harbor.GetShips().Last();
             Console.WriteLine(historyHandler.GetShipHistory(ship2));
+            Console.WriteLine(ship2.GetShipCargo().Count);
 
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
+            List<(DateTime, int, RecurringType)> sailings = sailing.CheckScheduledSailings(Model.ContainerShip);
 
-
+            foreach (var sailing_ in sailings)
+            {
+                Console.WriteLine(sailing_);
+            }
         }
 
         private static void Harbor_ShipDeparted(object? sender, ShipDepartureEventArgs e)
