@@ -18,6 +18,7 @@
         {
             Name = cargoName;
             Weight = cargoWeight;
+            Size = cargoSize;
 
         }
 

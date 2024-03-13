@@ -6,7 +6,23 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-    internal class AGV
+    public class AGV
     {
+        internal string Id { get; set; }
+        internal double speed { get; set; }
+        internal List<String> AVGHistory { get; } = new List<String>();
+
+        public AVG(string Id, double speed)
+        {
+            Id = AVGId;
+            speed = AVGSpeed;
+        }
+
+
+        public List<string> GetAVGHistory()
+        {
+            return AVGHistory;
+        }
+
+
     }
-}

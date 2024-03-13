@@ -184,7 +184,53 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return $"Ship Name: {Name}, Model: {Model}";
         }
 
-        
+
+        private int CalculateMaxCargoCapacity(Model model)
+        {
+            int maxCapacity = 0;
+
+            switch (model)
+            {
+                case Model.ContainerShip:
+                    maxCapacity = 200000;
+                    break;
+                case Model.Bulker:
+                    maxCapacity = 1000;
+                    break;
+                case Model.Tanker:
+                    maxCapacity = 100000;
+                    break;
+                case Model.LNGCarrier:
+                    maxCapacity = 200;
+                    break;
+                case Model.RoRo:
+                    maxCapacity = 300000;
+                    break;
+                default:
+                    maxCapacity = 0;
+                    break;
+            }
+
+            int smallCargoCount = 0;
+            int largeCargoCount = 0;
+
+            foreach (var cargo in Cargo)
+            {
+                if (cargo.Size == Size.Small)
+                {
+                    smallCargoCount++;
+                }
+                else
+                {
+                    largeCargoCount++;
+                }
+            }
+
+            maxCapacity -= largeCargoCount;
+            maxCapacity -= smallCargoCount / 2;
+
+            return maxCapacity;
+        }
 
     }
 }
