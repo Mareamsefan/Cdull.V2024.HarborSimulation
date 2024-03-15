@@ -10,7 +10,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
         internal string Id { get; set; }
         internal double speed { get; set; }
-        internal List<String> AVGHistory { get; } = new List<String>();
+        internal List<String> AVGHistory { get; set; } = new List<String>();
 
         public AVG(string Id, double speed)
         {
