@@ -7,9 +7,9 @@ using System.Xml.Linq;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-    internal class StorageColumns
+    public class StorageColumn
     {
-        public int ColumnId;
+        public int ColumnId { get; set;  }
         internal int Height { get; private set; }
         internal int Length { get; private set; }
         internal int Width { get; private set; }
@@ -18,7 +18,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal double OccupiedSpace { get; set; }
         internal bool IsAvailable { get; set; }
 
-        public StorageColumns(int columnId, int columnLength, int columnWidth, int columnHeight)
+        public StorageColumn(int columnId, int columnLength, int columnWidth, int columnHeight)
         {
             ColumnId = columnId;
             Length = columnLength;

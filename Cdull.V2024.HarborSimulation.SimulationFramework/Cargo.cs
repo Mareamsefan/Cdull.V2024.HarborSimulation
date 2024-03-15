@@ -5,6 +5,8 @@
     /// </summary>
     public class Cargo
     {
+        private static int lastId = 0;
+        internal int Id; 
         internal string Name { get; set; }
         internal double Weight { get; private set; }
         internal List<String> History { get; } = new List<String>();
@@ -16,6 +18,7 @@
         /// <param name="cargoWeight">The weight of the cargo.</param>
         public Cargo(string cargoName, double cargoWeight)
         {
+            Id = ++lastId;
             Name = cargoName;
             Weight = cargoWeight;
 

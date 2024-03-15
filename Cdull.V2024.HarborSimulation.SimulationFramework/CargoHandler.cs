@@ -43,12 +43,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 if (ship.Cargo.Any() && !ship.IsUnloadingCompleted)
                 {
                     int totalCargoCount = ship.Cargo.Count;
-                    if (harbor.CargoStorage.GetOccupiedSpace() + totalCargoCount <= harbor.CargoStorage.Capacity)
+                    if (harbor.CargoStorage.GetSpecificColumn(1).GetOccupiedSpace() + totalCargoCount <= harbor.CargoStorage.GetSpecificColumn(1).Capacity)
                     {
-                        foreach (var cargo in ship.Cargo.ToList())
+                        foreach (Cargo cargo in ship.Cargo)
                         {
-                            harbor.CargoStorage.AddCargo(cargo);
-                            harbor.CargoStorage.OccupySpace(cargo);
+                            harbor.CargoStorage.GetSpecificColumn(1).AddCargo(cargo);
+                            harbor.CargoStorage.GetSpecificColumn(1).OccupySpace(cargo);
                             ship.Cargo.Remove(cargo);
                         }
 
@@ -97,8 +97,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         {
                             Cargo cargo = harbor.CargoStorage.Cargo.First();
                             ship.Cargo.Add(cargo);
-                            harbor.CargoStorage.RemoveCargo(cargo);
-                            harbor.CargoStorage.deOccupySpace(cargo);
+                            harbor.CargoStorage.GetSpecificColumn(1).RemoveCargo(cargo);
+                            harbor.CargoStorage.GetSpecificColumn(1).deOccupySpace(cargo);
                             cargo.History.Add($"{cargo.Name} loaded at {harbor.CurrentTime} on {ship.Name}");
                         }
                         else
