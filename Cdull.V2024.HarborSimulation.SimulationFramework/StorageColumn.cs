@@ -14,7 +14,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal int Length { get; private set; }
         internal int Width { get; private set; }
         public int Capacity { get; set; }
-        internal List<Cargo> Cargo {  get; private set; }
+        internal List<Cargo> Cargo {  get; set; } = new List<Cargo>();
         internal double OccupiedSpace { get; set; }
         internal bool IsAvailable { get; set; }
 
@@ -45,11 +45,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentNullException(nameof(cargo), "Cargo parameter cannot be null.");
             }
 
+           
             if (!Cargo.Contains(cargo))
             {
                 Cargo.Add(cargo);
-            }
 
+            }
         }
 
         /// <summary>
@@ -127,6 +128,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public double GetOccupiedSpace()
         {
             return OccupiedSpace;
+        }
+
+        /// <summary>
+        /// Returns a string representation of the harbor simulation.
+        /// </summary>
+        /// <returns>A string containing information about the harbor simulation, including harbor name, current time, ship counts, and cargo storage details.</returns>
+        public override string ToString()
+        {
+            return $"{ColumnId}"; 
         }
     }
 }

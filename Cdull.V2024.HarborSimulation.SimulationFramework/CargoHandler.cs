@@ -42,17 +42,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentException("Ship is not docked in the harbor.", nameof(ship));
             }
 
-                if (ship.Cargo.Any() && !ship.IsUnloadingCompleted)
+            if (ship.Cargo.Any() && !ship.IsUnloadingCompleted)
+            {
+                int totalCargoCount = ship.Cargo.Count;
+                if (harbor.CargoStorage.GetSpecificColumn(1).GetOccupiedSpace() + totalCargoCount <= harbor.CargoStorage.GetSpecificColumn(1).Capacity)
                 {
-                    int totalCargoCount = ship.Cargo.Count;
-                    if (harbor.CargoStorage.GetSpecificColumn(1).GetOccupiedSpace() + totalCargoCount <= harbor.CargoStorage.GetSpecificColumn(1).Capacity)
+                    foreach (Cargo cargo in ship.Cargo.ToList())
                     {
-                        foreach (Cargo cargo in ship.Cargo)
-                        {
-                            harbor.CargoStorage.GetSpecificColumn(1).AddCargo(cargo);
-                            harbor.CargoStorage.GetSpecificColumn(1).OccupySpace(cargo);
-                            ship.Cargo.Remove(cargo);
-                        }
+                        StorageColumn storageColumn = harbor.CargoStorage.GetSpecificColumn(1); 
+
+                        storageColumn.AddCargo(cargo);
+                        storageColumn.OccupySpace(cargo);
+                        ship.Cargo.Remove(cargo);
+                    }
 
                     ship.IsUnloadingCompleted = true;
                     harbor.RaiseShipCompletedUnloading(ship);
@@ -87,15 +89,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentException("Number of cargo to add must be greater than zero.");
             }
 
-            if (ship == null)
+            if (ship != null)
             {
+
                 if (ship.Cargo.Count < numberOfCargo)
                 {
+
                     for (int i = 0; i < numberOfCargo; i++)
                     {
-                        if (harbor.CargoStorage.Cargo.Count > 0 && !ship.IsLoadingCompleted)
+
+                        if (harbor.CargoStorage.GetSpecificColumn(1).Cargo.Count > 0 && !ship.IsLoadingCompleted)
                         {
-                            Cargo cargo = harbor.CargoStorage.Cargo.First();
+
+                            Cargo cargo = harbor.CargoStorage.GetSpecificColumn(1).Cargo.First();
                             ship.Cargo.Add(cargo);
                             harbor.CargoStorage.GetSpecificColumn(1).RemoveCargo(cargo);
                             harbor.CargoStorage.GetSpecificColumn(1).deOccupySpace(cargo);
@@ -114,5 +120,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     }
 
                 }
+
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(ship), "Ship parameter cannot be null.");
+            }
+        }
+    }
 
 }

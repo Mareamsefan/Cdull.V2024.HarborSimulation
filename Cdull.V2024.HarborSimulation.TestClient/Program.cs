@@ -26,6 +26,8 @@ namespace HarborSimulationTest
             // Legger til 5 skip av typen ContainerShip og størrelse stor, med lastekapasitet på 100 enheter.
             ships.AddRange(harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 20));
 
+     
+
             // Legger til 5 skip av typen LNGCarrier og størrelse medium, med lastekapasitet på 50 enheter.
             ships.AddRange(harbor.InitializeShips(5, Model.LNGCarrier, Size.Medium, 20));
 
@@ -73,15 +75,15 @@ namespace HarborSimulationTest
             // Henter det siste skipet i havnen og skriver ut historikk for det.
             Ship ship2 = harbor.GetShips().Last();
             Console.WriteLine(historyHandler.GetShipHistory(ship2));
-            Console.WriteLine(ship2.GetShipCargo().Count);
+         
 
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
             List<(DateTime, int, RecurringType)> sailings = sailing.CheckScheduledSailings(Model.ContainerShip);
 
-          
+    
 
-            
+
 
 
         }
