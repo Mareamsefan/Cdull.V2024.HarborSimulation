@@ -14,7 +14,7 @@ namespace HarborSimulationTest
         static void Main(string[] args)
         {
             // Oppretter en ny havn med navnet "ExceptiontestHarbor" og en lastelager for gods med kapasitet på 10000 enheter.
-            Harbor harbor = new Harbor("ExceptiontestHarbor", new CargoStorage("cargo", 10000));
+            Harbor harbor = new Harbor("ExceptiontestHarbor", new CargoStorage(2, 18, 6, 4));
 
             // Oppretter en liste over dokker ved å initialisere 10 dokker for container skip av stor størrelse.
             List<Dock> docks = harbor.InitializeDocks(10, Model.ContainerShip, Size.Large, 2);
@@ -72,6 +72,8 @@ namespace HarborSimulationTest
 
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
+
+            
 
 
         }
