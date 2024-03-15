@@ -121,7 +121,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                             {
                                 if (harbor.RemoveShipFromDock(ship))
                                 {
-                                    Console.WriteLine("DENNE KJØRER 2 SEILING");
                                     Sail(ship,harbor,destinationLocation); 
                          
                                 }

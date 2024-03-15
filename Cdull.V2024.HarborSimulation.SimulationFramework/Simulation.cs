@@ -85,8 +85,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                     foreach(Ship ship in harbor.DockedShips.ToList())
                     {
                         if (cargoHandler.AddCargoToStorage(ship))
-                        {
-                            Console.WriteLine("DENNE KJØRER ");
+                        { 
                             cargoHandler.AddCargoToShip(ship, 10);
                         }
 
