@@ -56,7 +56,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public Harbor(string harborName, CargoStorage harborCargoStorage)
         {
             Name = harborName;
-            Location = 0; 
+            Location = 0;
             CargoStorage = harborCargoStorage;
         }
 
@@ -121,16 +121,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             if (numberOfShips <= 0)
             {
-                    throw new ArgumentException("Number of ships should be greater than zero.");
+                throw new ArgumentException("Number of ships should be greater than zero.");
             }
             for (int i = 0; i < numberOfShips; i++)
             {
-                Ship ship = new($"{shipModel}ship-{i}", shipModel, shipSize);  
+                Ship ship = new($"{shipModel}ship-{i}", shipModel, shipSize);
                 if (!ships.Any(s => s.Name == ship.Name))
                 {
                     ships.Add(ship);
                     ship.InitializeCargo(numberOfCargo);
-                }   
+                }
             }
             return ships;
         }
@@ -187,14 +187,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </remarks>
         internal bool IsShipInQueue(Ship ship)
         {
-            foreach(Ship otherShip in WaitingShips)
+            foreach (Ship otherShip in WaitingShips)
             {
-                if(ship.Name == otherShip.Name)
+                if (ship.Name == otherShip.Name)
                 {
-                    return true; 
+                    return true;
                 }
             }
-            return false; 
+            return false;
         }
 
 
@@ -215,87 +215,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 throw new ArgumentNullException(nameof(Ships), "Harbor cannot have Zero Ships.");
             }
-            
+
             foreach (Ship ship in Ships)
             {
                 if (!ship.IsSailing && !ship.HasDocked && !IsShipInQueue(ship))
-                {   
+                {
                     WaitingShips.Enqueue(ship);
                     RaiseShipArrived(ship);
-                    return true; 
+                    return true;
                 }
             }
-            return false; 
-        }
-
-        /// <summary>
-        /// Attempts to dock ships waiting in the queue to available docks in the harbor.
-        /// </summary>
-        /// <remarks>
-        /// This method iterates through the ships in the waiting queue and attempts to dock them to available docks in the harbor. 
-        /// It checks if there is an available dock of the appropriate size for each ship and if the ship is not currently sailing.
-        /// If a ship successfully docks, it is removed from the queue and added to the list of docked ships.
-        /// If there are no available docks or the ship is currently sailing, it remains in the queue.
-        /// </remarks>
-        /// <exception cref="InvalidOperationException">Thrown when there are no waiting ships in the queue.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when the ship's docked status cannot be updated.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when an event cannot be added to the ship's history.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when the ship cannot be added to the list of docked ships.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when a ship cannot be dequeued from the waiting queue.</exception>
-        internal void DockShips()
-        {
-            HistoryHandler historyHandler = HistoryHandler.GetInstance();
-
-            if (!WaitingShips.Any())
-            {
-                throw new InvalidOperationException("No waiting ships in the queue.");
-            }
-
-            while (WaitingShips.Any())
-            {
-                Ship ship = WaitingShips.Peek();
-                Dock availableDock = AvailableDockOfSize(ship.Size);
-
-                if (availableDock is not null && !ship.IsSailing)
-                {
-                    ship.SetDestinationLocationFrom(ship.CurrentLocation, Location);
-                    ship.CalculateMovement(this);
-
-                    if (ship.HasReachedDestination)
-                    {
-                        ship.HasDocked = true;
-                        ship.DockedAt = availableDock;
-                        availableDock.IsAvailable = false;
-                        availableDock.OccupiedBy = ship;
-                        ship.DockedAtTime = CurrentTime.ToString();
-
-                        try
-                        {
-                            historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Docked at {ship.DockedAtTime} on {ship.DockedAt.Name} ship cargo: {ship.Cargo.Count}");
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new InvalidOperationException("Failed to add event to ship's history.", ex);
-                        }
-
-                        DockedShips.Add(ship);
-
-                        try
-                        {
-                            WaitingShips.Dequeue();
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new InvalidOperationException("Failed to dequeue ship from waiting ships queue.", ex);
-                        }
-                    }
-                }
-                else
-                {
-                    WaitingShips.Enqueue(WaitingShips.Dequeue());
-                    break;
-                }
-            }
+            return false;
         }
 
 
@@ -459,7 +389,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             stringBuilder.AppendLine($"Docked Ships: {DockedShips.Count}");
             stringBuilder.AppendLine($"Sailing Ships: {SailingShips.Count}");
             stringBuilder.AppendLine($"Waiting Ships: {WaitingShips.Count}");
-            stringBuilder.AppendLine($"Cargo Storage: Capacity: {CargoStorage.Capacity}, Occupied Space: {CargoStorage.GetOccupiedSpace()}\n");
+            stringBuilder.AppendLine($"Cargo Storage: Capacity: {CargoStorage.Capacity}, Occupied Space: {CargoStorage.GetSpecificColumn(1).GetOccupiedSpace()}\n");
             return stringBuilder.ToString();
         }
 

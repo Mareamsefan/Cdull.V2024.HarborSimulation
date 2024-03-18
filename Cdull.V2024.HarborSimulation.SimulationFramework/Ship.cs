@@ -24,8 +24,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal bool IsWaitingForSailing { get; set; }
         internal int Speed { get; private set; }
         internal Dock? DockedAt { get; set; }
-        internal int CurrentLocation { get; set; }
-        internal int DestinationLocation { get; set; }
+        internal int CurrentLocation {  get; set; }
         internal bool HasReachedDestination { get; set; }
         internal bool IsLoadingCompleted { get; set; }
         internal bool IsUnloadingCompleted { get; set; }
@@ -49,7 +48,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             SailedAtTime = "";
             Speed = GetSpeedFromModel(shipModel);
             IsReadyToSail = false;
-            CurrentLocation =  GenerateRandomDestination(100, 1000); 
+            CurrentLocation =  GenerateRandomDestination(1000, 10000); 
         }
         /// <summary>
         /// Generates a random destination for the ship.
@@ -102,20 +101,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-        /// <summary>
-        /// Sets the destination location of the ship relative to a specified location.
-        /// </summary>
-        /// <param name="Location">The current location, such as harbor, dock, or sailing point.</param>
-        /// <param name="destination">The desired destination location.</param>
-        /// <remarks>
-        /// This method calculates the distance from the current location to the destination location and sets it as the ship's new destination.
-        /// The current location and destination are provided as parameters, and the absolute difference between them determines the distance.
-        /// </remarks>
-        internal void SetDestinationLocationFrom (int Location, int destination)
-        {
-            DestinationLocation = Math.Abs(destination - Location);
-        }
-
+     
         /// <summary>
         /// Retrieves the cargo carried by the ship.
         /// </summary>
@@ -126,54 +112,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-        /// <summary>
-        /// Moves the ship towards its destination.
-        /// </summary>
-        /// <remarks>
-        /// This method calculates the new location of the ship based on its speed and updates its current location.
-        /// If the ship reaches its destination, the HasReachedDestination property is set to true.
-        /// </remarks>
-        /// <exception cref="InvalidOperationException">Thrown when the speed of the ship is negative.</exception>
-        internal void Move()
-        {
-            int newLocation = CurrentLocation + ((Speed * 1000) / 60);
 
-            int destinationInMeters = DestinationLocation * 1000;
-
-            CurrentLocation = Math.Min(destinationInMeters, newLocation);
-
-            if (CurrentLocation >= destinationInMeters)
-            { 
-                HasReachedDestination = true;
-            }
-        }
-
-        /// <summary>
-        /// Calculates the movement of the ship based on its destination and current time.
-        /// </summary>
-        /// <param name="harbor">The harbor where the ship is located.</param>
-        /// <remarks>
-        /// This method calculates the time required for the ship to reach its destination based on its speed.
-        /// If the current time exceeds the estimated arrival time, the ship is moved towards its destination.
-        /// </remarks>
-        /// <exception cref="InvalidOperationException">Thrown when the ship's speed is zero.</exception>
-        internal void CalculateMovement(Harbor harbor)
-        {
-            int distance = Math.Abs(DestinationLocation - CurrentLocation);
-
-            if (Speed == 0)
-            {
-                throw new InvalidOperationException("Ship speed cannot be zero.");
-            }
-            double time = (double)distance / Speed; 
-
-            DateTime elapsedTime = harbor.GetCurrentTime().AddHours(time); 
-
-            if (harbor.GetCurrentTime() >= elapsedTime)
-            {
-                Move(); 
-            }
-        }
+     
 
         /// <summary>
         /// Returns a string representation of the ship with only its name and model.

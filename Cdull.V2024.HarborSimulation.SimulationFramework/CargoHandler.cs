@@ -14,7 +14,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         public CargoHandler(Harbor CargoHandlerHarbor)
         {
-            harbor = CargoHandlerHarbor; 
+            harbor = CargoHandlerHarbor;
         }
 
 
@@ -30,43 +30,45 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </remarks>
         /// <exception cref="InvalidOperationException">Thrown when there are no docked ships in the harbor.</exception>
         /// <exception cref="StorageSpaceException">Thrown when there is not enough space in the cargo storage to add all cargo from the ship.</exception>
-        internal bool AddCargoToStorage()
+        internal bool AddCargoToStorage(Ship ship)
         {
-            if (harbor.DockedShips.Any())
+            if (ship == null)
             {
-                Ship ship = harbor.DockedShips.First();
-                if (harbor.DockedShips.Count == 0)
+                throw new ArgumentNullException(nameof(ship), "Ship cannot be null.");
+            }
+
+            if (!harbor.DockedShips.Contains(ship))
+            {
+                throw new ArgumentException("Ship is not docked in the harbor.", nameof(ship));
+            }
+
+            if (ship.Cargo.Any() && !ship.IsUnloadingCompleted)
+            {
+                int totalCargoCount = ship.Cargo.Count;
+                if (harbor.CargoStorage.GetSpecificColumn(1).GetOccupiedSpace() + totalCargoCount <= harbor.CargoStorage.GetSpecificColumn(1).Capacity)
                 {
-                    throw new InvalidOperationException("No docked ships in harbor to unload cargo from.");
+                    foreach (Cargo cargo in ship.Cargo.ToList())
+                    {
+                        StorageColumn storageColumn = harbor.CargoStorage.GetSpecificColumn(1); 
+
+                        storageColumn.AddCargo(cargo);
+                        storageColumn.OccupySpace(cargo);
+                        ship.Cargo.Remove(cargo);
+                    }
+
+                    ship.IsUnloadingCompleted = true;
+                    harbor.RaiseShipCompletedUnloading(ship);
+                    return true;
                 }
-
-                if (ship.Cargo.Any() && !ship.IsUnloadingCompleted)
+                else
                 {
-                    int totalCargoCount = ship.Cargo.Count;
-                    if (harbor.CargoStorage.GetOccupiedSpace() + totalCargoCount <= harbor.CargoStorage.Capacity)
-                    {
-                        foreach (var cargo in ship.Cargo.ToList())
-                        {
-                            harbor.CargoStorage.AddCargo(cargo);
-                            harbor.CargoStorage.OccupySpace(cargo);
-                            ship.Cargo.Remove(cargo);
-                        }
-
-                        ship.IsUnloadingCompleted = true;
-                        if (ship.IsUnloadingCompleted)
-                        {
-                            harbor.RaiseShipCompletedUnloading(ship);
-                        }
-                        return true;
-                    }
-                    else
-                    {
-                        throw new StorageSpaceException("Not enough space in CargoStorage to add all cargo from the ship.");
-                    }
+                    throw new StorageSpaceException("Not enough space in CargoStorage to add all cargo from the ship.");
                 }
             }
             return false;
         }
+
+
 
 
         /// <summary>
@@ -80,25 +82,29 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </remarks>
         /// <exception cref="ArgumentException">Thrown when the number of cargo to add is not greater than zero.</exception>
         /// <exception cref="InsufficientCargoException">Thrown when there is not enough cargo in the cargo storage.</exception>
-        internal void AddCargoToShips(int numberOfCargo)
+        internal void AddCargoToShip(Ship ship, int numberOfCargo)
         {
             if (numberOfCargo <= 0)
             {
                 throw new ArgumentException("Number of cargo to add must be greater than zero.");
             }
 
-            foreach (Ship ship in harbor.DockedShips)
+            if (ship != null)
             {
+
                 if (ship.Cargo.Count < numberOfCargo)
                 {
+
                     for (int i = 0; i < numberOfCargo; i++)
                     {
-                        if (harbor.CargoStorage.Cargo.Count > 0 && !ship.IsLoadingCompleted)
+
+                        if (harbor.CargoStorage.GetSpecificColumn(1).Cargo.Count > 0 && !ship.IsLoadingCompleted)
                         {
-                            Cargo cargo = harbor.CargoStorage.Cargo.First();
+
+                            Cargo cargo = harbor.CargoStorage.GetSpecificColumn(1).Cargo.First();
                             ship.Cargo.Add(cargo);
-                            harbor.CargoStorage.RemoveCargo(cargo);
-                            harbor.CargoStorage.deOccupySpace(cargo);
+                            harbor.CargoStorage.GetSpecificColumn(1).RemoveCargo(cargo);
+                            harbor.CargoStorage.GetSpecificColumn(1).deOccupySpace(cargo);
                             cargo.History.Add($"{cargo.Name} loaded at {harbor.CurrentTime} on {ship.Name}");
                         }
                         else
@@ -116,6 +122,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 }
 
             }
+            else
+            {
+                throw new ArgumentNullException(nameof(ship), "Ship parameter cannot be null.");
+            }
         }
     }
+
 }

@@ -13,8 +13,9 @@ namespace HarborSimulationTest
     {
         static void Main(string[] args)
         {
+            CargoStorage cargoStorage = new CargoStorage("CargoStorage");
             // Oppretter en ny havn med navnet "ExceptiontestHarbor" og en lastelager for gods med kapasitet på 10000 enheter.
-            Harbor harbor = new Harbor("ExceptiontestHarbor", new CargoStorage("cargo", 10000));
+            Harbor harbor = new Harbor("ExceptiontestHarbor", cargoStorage);
 
             // Oppretter en liste over dokker ved å initialisere 10 dokker for container skip av stor størrelse.
             List<Dock> docks = harbor.InitializeDocks(10, Model.ContainerShip, Size.Large, 2);
@@ -23,17 +24,19 @@ namespace HarborSimulationTest
             List<Ship> ships = new List<Ship>();
 
             // Legger til 5 skip av typen ContainerShip og størrelse stor, med lastekapasitet på 100 enheter.
-            ships.AddRange(harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 100));
+            ships.AddRange(harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 20));
+
+     
 
             // Legger til 5 skip av typen LNGCarrier og størrelse medium, med lastekapasitet på 50 enheter.
-            ships.AddRange(harbor.InitializeShips(5, Model.LNGCarrier, Size.Medium, 50));
+            ships.AddRange(harbor.InitializeShips(5, Model.LNGCarrier, Size.Medium, 20));
 
             // Oppretter en instans av simuleringen.
             IHarborSimulation driver = new Simulation();
 
             // Setter starttid og sluttid for simuleringen.
             DateTime startTime = new DateTime(2024, 1, 1);
-            DateTime endTime = new DateTime(2024, 1, 10);
+            DateTime endTime = new DateTime(2024, 1, 15);
 
             // Setter starttidspunkt for seiling for alle skip i havnen som ikke har en gjentakende seilingsplan.
             DateTime startSailingTime = new DateTime(2024, 1, 2);
@@ -53,6 +56,9 @@ namespace HarborSimulationTest
             // Planlegger seiling for LNGCarrier skip med starttidspunkt 2024-01-02, antall skip 40, og med daglig gjentakelse.
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
+            StorageColumn column = new StorageColumn(1, 18, 6, 4);
+            cargoStorage.AddStorageColumn(column);
+
             // Kjører simuleringen.
             driver.Run(harbor, startTime, endTime, ships, docks);
 
@@ -69,9 +75,15 @@ namespace HarborSimulationTest
             // Henter det siste skipet i havnen og skriver ut historikk for det.
             Ship ship2 = harbor.GetShips().Last();
             Console.WriteLine(historyHandler.GetShipHistory(ship2));
+         
 
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
+            List<(DateTime, int, RecurringType)> sailings = sailing.CheckScheduledSailings(Model.ContainerShip);
+
+    
+
+
 
 
         }

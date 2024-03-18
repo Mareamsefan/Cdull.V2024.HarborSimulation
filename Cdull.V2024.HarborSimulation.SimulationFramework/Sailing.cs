@@ -70,6 +70,21 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             ScheduledSailings[shipModel].Add((sailingTime, destinationLocation, recurringType));
         }
 
+
+
+        internal void Sail(Ship ship, Harbor harbor, int destinationLocation)
+        {
+            Driver driver = new Driver();
+            HistoryHandler historyHandler = HistoryHandler.GetInstance(); 
+            driver.Move(destinationLocation, ship.Speed);
+            ship.SailedAtTime = harbor.GetCurrentTime().ToString();
+            historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Sailed at {ship.SailedAtTime} to destination:{destinationLocation}  ship cargo: {ship.Cargo.Count} --");
+            ship.IsSailing = true;
+            harbor.SailingShips.Add(ship);
+            harbor.RaiseShipDeparted(ship);
+            ship.HasReachedDestination = true;
+       
+        }
         /// <summary>
         /// Starts the scheduled sailings for ships in the harbor.
         /// </summary>
@@ -97,7 +112,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     {
                         continue;
                     }
-                    if (harbor.GetCurrentTime().Hour == sailingTime.Hour && harbor.GetCurrentTime().Minute == sailingTime.Minute)
+                    if (harbor.GetCurrentTime().Hour == sailingTime.Hour && harbor.GetCurrentTime().Minute == sailingTime.Minute 
+                        && harbor.GetCurrentTime().Second == sailingTime.Second)
                     {
                         foreach (Ship ship in harbor.Ships)
                         {
@@ -105,13 +121,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                             {
                                 if (harbor.RemoveShipFromDock(ship))
                                 {
-                                    ship.SetDestinationLocationFrom(ship.CurrentLocation, destinationLocation);
-                                    ship.CalculateMovement(harbor);
-                                    ship.SailedAtTime = harbor.GetCurrentTime().ToString();
-                                    historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Sailed at {ship.SailedAtTime} to destination:{destinationLocation}  ship cargo: {ship.Cargo.Count} --");
-                                    ship.IsSailing = true;
-                                    harbor.SailingShips.Add(ship);
-                                    harbor.RaiseShipDeparted(ship);
+                                    Sail(ship,harbor,destinationLocation); 
+                         
                                 }
                             }
                             else if (ship.HasReachedDestination)

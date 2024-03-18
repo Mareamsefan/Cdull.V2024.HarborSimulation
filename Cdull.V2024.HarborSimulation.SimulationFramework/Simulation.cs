@@ -46,6 +46,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
             CargoHandler cargoHandler = new CargoHandler(harbor);
+            Driver driver = new Driver(); 
+            Docking docking = new Docking();
             harbor.SetCurrentTime(startTime);
 
        
@@ -62,29 +64,44 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             while (harbor.GetCurrentTime() < endTime)
             {
         
-                if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0)
+                if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0 && harbor.GetCurrentTime().Second == 0)
                 {
                     historyHandler.SaveHarborHistory(harbor.GetCurrentTime(), harbor); 
                 }
 
-                if (harbor.QueueShipsToDock())
+                harbor.QueueShipsToDock();
+
+                if (harbor.WaitingShips.Any())
                 {
-                    harbor.DockShips();
-                }
-                
+                    Ship ship = harbor.WaitingShips.First();
+                    if (!driver.Move(ship.CurrentLocation,ship.Speed))
+                    {
+                        docking.DockShip(harbor, ship);
+                    }
 
-                if (cargoHandler.AddCargoToStorage())
+                }
+                if (harbor.DockedShips.Any())
                 {
-                   cargoHandler.AddCargoToShips(10);
+                    foreach(Ship ship in harbor.DockedShips.ToList())
+                    {
+                        if (cargoHandler.AddCargoToStorage(ship))
+                        { 
+                            cargoHandler.AddCargoToShip(ship, 10);
+                        }
+
+                    }
+                 
+
+                    Sailing sailing = Sailing.GetInstance();
+
+                    sailing.StartScheduledSailings(harbor, historyHandler);
                 }
 
 
-                Sailing sailing = Sailing.GetInstance();
-
-                sailing.StartScheduledSailings(harbor, historyHandler);
 
 
-                harbor.SetCurrentTime(harbor.GetCurrentTime().AddMinutes(1));
+
+                harbor.SetCurrentTime(harbor.GetCurrentTime().AddSeconds(1));
             }
         }
     }
