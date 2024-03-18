@@ -10,19 +10,21 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
         internal string Id { get; set; }
         internal double speed { get; set; }
-        internal List<String> AVGHistory { get; set; } = new List<String>();
+        internal List<String> AGVHistory { get; set; } = new List<String>();
 
-        public AVG(string Id, double speed)
+
+        public AGV(string agvId, double agvSpeed)
         {
-            Id = AVGId;
-            speed = AVGSpeed;
+            Id = agvId;
+            speed = agvSpeed;
         }
 
 
-        public List<string> GetAVGHistory()
+        public List<string> GetAGVHistory()
         {
-            return AVGHistory;
+            return AGVHistory;
         }
 
 
     }
+}

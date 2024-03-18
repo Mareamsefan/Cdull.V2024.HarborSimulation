@@ -9,17 +9,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     internal class Driver
     {
 
-        private float Speed;
         internal int CurrentLocation { get; set; }
-        internal int DestinationLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
-        internal int tid { get; set; }
 
 
         public Driver()
         {
 
             CurrentLocation = 0;
+            HasReachedDestination = false;
 
         }
 
@@ -34,20 +32,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <exception cref="InvalidOperationException">Thrown when the speed of the ship is negative.</exception>
         internal bool Move(int range, float speed)
         {
+
             if (HasReachedDestination)
             {
                 return false; // Stopper metoden hvis destinasjonen allerede er nådd
             }
 
-            var distance = range - CurrentLocation;
 
-
-            tid++; // Øker tiden med ett sekund for simulering
 
             if (CurrentLocation >= range)
             {
                 HasReachedDestination = true;
-                tid = 0;
+  
             }
             else
             {

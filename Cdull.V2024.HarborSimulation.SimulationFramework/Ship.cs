@@ -91,11 +91,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="number">The number of cargo to initialize.</param>
         /// <param name="weight">The weight of each cargo.</param>
-        internal void InitializeCargo(int number, double weight = 10)
+        internal void InitializeCargo(int number, double weight = 10, Size size = Size.Large)
         {
             for (int i = 0; i < number; i++)
             {
-                Cargo cargo = new($"cargo{i}", weight);
+                Cargo cargo = new($"cargo{i}", weight, size);
                 Cargo.Add(cargo);
             }
 

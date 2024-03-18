@@ -10,20 +10,22 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public string Id {  get; set; } 
         public double MaxCapacity { get; set; }
         private bool IsPortalCraneAvalible { get; set; }
-        private bool IsPortalCraneOutOfFuntion { get; set; }
+        private bool IsPortalCraneOutOffFuntion { get; set; }
+
+        private int PortalCraneSpeed { get; set; }  
 
         /// <summary>
         /// Initializes a new instance of the PortalCrane class with specified name.
         /// </summary>
         /// <param name="Id"></param>
         /// <param name="MaxCapacity"></param>
-        public PortalCrane(string Id, double MaxCapacity)
+        public PortalCrane(string portalCraneId, double MaxCapacity)
         {
-            Id = PortalCraneId;
+            Id = portalCraneId;
             MaxCapacity = MaxCapacity;
-            IsCraneAvalible = true;
-            IsCraneOutOfFuntion = false;
-            PortalCraneSpeed = 200; // i sek?
+            IsPortalCraneAvalible = true;
+            IsPortalCraneOutOffFuntion = false;
+            PortalCraneSpeed = 20; // i sek?
         }
     }
 
