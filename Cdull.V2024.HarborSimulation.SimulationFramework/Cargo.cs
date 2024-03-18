@@ -21,6 +21,7 @@
             Id = ++lastId;
             Name = cargoName;
             Weight = cargoWeight;
+            Size = cargoSize;
 
         }
 
