@@ -10,9 +10,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     internal class Docking
     {
 
-       
-
-
 
         private bool Dock(Ship ship, Dock availableDock, Harbor harbor)
         {
@@ -25,7 +22,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             try
             {
-                historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Docked at {ship.DockedAtTime} on {ship.DockedAt.Name} ship cargo: {ship.Cargo.Count}");
+                historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Docked at {ship.DockedAtTime} on {ship.DockedAt.Name} ship containers: {ship.Containers.Count}");
             }
             catch (Exception ex)
             {

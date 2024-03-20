@@ -4,35 +4,32 @@ using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     /// <summary>
-    /// Represents cargo that can be loaded onto ships in the harbor simulation.
+    /// Represents container that can be loaded onto ships in the harbor simulation.
     /// </summary>
-    public class Cargo
+    public class Container
     {
         private static int lastId = 0;
         internal int Id; 
         internal string Name { get; set; }
-        internal double Weight { get; private set; }
         internal List<String> History { get; } = new List<String>();
-        internal Size Size { get; set; }
+        internal ContainerSize Size { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of Cargo class with the specified name and weight.
+        /// Initializes a new instance of Container class with the specified name and weight.
         /// </summary>
         /// <param name="cargoName">The name of the cargo.</param>
-        /// <param name="cargoWeight">The weight of the cargo.</param>
-        public Cargo(string cargoName, double cargoWeight, Size cargoSize)
+        public Container(string cargoName, ContainerSize containerSize)
         {
             Id = ++lastId;
             Name = cargoName;
-            Weight = cargoWeight;
-            Size = cargoSize;
+            Size = containerSize;
 
         }
 
         /// <summary>
-        /// Retrieves the history of the cargo.
+        /// Retrieves the history of the container.
         /// </summary>
-        /// <returns>A list of strings representing the cargo's history.</returns>
+        /// <returns>A list of strings representing the c's history.</returns>
         public List<string> GetCargoHistory()
         {
             return History;
