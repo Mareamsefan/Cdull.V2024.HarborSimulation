@@ -11,7 +11,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Enums
     /// </summary>
     public enum ContainerSize
     {
-        Small, 
-        Large
+        Small = 1, 
+        Large = 2
     }
 }

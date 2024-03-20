@@ -11,11 +11,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Enums
     /// </summary>
     public enum Model
     {
-        ContainerShip,
-        Bulker,
-        Tanker,
-        LNGCarrier,
-        RoRo
-
+        ContainerShip = 30,
+        Bulker = 40,
+        Tanker = 50,
+        LNGCarrier = 45,
+        RoRo = 35
     }
+
 }

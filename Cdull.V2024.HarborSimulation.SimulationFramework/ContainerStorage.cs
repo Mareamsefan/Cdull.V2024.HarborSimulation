@@ -4,16 +4,16 @@ using System.Xml.Linq;
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     /// <summary>
-    /// Represents a storage facility for cargo items.
+    /// Represents a storage facility for container items.
     /// </summary>
-    public class CargoStorage
+    public class ContainerStorage
     {
         private string name;
         internal List<StorageColumn> StorageColumns { get; set; } = new List<StorageColumn>();
         public int Capacity { get; set; }
 
 
-        public CargoStorage(string cargoStorageName)
+        public ContainerStorage(string cargoStorageName)
         {
             name = cargoStorageName;
 

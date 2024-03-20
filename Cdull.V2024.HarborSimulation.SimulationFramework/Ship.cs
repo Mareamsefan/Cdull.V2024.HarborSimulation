@@ -15,7 +15,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal Model Model { get; set; }
         internal Size Size { get; set; }
         internal bool HasDocked { get; set; }
-        internal List<Cargo> Cargo { get; } = new List<Cargo>(); 
+        internal List<Container> Containers { get; } = new List<Container>(); 
         internal List<string> History { get; } = new List<String>();
         internal string DockedAtTime { get; set; }
         internal string SailedAtTime { get; set; }
@@ -69,46 +69,37 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>The speed of the ship.</returns>
         private int GetSpeedFromModel(Model model)
         {
-            switch (model)
-            {
-                case Model.ContainerShip:
-                    return 30; 
-                case Model.Bulker:
-                    return 40; 
-                case Model.Tanker:
-                    return 50; 
-                case Model.LNGCarrier:
-                    return 45; 
-                case Model.RoRo:
-                    return 35;
-                default: 
-                    return 0; 
-            }
+            return (int)model;
         }
 
         /// <summary>
-        /// Initializes cargo on the ship.
+        /// Initializes container on the ship.
         /// </summary>
-        /// <param name="number">The number of cargo to initialize.</param>
-        /// <param name="weight">The weight of each cargo.</param>
-        internal void InitializeCargo(int number, double weight = 10, Size size = Size.Large)
+        /// <param name="number">The number of container units to initialize.</param>
+        /// <param name="size">The size of each container unit. Default is set to CargoSize.Large.</param>
+        internal void InitializeContainers(int number, ContainerSize size = ContainerSize.Large)
         {
+            if (Model != Model.ContainerShip)
+            {
+                throw new InvalidOperationException("Only Container Ships can carry container.");
+            }
+
             for (int i = 0; i < number; i++)
             {
-                Cargo cargo = new($"cargo{i}", weight, size);
-                Cargo.Add(cargo);
+                Container container = new($"container{i}", size);
+                Containers.Add(container);
             }
 
         }
 
      
         /// <summary>
-        /// Retrieves the cargo carried by the ship.
+        /// Retrieves the container carried by the ship.
         /// </summary>
-        /// <returns>A list of Cargo objects representing the ship's cargo.</returns>
-        public List<Cargo> GetShipCargo()
+        /// <returns>A list of Containers objects representing the ship's container.</returns>
+        public List<Container> GetShipCargo()
         {
-            return Cargo;
+            return Containers;
         }
 
 
@@ -125,52 +116,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-        private int CalculateMaxCargoCapacity(Model model)
-        {
-            int maxCapacity = 0;
-
-            switch (model)
-            {
-                case Model.ContainerShip:
-                    maxCapacity = 200000;
-                    break;
-                case Model.Bulker:
-                    maxCapacity = 1000;
-                    break;
-                case Model.Tanker:
-                    maxCapacity = 100000;
-                    break;
-                case Model.LNGCarrier:
-                    maxCapacity = 200;
-                    break;
-                case Model.RoRo:
-                    maxCapacity = 300000;
-                    break;
-                default:
-                    maxCapacity = 0;
-                    break;
-            }
-
-            int smallCargoCount = 0;
-            int largeCargoCount = 0;
-
-            foreach (var cargo in Cargo)
-            {
-                if (cargo.Size == Size.Small)
-                {
-                    smallCargoCount++;
-                }
-                else
-                {
-                    largeCargoCount++;
-                }
-            }
-
-            maxCapacity -= largeCargoCount;
-            maxCapacity -= smallCargoCount / 2;
-
-            return maxCapacity;
-        }
+      
 
     }
 }

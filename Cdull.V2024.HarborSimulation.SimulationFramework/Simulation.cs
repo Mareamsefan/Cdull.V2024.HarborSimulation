@@ -45,7 +45,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             }
 
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
-            CargoHandler cargoHandler = new CargoHandler(harbor);
+            ContainerHandler containerHandler = new ContainerHandler(harbor);
             Driver driver = new Driver(); 
             Docking docking = new Docking();
             harbor.SetCurrentTime(startTime);
@@ -84,9 +84,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 {
                     foreach(Ship ship in harbor.DockedShips.ToList())
                     {
-                        if (cargoHandler.AddCargoToStorage(ship))
+                        if (containerHandler.AddContainerToStorage(ship))
                         { 
-                            cargoHandler.AddCargoToShip(ship, 10);
+                            containerHandler.AddContainerToShip(ship, 10);
                         }
 
                     }

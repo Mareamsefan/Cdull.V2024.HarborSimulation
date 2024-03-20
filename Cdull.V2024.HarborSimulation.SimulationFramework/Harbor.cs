@@ -40,7 +40,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
-        internal CargoStorage CargoStorage { get; set; }
+        internal ContainerStorage ContainerStorage { get; set; }
 
 
         /// <summary>
@@ -53,18 +53,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// It sets the harbor's location to the default value of 0.
         /// </remarks>
 
-        public Harbor(string harborName, CargoStorage harborCargoStorage)
+        public Harbor(string harborName, ContainerStorage harborContainerStorage)
         {
             Name = harborName;
             Location = 0;
-            CargoStorage = harborCargoStorage;
+            ContainerStorage = harborContainerStorage;
         }
 
         /// <summary>
         /// Initializes a list of docks for the harbor simulation with the specified parameters.
         /// </summary>
         /// <param name="numberOfDock">The number of docks to create.</param>
-        /// <param name="dockModel">The model of the docks to create.</param>
         /// <param name="dockSize">The size of the docks to create.</param>
         /// <param name="numberOfCranes">The number of cranes to add to each dock.</param>
         /// <returns>A list of created docks.</returns>
@@ -73,7 +72,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// It ensures that the number of docks is greater than zero and creates each dock with a unique name.
         /// If the number of cranes is greater than zero, it adds the specified number of cranes to each dock.
         /// </remarks>
-        public List<Dock> InitializeDocks(int numberOfDock, Model dockModel, Size dockSize, int numberOfCranes)
+        public List<Dock> InitializeDocks(int numberOfDock, Size dockSize, int numberOfCranes)
         {
             List<Dock> docks = new List<Dock>();
 
@@ -84,7 +83,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             for (int i = 0; i < numberOfDock; i++)
             {
-                Dock dock = new($"{dockModel}dock-{i}", dockSize, dockModel);
+                Dock dock = new($"Dock-{i}", dockSize);
                 docks.Add(dock);
 
                 if (numberOfCranes > 0)
@@ -102,20 +101,22 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
         /// <summary>
-        /// Initializes a list of ships for the simulation with the specified parameters.
+        /// Initializes a list of ships based on the provided parameters.
         /// </summary>
-        /// <param name="numberOfShips">The number of ships to create.</param>
-        /// <param name="shipModel">The model of the ships to create.</param>
-        /// <param name="shipSize">The size of the ships to create.</param>
-        /// <param name="numberOfCargo">The number of cargos on each ship.</param>
-        /// <param name="CargoWeight">The weight of all cargo on each ship (default is 10).</param>
-        /// <returns>A list of created ships.</returns>
+        /// <param name="numberOfShips">The number of ships to initialize.</param>
+        /// <param name="shipModel">The model of the ships to initialize.</param>
+        /// <param name="shipSize">The size of the ships to initialize. Default is set to Size.Small.</param>
+        /// <param name="numberOfCargo">The number of cargo units to initialize for each ship. Default is set to 0.</param>
+        /// <param name="containerSize">The size of each cargo unit. Default is set to containerSize.Large.</param>
+        /// <returns>A list of initialized Ship objects.</returns>
         /// <remarks>
-        /// This method creates a list of ships based on the specified parameters.
-        /// It ensures that the number of ships is greater than zero and creates each ship with a unique name.
-        /// Each ship is initialized with the specified number of cargo items and cargo weight.
+        /// This method initializes a list of ships based on the provided parameters.
+        /// If the ship model is a ContainerShip, it initializes the specified number of cargo units for each ship.
+        /// The ship size and number of cargo units parameters are optional, with default values assigned if not provided.
         /// </remarks>
-        public List<Ship> InitializeShips(int numberOfShips, Model shipModel, Size shipSize, int numberOfCargo, int CargoWeight = 10)
+
+        public List<Ship> InitializeShips(int numberOfShips, Model shipModel, Size shipSize = Size.Small, 
+            int numberOfContainers= 0, ContainerSize containerSize = ContainerSize.Large)
         {
             List<Ship> ships = new List<Ship>();
 
@@ -129,11 +130,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 if (!ships.Any(s => s.Name == ship.Name))
                 {
                     ships.Add(ship);
-                    ship.InitializeCargo(numberOfCargo);
+                    // Only initialize cargo if the ship model is a container ship
+                    if (shipModel == Model.ContainerShip)
+                    {
+                        ship.InitializeContainers(numberOfContainers, containerSize);
+                    }
                 }
             }
             return ships;
         }
+
 
 
 
@@ -389,7 +395,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             stringBuilder.AppendLine($"Docked Ships: {DockedShips.Count}");
             stringBuilder.AppendLine($"Sailing Ships: {SailingShips.Count}");
             stringBuilder.AppendLine($"Waiting Ships: {WaitingShips.Count}");
-            stringBuilder.AppendLine($"Cargo Storage: Capacity: {CargoStorage.Capacity}, Occupied Space: {CargoStorage.GetSpecificColumn(1).GetOccupiedSpace()}\n");
+            stringBuilder.AppendLine($"Containers Storage: Capacity: {ContainerStorage.Capacity}, Occupied Space: {ContainerStorage.GetSpecificColumn(1).GetOccupiedSpace()}\n");
             return stringBuilder.ToString();
         }
 
