@@ -13,9 +13,9 @@ namespace HarborSimulationTest
     {
         static void Main(string[] args)
         {
-            ContainerStorage cargoStorage = new ContainerStorage("CargoStorage");
+            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage");
             // Oppretter en ny havn med navnet "ExceptiontestHarbor" og en lastelager for gods med kapasitet på 10000 enheter.
-            Harbor harbor = new Harbor("ExceptiontestHarbor", cargoStorage);
+            Harbor harbor = new Harbor("ExceptiontestHarbor", containerStorage);
 
             // Oppretter en liste over dokker ved å initialisere 10 dokker for container skip av stor størrelse.
             List<Dock> docks = harbor.InitializeDocks(10, Size.Large, 2);
@@ -26,11 +26,13 @@ namespace HarborSimulationTest
             // Legger til 5 skip av typen ContainerShip og størrelse stor, med lastekapasitet på 100 enheter.
             ships.AddRange(harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 20, ContainerSize.Small));
 
-     
+
+            Ship ship = new Ship("mari", Model.ContainerShip, Size.Small);
+           // ship.InitializeContainers(10, ContainerSize.Large); 
 
             // Legger til 5 skip av typen LNGCarrier og størrelse medium, med lastekapasitet på 50 enheter.
             ships.AddRange(harbor.InitializeShips(5, Model.LNGCarrier, Size.Medium));
-
+            ships.Add(ship); 
             // Oppretter en instans av simuleringen.
             IHarborSimulation driver = new Simulation();
 
@@ -57,8 +59,13 @@ namespace HarborSimulationTest
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
             StorageColumn column = new StorageColumn(1, 15, 6, 4);
-            cargoStorage.AddStorageColumn(column);
+            StorageColumn column2 = new StorageColumn(2, 15, 6, 4);
+            StorageColumn column3 = new StorageColumn(3, 15, 6, 4);
+            containerStorage.AddStorageColumn(column);
 
+            ContainerHandler containerHandler = ContainerHandler.GetInstance();
+            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 3),  1, 2, LoadingType.Loading, harbor);
+            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 4), 2, 3, LoadingType.Unloading, harbor);
             // Kjører simuleringen.
             driver.Run(harbor, startTime, endTime, ships, docks);
 
@@ -79,12 +86,17 @@ namespace HarborSimulationTest
 
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
-            List<(DateTime, int, RecurringType)> sailings = sailing.CheckScheduledSailings(Model.ContainerShip);
+            List<(DateTime, int, LoadingType)> sailings = containerHandler.CheckScheduledCargoHandling(ship);
+            foreach (var sailingInfo in sailings)
+            {
+                DateTime sailingTime = sailingInfo.Item1;
+                int destinationLocation = sailingInfo.Item2;
+                LoadingType recurringType = sailingInfo.Item3;
 
-    
+                Console.WriteLine($"Sailing Time: {sailingTime}, Destination Location: {destinationLocation}, Recurring Type: {recurringType}");
+            }
 
-
-
+            Console.WriteLine(containerHandler.CheckScheduledCargoHandling(ship) ); 
 
         }
 
@@ -102,12 +114,12 @@ namespace HarborSimulationTest
         private static void Harbor_ShipCompletedUnloading(object? sender, ShipUnloadingEventArgs e)
         {
 
-            Console.WriteLine($"Ship '{e.CompletedUnloadingShip}' completed unloading containers.");
+            Console.WriteLine($"Ship '{e.CompletedUnloadingShip}' completed unloading containers." );
         }
         private static void Harbor_ShipCompletedLoading(object? sender, ShipLoadingEventArgs e)
         {
 
-            Console.WriteLine($"Ship '{e.CompletedLoadingShip}' completed loading containers.");
+            Console.WriteLine($"Ship '{e.CompletedLoadingShip}' completed Loading containers.");
         }
 
     }

@@ -77,7 +77,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="number">The number of container units to initialize.</param>
         /// <param name="size">The size of each container unit. Default is set to CargoSize.Large.</param>
-        internal void InitializeContainers(int number, ContainerSize size = ContainerSize.Large)
+        public void InitializeContainers(int number, ContainerSize size = ContainerSize.Large)
         {
             if (Model != Model.ContainerShip)
             {

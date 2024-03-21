@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 namespace Cdull.V2024.HarborSimulation.TestClient
 {
@@ -45,7 +46,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             }
 
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
-            ContainerHandler containerHandler = new ContainerHandler(harbor);
+            ContainerHandler containerHandler = ContainerHandler.GetInstance();
             Driver driver = new Driver(); 
             Docking docking = new Docking();
             harbor.SetCurrentTime(startTime);
@@ -77,16 +78,22 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                     if (!driver.Move(ship.CurrentLocation,ship.Speed))
                     {
                         docking.DockShip(harbor, ship);
+                      
                     }
+                
 
                 }
                 if (harbor.DockedShips.Any())
                 {
                     foreach(Ship ship in harbor.DockedShips.ToList())
                     {
-                        if (containerHandler.AddContainerToStorage(ship))
+                        if (containerHandler.AddContainerToStorage(ship, harbor))
                         { 
-                            containerHandler.AddContainerToShip(ship, 10);
+                            containerHandler.AddContainerToShip(ship, 10, harbor);
+                        }
+                        if (!ship.Model.Equals(Model.ContainerShip))
+                        {
+                            ship.IsReadyToSail = true; 
                         }
 
                     }
@@ -102,6 +109,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
 
                 harbor.SetCurrentTime(harbor.GetCurrentTime().AddSeconds(1));
+
             }
         }
     }
