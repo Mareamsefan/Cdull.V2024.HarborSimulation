@@ -8,8 +8,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Enums
 {
     public enum LoadingType
     {
-        Loading, 
-        Unloading
+        Load, 
+        Unload
     }
 
 }

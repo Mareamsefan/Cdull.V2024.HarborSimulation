@@ -395,7 +395,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             stringBuilder.AppendLine($"Docked Ships: {DockedShips.Count}");
             stringBuilder.AppendLine($"Sailing Ships: {SailingShips.Count}");
             stringBuilder.AppendLine($"Waiting Ships: {WaitingShips.Count}");
-            stringBuilder.AppendLine($"Containers Storage: Capacity: {ContainerStorage.Capacity}, Occupied Space: {ContainerStorage.GetSpecificColumn(1).GetOccupiedSpace()}\n");
+            stringBuilder.AppendLine($"Containers Storage: Capacity: {ContainerStorage.Capacity}, Occupied Space: {ContainerStorage.GetOccupiedSpace()}\n");
             return stringBuilder.ToString();
         }
 

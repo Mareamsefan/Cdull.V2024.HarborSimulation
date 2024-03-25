@@ -18,17 +18,17 @@ namespace HarborSimulationTest
             Harbor harbor = new Harbor("ExceptiontestHarbor", containerStorage);
 
             // Oppretter en liste over dokker ved å initialisere 10 dokker for container skip av stor størrelse.
-            List<Dock> docks = harbor.InitializeDocks(10, Size.Large, 2);
+            List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
 
             // Oppretter en liste over skip.
             List<Ship> ships = new List<Ship>();
 
             // Legger til 5 skip av typen ContainerShip og størrelse stor, med lastekapasitet på 100 enheter.
-            ships.AddRange(harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 20, ContainerSize.Small));
+            ships.AddRange(harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 10, ContainerSize.Small));
 
 
             Ship ship = new Ship("mari", Model.ContainerShip, Size.Small);
-           // ship.InitializeContainers(10, ContainerSize.Large); 
+            ship.InitializeContainers(10, ContainerSize.Small); 
 
             // Legger til 5 skip av typen LNGCarrier og størrelse medium, med lastekapasitet på 50 enheter.
             ships.AddRange(harbor.InitializeShips(5, Model.LNGCarrier, Size.Medium));
@@ -62,10 +62,37 @@ namespace HarborSimulationTest
             StorageColumn column2 = new StorageColumn(2, 15, 6, 4);
             StorageColumn column3 = new StorageColumn(3, 15, 6, 4);
             containerStorage.AddStorageColumn(column);
+            containerStorage.AddStorageColumn(column2);
+            containerStorage.AddStorageColumn(column3);
 
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
-            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 3),  1, 2, LoadingType.Loading, harbor);
-            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 4), 2, 3, LoadingType.Unloading, harbor);
+            //column.InitializeContainers(10, ContainerSize.Large); 
+            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload, harbor);
+            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 7),  1, 2, 10, LoadingType.Load, harbor);
+            ships.ForEach(ship =>
+            {
+                if (ship.Model.Equals(Model.ContainerShip))
+                {
+                    containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 6), 2, 3, 10, LoadingType.Unload, harbor);
+                    containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load, harbor);
+                }
+
+            });
+   
+            List<(int, int, int, DateTime, LoadingType)> sailings = containerHandler.CheckScheduledCargoHandling(ship);
+            foreach (var keys in sailings)
+            {
+                int startCloumnId = keys.Item1;
+                int endCloumnId = keys.Item2;
+                int numberOfContainers = keys.Item3;
+                DateTime loadingTime = keys.Item4;
+                LoadingType loadingType = keys.Item5;
+
+                Console.WriteLine($"LoadingTime: {loadingTime}, LoadingType: {loadingType} , numberOfContainers: {numberOfContainers}, startID:{startCloumnId}" +
+                    $" endID: {endCloumnId}");
+
+            }
+
             // Kjører simuleringen.
             driver.Run(harbor, startTime, endTime, ships, docks);
 
@@ -86,17 +113,10 @@ namespace HarborSimulationTest
 
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
-            List<(DateTime, int, LoadingType)> sailings = containerHandler.CheckScheduledCargoHandling(ship);
-            foreach (var sailingInfo in sailings)
-            {
-                DateTime sailingTime = sailingInfo.Item1;
-                int destinationLocation = sailingInfo.Item2;
-                LoadingType recurringType = sailingInfo.Item3;
-
-                Console.WriteLine($"Sailing Time: {sailingTime}, Destination Location: {destinationLocation}, Recurring Type: {recurringType}");
-            }
-
-            Console.WriteLine(containerHandler.CheckScheduledCargoHandling(ship) ); 
+        
+     
+     
+ 
 
         }
 
