@@ -16,7 +16,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal int Width { get; private set; }
         public int Capacity { get; set; }
         internal List<Container> Containers {  get; set; } = new List<Container>();
-        internal double OccupiedSpace { get; set; }
+        internal int OccupiedSpace { get; set; }
         internal bool IsAvailable { get; set; }
 
         public StorageColumn(int columnId, int columnLength, int columnWidth, int columnHeight)
@@ -39,7 +39,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// This method adds the specified container to the container storage if it is not already present.
         /// </remarks>
         /// <exception cref="ArgumentNullException">Thrown when the container parameter is null.</exception>
-        internal void AddCargo(Container container)
+        internal void AddContainer(Container container)
         {
             if (container == null)
             {
@@ -62,7 +62,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// This method removes the specified container from the container storage if it exists.
         /// </remarks>
         /// <exception cref="ArgumentNullException">Thrown when the container parameter is null.</exception>
-        internal void RemoveCargo(Container container)
+        internal void RemoveContainer(Container container)
         {
             if (container == null)
             {
@@ -72,6 +72,22 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             if (Containers.Contains(container))
             {
                 Containers.Remove(container);
+            }
+
+        }
+
+
+        /// <summary>
+        /// Initializes container on the ship.
+        /// </summary>
+        /// <param name="number">The number of container units to initialize.</param>
+        /// <param name="size">The size of each container unit. Default is set to CargoSize.Large.</param>
+        public void InitializeContainers(int number, ContainerSize size = ContainerSize.Large)
+        {
+            for (int i = 0; i < number; i++)
+            {
+                Container container = new($"container{i}", size);
+                Containers.Add(container);
             }
 
         }
@@ -109,11 +125,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// If the occupied space becomes less than or equal to the capacity of the container storage, it marks the storage as available.
         /// </remarks>
         /// <exception cref="InvalidOperationException">Thrown when the occupied space or capacity is invalid.</exception>
-        internal void deOccupySpace(Container container)
+        internal void deOccupySpace(Container container, Harbor harbor)
         {
             if (OccupiedSpace <= Capacity && OccupiedSpace > 0)
             {
                 OccupiedSpace -= (int)container.Size; 
+                harbor.ContainerStorage.Capacity -= (int)container.Size;
                 IsAvailable = true;
             }
             else
@@ -127,7 +144,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Returns the occupied space in the container storage based on the weight of the stored container.
         /// </summary>
         /// <returns>The total weight of the container stored in the container storage.</returns>
-        public double GetOccupiedSpace()
+        public int GetOccupiedSpace()
         {
             return OccupiedSpace;
         }

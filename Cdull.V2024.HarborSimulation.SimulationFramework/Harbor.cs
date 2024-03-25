@@ -34,7 +34,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         public event EventHandler<ShipUnloadingEventArgs> CompletedUnloadingShip;
         /// <summary>
-        /// Event raised when a ship completes loading at the harbor.
+        /// Event raised when a ship completes Loading at the harbor.
         /// </summary>
         public event EventHandler<ShipLoadingEventArgs> CompletedloadingShip;
 
@@ -314,7 +314,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <summary>
         /// Raises the CompletedLoadingShip event.
         /// </summary>
-        /// <param name="completedLoadingShip">The ship that has completed loading.</param>
+        /// <param name="completedLoadingShip">The ship that has completed Loading.</param>
         internal void RaiseShipCompletedLoading(Ship completedLoadingShip)
         {
             CompletedloadingShip?.Invoke(this, new ShipLoadingEventArgs(completedLoadingShip));
@@ -395,7 +395,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             stringBuilder.AppendLine($"Docked Ships: {DockedShips.Count}");
             stringBuilder.AppendLine($"Sailing Ships: {SailingShips.Count}");
             stringBuilder.AppendLine($"Waiting Ships: {WaitingShips.Count}");
-            stringBuilder.AppendLine($"Containers Storage: Capacity: {ContainerStorage.Capacity}, Occupied Space: {ContainerStorage.GetSpecificColumn(1).GetOccupiedSpace()}\n");
+            stringBuilder.AppendLine($"Containers Storage: Capacity: {ContainerStorage.Capacity}, Occupied Space: {ContainerStorage.GetOccupiedSpace()}\n");
             return stringBuilder.ToString();
         }
 

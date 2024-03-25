@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+using System.Text;
 using System.Xml.Linq;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
@@ -11,6 +12,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         private string name;
         internal List<StorageColumn> StorageColumns { get; set; } = new List<StorageColumn>();
         public int Capacity { get; set; }
+
 
 
         public ContainerStorage(string cargoStorageName)
@@ -38,5 +40,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             StorageColumns.Add(column); 
             Capacity += column.Capacity;
         }
+        public int GetOccupiedSpace()
+        {
+            int occupiedSpace = 0; 
+            StorageColumns.ForEach(column =>
+            {
+                occupiedSpace += column.OccupiedSpace;
+            }); 
+            return occupiedSpace;
+        }
+
+
     }
 }

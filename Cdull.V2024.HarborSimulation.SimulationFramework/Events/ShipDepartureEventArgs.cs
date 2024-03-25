@@ -8,6 +8,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Events
     public class ShipDepartureEventArgs : EventArgs
     {
         /// <summary>
+        /// Gets the ship that has departed.
+        /// </summary>
+        public Ship DepartedShip { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ShipDepartureEventArgs"/> class with the specified departed ship.
         /// </summary>
         /// <param name="departedShip">The ship that has departed.</param>
@@ -16,9 +21,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Events
             DepartedShip = departedShip;
         }
 
-        /// <summary>
-        /// Gets the ship that has departed.
-        /// </summary>
-        public Ship DepartedShip { get; private set; }
+
     }
 }
