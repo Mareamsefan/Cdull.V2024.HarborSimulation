@@ -35,7 +35,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="shipName">The name of the ship.</param>
         /// <param name="shipModel">The model of the ship.</param>
         /// <param name="shipSize">The size of the ship.</param>
-        public Ship (string shipName, Model shipModel, Size shipSize)
+        public Ship (string shipName, Model shipModel, Size shipSize, int shipCurrentLocation)
         {
             Name = shipName;
             Model = shipModel;
@@ -48,7 +48,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             SailedAtTime = "";
             Speed = GetSpeedFromModel(shipModel);
             IsReadyToSail = false;
-            CurrentLocation =  1000; 
+            CurrentLocation =   shipCurrentLocation; 
         }
         /// <summary>
         /// Generates a random destination for the ship.

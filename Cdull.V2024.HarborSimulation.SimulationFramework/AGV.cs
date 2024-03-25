@@ -8,28 +8,32 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     public class AGV
     {
-        internal string Id { get; set; }
+        internal int Id { get; set; }
+        internal int Counter { get; set; }
         internal double speed { get; set; }
-        internal List<String> AGVHistory { get; set; } = new List<String>();
+        internal bool IsAvailable { get; set; }
+        internal Container Container { get; set; }
+        internal int Location { get; set; }
 
 
-        public AGV(string agvId, double agvSpeed)
+        public AGV(int agvLocation ,double agvSpeed)
         {
-            Id = agvId;
+            Counter++;
+            Id = Counter;
             speed = agvSpeed;
+            Location = agvLocation;
+            IsAvailable = true;
         }
 
-
-        public List<string> GetAGVHistory()
+        public void LoadContainerToAGV(Container container)
         {
-            return AGVHistory;
+            if (Container != null)
+            {
+                throw new InvalidOperationException("AGV already loaded with cargo.");
+            }
+            Container = container;
         }
 
-
-        AgvMove()
-        {
-
-        }
 
 
     }

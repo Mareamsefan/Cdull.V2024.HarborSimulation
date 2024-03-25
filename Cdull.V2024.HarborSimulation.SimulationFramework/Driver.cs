@@ -59,6 +59,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal bool Move(int range, float speed)
         {
 
+
             if (HasReachedDestination)
             {
                 return false; // Stopper metoden hvis destinasjonen allerede er nådd

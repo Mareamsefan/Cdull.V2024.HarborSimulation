@@ -104,7 +104,6 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
 
 
-
                 harbor.SetCurrentTime(harbor.GetCurrentTime().AddSeconds(1));
 
             }
