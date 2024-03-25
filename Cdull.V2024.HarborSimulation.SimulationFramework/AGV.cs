@@ -26,5 +26,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
+        AgvMove()
+        {
+
+        }
+
+
     }
 }
