@@ -51,61 +51,66 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             if (!harbor.DockedShips.Contains(ship))
             {
-                Console.WriteLine(harbor.DockedShips.Count);
-                Console.WriteLine(harbor.WaitingShips.Count);
                 throw new ArgumentException("Ship is not docked in the harbor.", nameof(ship));
             }
-
-            if (ship.Containers.Any() && !ship.IsUnloadingCompleted)
+            if (harbor.GetAvailableAGV() != null)
             {
-                int totalContainerCount = ship.Containers.Count;
-                int occupiedSpace = 0;
+                AGV agv = harbor.GetAvailableAGV();
+                agv.IsAvailable = false;
 
-                // Beregn totalt antall opptatt plass i kolonnene som skal tømmes
-                for (int columnId = startColumnId; columnId <= endColumnId; columnId++)
+                if (ship.Containers.Any() && !ship.IsUnloadingCompleted)
                 {
-                    StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(columnId);
-                    occupiedSpace += storageColumn.GetOccupiedSpace();
-                }
+                    int totalContainerCount = ship.Containers.Count;
+                    int occupiedSpace = 0;
 
-                // Sjekk om det er nok plass i containerlagringen for alle containerne som skal tømmes
-                if (occupiedSpace + totalContainerCount <= harbor.ContainerStorage.Capacity)
-                {
-                  
-                    // Tøm containerne fra skipet og legg dem til i containerlagringen
-                    foreach (Container container in ship.Containers.ToList())
+                    // Beregn totalt antall opptatt plass i kolonnene som skal tømmes
+                    for (int columnId = startColumnId; columnId <= endColumnId; columnId++)
                     {
-                        StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(startColumnId);
-
-                        for (int columnId = startColumnId; columnId <= endColumnId; columnId++)
-                        { 
-                            storageColumn.AddContainer(container);
-                            storageColumn.OccupySpace(container);          
-                        }
-
-                        // Fjern containeren fra skipet
-                        ship.Containers.Remove(container);
+                        StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(columnId);
+                        occupiedSpace += storageColumn.GetOccupiedSpace();
                     }
 
-                    // Marker at tømming av skipet er fullført
-                    ship.IsUnloadingCompleted = true;
+                    // Sjekk om det er nok plass i containerlagringen for alle containerne som skal tømmes
+                    if (occupiedSpace + totalContainerCount <= harbor.ContainerStorage.Capacity)
+                    {
 
-                    // Utløs hendelse om at tømming av skipet er fullført
-                    harbor.RaiseShipCompletedUnloading(ship);
+                        // Tøm containerne fra skipet og legg dem til i containerlagringen
+                        foreach (Container container in ship.Containers.ToList())
+                        {
+                            StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(startColumnId);
 
-                    return true;
-                }
-                else
-                {
-                    // Beregn hvor mye plass som er igjen i den første lagringskolonnen
-                    int remainingSpace = harbor.ContainerStorage.GetSpecificColumn(startColumnId).Capacity
-                                        - harbor.ContainerStorage.GetSpecificColumn(startColumnId).GetOccupiedSpace();
+                            for (int columnId = startColumnId; columnId <= endColumnId; columnId++)
+                            {
+                                storageColumn.AddContainer(container);
+                                storageColumn.OccupySpace(container);
+                            }
 
-                    // Beregn hvor mange containere som ikke kan lastes inn i den første lagringskolonnen
-                    int remainingContainers = totalContainerCount;
+                            // Fjern containeren fra skipet
+                            ship.Containers.Remove(container);
+                        }
 
-                    // Kast InsufficientStorageSpaceException med detaljert informasjon
-                    throw new InsufficientStorageSpaceException(endColumnId, remainingSpace, remainingContainers);
+                        // Marker at tømming av skipet er fullført
+                        ship.IsUnloadingCompleted = true;
+
+                        // Utløs hendelse om at tømming av skipet er fullført
+                        harbor.RaiseShipCompletedUnloading(ship);
+                        agv.IsAvailable = true;
+
+                        return true;
+                    }
+
+                    else
+                    {
+                        // Beregn hvor mye plass som er igjen i den første lagringskolonnen
+                        int remainingSpace = harbor.ContainerStorage.GetSpecificColumn(startColumnId).Capacity
+                                            - harbor.ContainerStorage.GetSpecificColumn(startColumnId).GetOccupiedSpace();
+
+                        // Beregn hvor mange containere som ikke kan lastes inn i den første lagringskolonnen
+                        int remainingContainers = totalContainerCount;
+
+                        // Kast InsufficientStorageSpaceException med detaljert informasjon
+                        throw new InsufficientStorageSpaceException(endColumnId, remainingSpace, remainingContainers);
+                    }
                 }
             }
 
@@ -136,39 +141,43 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 throw new ArgumentNullException(nameof(ship), "Ship parameter cannot be null.");
             }
-
-            if (ship.Containers.Count < numberOfContainers)
+            if (harbor.GetAvailableAGV() != null)
             {
-                for (int i = 0; i < numberOfContainers; i++)
+                AGV agv = harbor.GetAvailableAGV();
+                agv.IsAvailable = false;
+
+                if (ship.Containers.Count < numberOfContainers)
                 {
-                    bool addedContainer = false;
-
-                    // Gå gjennom kolonnene fra endColumnId til endColumnId
-                    for (int columnId = startColumnId; columnId <= endColumnId; columnId++)
+                    for (int i = 0; i < numberOfContainers; i++)
                     {
-                        StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(columnId);
+                        bool addedContainer = false;
 
-                        // Sjekk om det er nok containere i kolonnen og om skipet kan ta imot flere containere
-                        if (storageColumn.Containers.Count > 0 && !ship.IsLoadingCompleted)
+                        // Gå gjennom kolonnene fra endColumnId til endColumnId
+                        for (int columnId = startColumnId; columnId <= endColumnId; columnId++)
                         {
-                            Container container = storageColumn.Containers.First();
-                            ship.Containers.Add(container);
-                            storageColumn.RemoveContainer(container);
-                            storageColumn.deOccupySpace(container, harbor);
-                            container.History.Add($"{container.Name} loaded at {harbor.CurrentTime} on {ship.Name}");
+                            StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(columnId);
 
-                            addedContainer = true;
-                            break; // Avslutt løkken når en container er lagt til i skipet
+                            // Sjekk om det er nok containere i kolonnen og om skipet kan ta imot flere containere
+                            if (storageColumn.Containers.Count > 0 && !ship.IsLoadingCompleted)
+                            {
+                                Container container = storageColumn.Containers.First();
+                                ship.Containers.Add(container);
+                                storageColumn.RemoveContainer(container);
+                                storageColumn.deOccupySpace(container, harbor);
+                                container.History.Add($"{container.Name} loaded at {harbor.CurrentTime} on {ship.Name}");
+                                addedContainer = true;
+                                break; // Avslutt løkken når en container er lagt til i skipet
+                            }
+                            agv.IsAvailable = true;
+                        }
+                        // Kast unntak hvis det ikke ble lagt til noen container i skipet
+                        if (!addedContainer)
+                        {
+                            throw new InsufficientContainerException("Not enough containers in cargostorage");
                         }
                     }
 
-                    // Kast unntak hvis det ikke ble lagt til noen container i skipet
-                    if (!addedContainer)
-                    {
-                        throw new InsufficientContainerException("Not enough containers in cargostorage");
-                    }
                 }
-
                 ship.IsReadyToSail = true;
                 ship.IsLoadingCompleted = true;
 
