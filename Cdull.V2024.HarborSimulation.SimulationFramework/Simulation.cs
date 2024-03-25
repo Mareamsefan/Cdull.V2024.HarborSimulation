@@ -21,7 +21,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         /// <param name="docks">The list of docks in the harbor.</param>
         /// <exception cref="ArgumentNullException">Thrown when the harbor, list of ships, or list of docks is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the start time is after the end time or if either the list of ships or list of docks is empty.</exception>
-        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks)
+        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, List<AGV> agvs)
         {
             // Ensure harbor, ships, and docks are not null
             if (harbor == null)
@@ -39,7 +39,12 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 throw new ArgumentNullException(nameof(docks), "List of docks cannot be null.");
             }
 
-         
+            if (agvs == null)
+            {
+                throw new ArgumentNullException(nameof(agvs), "List of agvs cannot be null.");
+            }
+
+
             if (startTime > endTime)
             {
                 throw new ArgumentException("Start time cannot be after end time.", nameof(startTime));
@@ -63,10 +68,12 @@ namespace Cdull.V2024.HarborSimulation.TestClient
       
             harbor.Docks.AddRange(docks);
             harbor.Ships.AddRange(ships);
+            harbor.AGVs.AddRange(agvs);
 
             while (harbor.GetCurrentTime() < endTime)
             {
         
+                //10% av container fjernes 
                 if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0 && harbor.GetCurrentTime().Second == 0)
                 {
                     historyHandler.SaveHarborHistory(harbor.GetCurrentTime(), harbor); 
@@ -87,7 +94,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 }
                 if (harbor.DockedShips.Any())
                 {
-                    containerHandler.PerformScheduledContainerHandling(harbor);
+                    containerHandler.PerformScheduledContainerHandling(harbor); 
+                    
                     harbor.DockedShips.ForEach(ship =>
                     {
                         if (!ship.Model.Equals(Model.ContainerShip))
