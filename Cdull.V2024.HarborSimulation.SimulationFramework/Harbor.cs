@@ -20,6 +20,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal List<Ship> DockedShips { get; set; } = new List<Ship>();
         internal List<Ship> SailingShips { get; set; } = new List<Ship>();
         internal Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
+        internal List<AGV> AGVs { get; set; } = new List<AGV> ();
+
 
         /// <summary>
         /// Event raised when a ship departs from the harbor.
@@ -115,7 +117,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// The ship size and number of cargo units parameters are optional, with default values assigned if not provided.
         /// </remarks>
 
-        public List<Ship> InitializeShips(int numberOfShips, Model shipModel, Size shipSize = Size.Small, 
+        public List<Ship> InitializeShips(int shipCurrentLocation, int numberOfShips, Model shipModel, Size shipSize = Size.Small, 
             int numberOfContainers= 0, ContainerSize containerSize = ContainerSize.Large)
         {
             List<Ship> ships = new List<Ship>();
@@ -126,7 +128,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
             for (int i = 0; i < numberOfShips; i++)
             {
-                Ship ship = new($"{shipModel}ship-{i}", shipModel, shipSize);
+                Ship ship = new($"{shipModel}ship-{i}", shipModel, shipSize, shipCurrentLocation);
                 if (!ships.Any(s => s.Name == ship.Name))
                 {
                     ships.Add(ship);
@@ -141,7 +143,41 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
+        public List<AGV> InitializeAGVs(int numberOfAGV, int agvSpeed, int agvLocation)
+        {
+            List<AGV> agvs = new List<AGV>();
 
+            if (numberOfAGV <= 0)
+            {
+                throw new ArgumentException("Number of AGVs should be greater than zero.");
+            }
+
+            for (int i = 0; i < numberOfAGV; i++)
+            {
+                AGV agv = new(agvLocation, agvSpeed);
+                agvs.Add(agv);
+            }
+
+            return agvs;
+        }
+
+        internal AGV AvailableAGV()
+        {
+            if (AGVs.Count == 0)
+            {
+                throw new ArgumentNullException(nameof(Dock), "Harbor cannot have Zero AGVs.");
+            }
+
+            foreach (AGV agv in AGVs)
+            {
+                if (agv.IsAvailable)
+                {
+                    return agv;
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Finds an available dock of the specified size for docking a ship.

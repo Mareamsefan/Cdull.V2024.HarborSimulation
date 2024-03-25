@@ -13,25 +13,26 @@ namespace HarborSimulationTest
     {
         static void Main(string[] args)
         {
+
             ContainerStorage containerStorage = new ContainerStorage("ContainerStorage");
             // Oppretter en ny havn med navnet "ExceptiontestHarbor" og en lastelager for gods med kapasitet på 10000 enheter.
             Harbor harbor = new Harbor("ExceptiontestHarbor", containerStorage);
 
             // Oppretter en liste over dokker ved å initialisere 10 dokker for container skip av stor størrelse.
             List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
-
+            
             // Oppretter en liste over skip.
             List<Ship> ships = new List<Ship>();
 
             // Legger til 5 skip av typen ContainerShip og størrelse stor, med lastekapasitet på 100 enheter.
-            ships.AddRange(harbor.InitializeShips(5, Model.ContainerShip, Size.Large, 10, ContainerSize.Small));
+            ships.AddRange(harbor.InitializeShips(2000, 5, Model.ContainerShip, Size.Large, 10, ContainerSize.Small));
 
 
-            Ship ship = new Ship("mari", Model.ContainerShip, Size.Small);
+            Ship ship = new Ship("mari", Model.ContainerShip, Size.Small, 2000);
             ship.InitializeContainers(10, ContainerSize.Small); 
 
             // Legger til 5 skip av typen LNGCarrier og størrelse medium, med lastekapasitet på 50 enheter.
-            ships.AddRange(harbor.InitializeShips(5, Model.LNGCarrier, Size.Medium));
+            ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
             ships.Add(ship); 
             // Oppretter en instans av simuleringen.
             IHarborSimulation driver = new Simulation();
@@ -114,9 +115,6 @@ namespace HarborSimulationTest
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
         
-     
-     
- 
 
         }
 
