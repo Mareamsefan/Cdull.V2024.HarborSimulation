@@ -161,7 +161,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return agvs;
         }
 
-        internal AGV AvailableAGV()
+        internal AGV GetAvailableAGV()
         {
             if (AGVs.Count == 0)
             {

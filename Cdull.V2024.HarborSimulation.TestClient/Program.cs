@@ -20,7 +20,10 @@ namespace HarborSimulationTest
 
             // Oppretter en liste over dokker ved å initialisere 10 dokker for container skip av stor størrelse.
             List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
-            
+
+
+            List<AGV> agvs = harbor.InitializeAGVs(20, 7, 1000); 
+
             // Oppretter en liste over skip.
             List<Ship> ships = new List<Ship>();
 
