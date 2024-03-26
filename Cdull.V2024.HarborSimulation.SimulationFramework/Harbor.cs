@@ -143,7 +143,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-        public List<AGV> InitializeAGVs(int numberOfAGV, int agvSpeed, int agvLocation)
+        public List<AGV> InitializeAGVs(int numberOfAGV, int agvLocation)
         {
             List<AGV> agvs = new List<AGV>();
 
@@ -154,7 +154,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             for (int i = 0; i < numberOfAGV; i++)
             {
-                AGV agv = new(agvLocation, agvSpeed);
+                AGV agv = new(agvLocation);
                 agvs.Add(agv);
             }
 

@@ -2,9 +2,11 @@
 using Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
@@ -28,7 +30,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return instance;
         }
 
-        public void MoveContainerFromShipToAGV(Ship ship, AGV agv)
+        public void MoveContainerFromShipToAGV(Ship ship, AGV agv, Crane crane, Harbor harbor)
         {
             if (ship == null)
             {
@@ -40,19 +42,26 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentNullException(nameof(agv), "AGV cannot be null.");
             }
 
+            if (crane == null)
+            {
+                throw new ArgumentNullException(nameof(crane), "Crane cannot be null.");
+            }
+
             // Sjekk om skipet har last
             if (ship.Containers.Any())
             {
-                Container container = ship.Containers.First(); // Få tak i den første cargoen fra skipet
+                crane.handlingTime++;
+                
+                Container container = ship.Containers.First(); // Få tak i den første cargoen fra skipet 
 
-                // Fjern cargo fra skipet
-                ship.Containers.Remove(container);
-
-                // Legg til cargo i AGV
-                agv.LoadContainerToAGV(container);
-
-                // Oppdater historien til cargo
-                container.History.Add($"{container.Name} moved from Ship {ship.Name} to AGV {agv.Id}");
+                if (crane.handlingTime == 30)
+                {
+                    ship.Containers.Remove(container);
+                    crane.LiftContainer(container);
+                    crane.Container = null;
+                    agv.LoadContainerToAGV(container);
+                    container.History.Add($"{container.Name} moved from Ship {ship.Name} to AGV {agv.Id}");
+                }
             }
             else
             {
@@ -60,7 +69,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new InvalidOperationException("Unable to move container from Ship to AGV.");
             }
         }
-        public void MoveContainerFromAGVToStorageColumn(StorageColumn column, AGV agv)
+        public void MoveContainerFromAGVToStorageColumn(StorageColumn column, AGV agv, PortalCrane portalCrane, Harbor harbor)
         {
             if (column == null)
             {
@@ -72,18 +81,26 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentNullException(nameof(agv), "AGV cannot be null.");
             }
 
+            if (portalCrane == null)
+            {
+                throw new ArgumentNullException(nameof(portalCrane), "Portalcrane cannot be null.");
+            }
+
             // Sjekk om AGV har last
             if (agv.Container != null)
             {
+                portalCrane.handlingTime++;
                 Container container = agv.Container; // Få tak i containeren fra AGV-en
 
                 // Fjern containeren fra AGV-en og legg til i lagringskolonnen
-                agv.Container = null;
-
-                column.AddContainer(container);
-
-                // Oppdater historien til containeren
-                container.History.Add($"{container.Name} moved from AGV {agv.Id} to StorageColumn {column.ColumnId}");
+                if (portalCrane.handlingTime == 60)
+                {
+                    agv.Container = null;
+                    portalCrane.LiftContainer(container);
+                    portalCrane.Container = null;
+                    column.AddContainer(container);
+                    container.History.Add($"{container.Name} moved from AGV {agv.Id} to StorageColumn {column.ColumnId}");
+                }
             }
             else
             {
@@ -91,7 +108,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new InvalidOperationException("AGV has no container available to move to StorageColumn.");
             }
         }
-        public void MoveContainerFromStorageColumnToAGV(StorageColumn column, AGV agv)
+        public void MoveContainerFromStorageColumnToAGV(StorageColumn column, AGV agv, PortalCrane portalCrane, Harbor harbor)
         {
             if (column == null)
             {
@@ -103,16 +120,26 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentNullException(nameof(agv), "AGV cannot be null.");
             }
 
+            if (portalCrane == null)
+            {
+                throw new ArgumentNullException(nameof(portalCrane), "Portalcrane cannot be null.");
+            }
+
             if (column.Containers.Any())
             {
+                portalCrane.handlingTime++;
                 Container container = column.Containers.First(); // Get the first container from the storage column
 
-                // Remove container from the storage column and load onto AGV
-                column.RemoveContainer(container);
-                agv.LoadContainerToAGV(container);
+                if (portalCrane.handlingTime == 60)
+                {
+                    column.RemoveContainer(container);
+                    portalCrane.LiftContainer(container);
+                    portalCrane.Container = null;
+                    agv.LoadContainerToAGV(container);
 
-                // Update container history
-                container.History.Add($"{container.Name} moved from StorageColumn {column.ColumnId} to AGV {agv.Id}");
+                    // Update container history
+                    container.History.Add($"{container.Name} moved from StorageColumn {column.ColumnId} to AGV {agv.Id}");
+                }
             }
             else
             {
@@ -120,7 +147,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
 
-        public void MoveContainerFromAGVToShip(AGV agv, Ship ship)
+        public void MoveContainerFromAGVToShip(AGV agv, Ship ship, Crane crane, Harbor harbor)
         {
             if (agv == null)
             {
@@ -132,16 +159,26 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentNullException(nameof(ship), "Ship cannot be null.");
             }
 
+            if (crane == null)
+            {
+                throw new ArgumentNullException(nameof(crane), "Crane cannot be null.");
+            }
+
             if (agv.Container != null)
             {
+                crane.handlingTime++;
                 Container container = agv.Container; // Get the container from the AGV
 
-                // Remove container from the AGV and load onto the ship
-                agv.Container = null;
-                ship.Containers.Add(container);
+                if (crane.handlingTime == 30)
+                {
+                    agv.Container = null;
+                    crane.LiftContainer(container);
+                    crane.Container = null;
+                    ship.Containers.Add(container);
 
-                // Update container history
-                container.History.Add($"{container.Name} moved from AGV {agv.Id} to Ship {ship.Name}");
+                    // Update container history
+                    container.History.Add($"{container.Name} moved from AGV {agv.Id} to Ship {ship.Name}");
+                }
             }
             else
             {

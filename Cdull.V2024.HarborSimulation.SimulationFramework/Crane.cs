@@ -1,4 +1,6 @@
-﻿namespace Cdull.V2024.HarborSimulation.SimulationFramework
+﻿using System.ComponentModel;
+
+namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     /// <summary>
     /// Represents a crane used in harbor to move containers from/to ships/harbor.
@@ -18,14 +20,14 @@
         public Crane(string craneName)
         {
             Name = craneName;
-            handlingTime = 60;
+            handlingTime = 0;
         }
 
         public void LiftContainer(Container container)
         {
             if (Container != null)
             {
-                throw new InvalidOperationException("AGV already loaded with cargo.");
+                throw new InvalidOperationException("Crane already loaded with cargo.");
             }
             Container = container;
         }
