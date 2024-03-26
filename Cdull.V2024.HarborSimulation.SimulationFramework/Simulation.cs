@@ -72,8 +72,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             while (harbor.GetCurrentTime() < endTime)
             {
-        
-                //10% av container fjernes 
+   
                 if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0 && harbor.GetCurrentTime().Second == 0)
                 {
                     historyHandler.SaveHarborHistory(harbor.GetCurrentTime(), harbor);
@@ -84,18 +83,23 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                             container.numberOfDaysInStorage++; 
                         });
                     }); 
+                    
                 }
 
                 harbor.ContainerStorage.StorageColumns.ForEach(storageColumn =>
                 {
                     storageColumn.Containers.ForEach(container =>
                     {
-                        if(container.numberOfDaysInStorage == 4)
+                        if (container.numberOfDaysInStorage == 4)
                         {
-                            //Console.WriteLine("IT WORKS GUYS :))))"); 
+
+                            containerHandler.RemovePercentageOfContainersFromSource(0.1m, storageColumn: storageColumn);
+
                         }
                     });
-                });
+
+
+                }); 
 
                 harbor.QueueShipsToDock();
 
@@ -105,53 +109,49 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                     if (!driver.Move(ship.CurrentLocation,ship.Speed))
                     {
                         docking.DockShip(harbor, ship);
-                      
+                        containerHandler.RemovePercentageOfContainersFromSource(0.15m, ship);
+                        ship.DockedAt.numberOfShipsPerDay++;
+
                     }
                    
 
                 }
                 if (harbor.DockedShips.Any())
                 {
-                   containerHandler.PerformScheduledContainerHandling(harbor); 
-                    
                     harbor.DockedShips.ForEach(ship =>
                     {
-                        if (!ship.Model.Equals(Model.ContainerShip))
+                        if(ship.DockedAt.numberOfShipsPerDay < 20)
                         {
-                            ship.IsReadyToSail = true;
-                        }
-                    });
-                    
-                    foreach (var key in containerHandler.ScheduledContainerHandling.Keys.ToList()) 
-                    {
-                        Ship ship = key.Item1;
-                        DateTime handlingTime = key.Item2;
-                        var handlingInfo = containerHandler.ScheduledContainerHandling[key];
-
-                        if (harbor.GetCurrentTime().Date == handlingTime.Date)
-                        {
-                            foreach (var info in handlingInfo)
+                            foreach (ScheduledContainerHandling scheduledContainerHandling in ship.ScheduledContainerHandlings)
                             {
-                                int startColumnId = info.Item1;
-                                int endColumnId = info.Item2;
-                                int numberOfContainers = info.Item3;
-                                LoadingType loadingType = info.Item4;
-                                Console.WriteLine(harbor.CurrentTime);
-                                if (loadingType == LoadingType.Load)
-                                {
-                                    Console.WriteLine("THIS WORKS 22222 --->");
-                                }
-                                else if (loadingType == LoadingType.Unload)
-                                {
-                                    Console.WriteLine("THIS WORKS 22222");
-                                }
 
-                                containerHandler.ScheduledContainerHandling.Remove(key);
+                                if (harbor.GetCurrentTime().Date == scheduledContainerHandling.HandlingTime.Date)
+                                {
+
+                                    if (scheduledContainerHandling.LoadingType == LoadingType.Unload)
+                                    {
+                                        foreach (Container container in ship.Containers.ToList())
+                                        {
+
+                                            AGV agv = containerHandler.MoveContainerFromShipToAGV(ship, container, harbor);
+
+                                            containerHandler.MoveContainerFromAGVToStorageColumn(harbor.ContainerStorage,
+                                            scheduledContainerHandling.StartColumnId, scheduledContainerHandling.EndColumnId, agv);
+                                        }
+
+                                    }
+
+                                    else if (scheduledContainerHandling.LoadingType == LoadingType.Load)
+                                    {
+                                        AGV agv = containerHandler.MoveContainerFromStorageColumnToAGV(harbor.ContainerStorage,
+                                            scheduledContainerHandling.StartColumnId, harbor);
+                                        containerHandler.MoveContainerFromAGVToShip(agv, ship);
+                                    }
+                                }
                             }
                         }
-                    }
-
-
+                    }); 
+                  
                     sailing.StartScheduledSailings(harbor, historyHandler);
                 }
 

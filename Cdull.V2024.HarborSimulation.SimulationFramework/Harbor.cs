@@ -143,7 +143,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-        public List<AGV> InitializeAGVs(int numberOfAGV, int agvSpeed, int agvLocation)
+        public List<AGV> InitializeAGVs(int numberOfAGV, int agvLocation)
         {
             List<AGV> agvs = new List<AGV>();
 
@@ -154,7 +154,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             for (int i = 0; i < numberOfAGV; i++)
             {
-                AGV agv = new(agvLocation, agvSpeed);
+                AGV agv = new(agvLocation);
                 agvs.Add(agv);
             }
 
@@ -163,10 +163,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         internal AGV GetAvailableAGV()
         {
-            if (AGVs.Count == 0)
-            {
-                throw new ArgumentNullException(nameof(Dock), "Harbor cannot have Zero AGVs.");
-            }
+            AGV availableAgv = AGVs.First(); 
 
             foreach (AGV agv in AGVs)
             {
@@ -176,7 +173,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 }
             }
 
-            return null;
+            return availableAgv; 
         }
 
         /// <summary>

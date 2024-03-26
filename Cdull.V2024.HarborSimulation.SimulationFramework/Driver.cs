@@ -25,6 +25,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             HasReachedDestination = false;
             agvHasReachedDestination = false;
             agvSpeed = 7;
+           
 
         }
 

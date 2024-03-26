@@ -11,8 +11,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal string Name { get; set; }
         internal Size Size { get; set; }
         internal bool IsAvailable { get; set; }
-        internal List<Crane> Cranes { get; set; } = new List<Crane>();
+        public List<Crane> Cranes { get; set; } = new List<Crane>();
         internal Ship? OccupiedBy { get; set; }
+        internal int numberOfShipsPerDay { get; set; }
 
 
         /// <summary>
@@ -28,6 +29,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Size = dockSize;
             IsAvailable = true;
             OccupiedBy = null;
+            numberOfShipsPerDay = 0;
 
             if (dockCranes != null)
             {
@@ -40,6 +42,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
+        public bool GetAvailableCrane(Crane crane)
+        {
+            if (crane != null && crane.IsAvailable)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
 
     }
