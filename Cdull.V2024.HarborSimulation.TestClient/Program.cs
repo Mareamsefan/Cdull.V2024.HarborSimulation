@@ -18,25 +18,32 @@ namespace HarborSimulationTest
             // Oppretter en ny havn med navnet "ExceptiontestHarbor" og en lastelager for gods med kapasitet på 10000 enheter.
             Harbor harbor = new Harbor("ExceptiontestHarbor", containerStorage);
 
-            // Oppretter en liste over dokker ved å initialisere 10 dokker for container skip av stor størrelse.
-            List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
+           //Lager 3 kaiplasser som skal betjenes av 7 kraner:
+           //Kaiplassene betjener maks 20 ship og minst 3. 
+            List<Dock> docks = harbor.InitializeDocks(2, Size.Large, 3);
+            docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1)); 
 
-
+            //Lager 20 AGV-er som skal flytte på containere: 
             List<AGV> agvs = harbor.InitializeAGVs(20, 1000); 
 
             // Oppretter en liste over skip.
             List<Ship> ships = new List<Ship>();
 
-            // Legger til 5 skip av typen ContainerShip og størrelse stor, med lastekapasitet på 100 enheter.
-            ships.AddRange(harbor.InitializeShips(2000, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Small));
+            // Legger til 5 skip av typen ContainerShip, med 5 små containere med currentLocation 1500m unna Harbor: 
+            ships.AddRange(harbor.InitializeShips(1500, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Small));
 
+            // Legger til 5 skip av typen ContainerShip, med 5 store containere med currentlocation 1700m unna Harbor: 
+            ships.AddRange(harbor.InitializeShips(1700, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Large));
 
-            Ship ship = new Ship("mari", Model.ContainerShip, Size.Small, 2000);
+            // Lager en test containership som viser at man kan lage et og et ship: 
+            Ship ship = new Ship("TestContainerShip", Model.ContainerShip, Size.Small, 1000);
+
             ship.InitializeContainers(5, ContainerSize.Small); 
 
-            // Legger til 5 skip av typen LNGCarrier og størrelse medium, med lastekapasitet på 50 enheter.
+            // Legger til 5 skip av typen LNGCarrier og størrelse medium med currentlocation 2000m unna Harbor:
             ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
             ships.Add(ship); 
+
             // Oppretter en instans av simuleringen.
             IHarborSimulation driver = new Simulation();
 
@@ -44,16 +51,13 @@ namespace HarborSimulationTest
             DateTime startTime = new DateTime(2024, 1, 1);
             DateTime endTime = new DateTime(2024, 1, 15);
 
-            // Setter starttidspunkt for seiling for alle skip i havnen som ikke har en gjentakende seilingsplan.
-            DateTime startSailingTime = new DateTime(2024, 1, 2);
-
             // Legger til hendelsesbehandlere for avgang, ankomst, fullført lossing og fullført lasting i havnen.
             harbor.DepartedShip += Harbor_ShipDeparted;
             harbor.ArrivedShip += Harbor_ShipArrived;
             harbor.CompletedUnloadingShip += Harbor_ShipCompletedUnloading;
             harbor.CompletedloadingShip += Harbor_ShipCompletedLoading;
 
-            // Får en instans av seiling.
+            // Lager en instans av seiling.
             Sailing sailing = Sailing.GetInstance();
 
             // Planlegger seiling for container skip med starttidspunkt 2024-01-02, antall skip 50, og med ukentlig gjentakelse.
@@ -62,9 +66,13 @@ namespace HarborSimulationTest
             // Planlegger seiling for LNGCarrier skip med starttidspunkt 2024-01-02, antall skip 40, og med daglig gjentakelse.
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
+            //Lager 24 Lange lagringskolonner: 
             StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
             StorageColumn column2 = new StorageColumn(300, 2, 15, 6, 4);
             StorageColumn column3 = new StorageColumn(400, 3, 15, 6, 4);
+            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
+            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
+            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
             containerStorage.AddStorageColumn(column);
             containerStorage.AddStorageColumn(column2);
             containerStorage.AddStorageColumn(column3);
