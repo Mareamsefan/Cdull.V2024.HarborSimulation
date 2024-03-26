@@ -2,6 +2,7 @@
 using Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -168,7 +169,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     if (ship.Containers.Any())
                     {
+                        Container container = ship.Containers[0];
                         ship.Containers.RemoveAt(0); // Fjerner det første elementet i listen
+                        container.History.Add($"{container.Name} was picked up by a truck, and left the harbor.");
                     }
                     else
                     {

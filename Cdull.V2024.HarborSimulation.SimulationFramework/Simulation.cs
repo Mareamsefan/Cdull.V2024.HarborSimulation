@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using System.Timers;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
@@ -70,9 +72,11 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.Ships.AddRange(ships);
             harbor.AGVs.AddRange(agvs);
 
+
+    
             while (harbor.GetCurrentTime() < endTime)
             {
-        
+
                 //10% av container fjernes 
                 if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0 && harbor.GetCurrentTime().Second == 0)
                 {
@@ -92,10 +96,16 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                     {
                         if(container.numberOfDaysInStorage == 4)
                         {
-                            //Console.WriteLine("IT WORKS GUYS :))))"); 
+  
+                            containerHandler.RemovePercentageOfContainersFromSource(0.1m, storageColumn: storageColumn);
+
                         }
                     });
                 });
+
+
+               
+                
 
                 harbor.QueueShipsToDock();
 
@@ -105,7 +115,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                     if (!driver.Move(ship.CurrentLocation,ship.Speed))
                     {
                         docking.DockShip(harbor, ship);
-                      
+                        containerHandler.RemovePercentageOfContainersFromSource(0.15m, ship);
+                       
                     }
                    
 
@@ -121,6 +132,10 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                             ship.IsReadyToSail = true;
                         }
                     });
+
+
+                    
+                    
                     
                     foreach (var key in containerHandler.ScheduledContainerHandling.Keys.ToList()) 
                     {
