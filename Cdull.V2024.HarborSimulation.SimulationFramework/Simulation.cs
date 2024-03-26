@@ -119,7 +119,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 {
                     harbor.DockedShips.ForEach(ship =>
                     {
-                        if(ship.DockedAt.numberOfShipsPerDay < 20)
+                        if(ship.DockedAt.numberOfShipsPerDay < 7)
                         {
                             foreach (ScheduledContainerHandling scheduledContainerHandling in ship.ScheduledContainerHandlings)
                             {

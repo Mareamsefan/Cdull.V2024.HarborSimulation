@@ -161,6 +161,24 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return agvs;
         }
 
+        public List<StorageColumn> InitializeStorageColumns(int coulmnLocation, int numberOfColumns, int columnLength, int columnWidth, int columnHeight)
+        {
+            List<StorageColumn> columns = new List<StorageColumn>();
+
+            if (numberOfColumns <= 0)
+            {
+                throw new ArgumentException("Number of columns should be greater than zero.");
+            }
+
+            for (int i = 0; i < numberOfColumns; i++)
+            {
+                StorageColumn column = new StorageColumn(coulmnLocation,i, columnLength, columnWidth, columnHeight);
+                columns.Add(column);
+            }
+
+            return columns;
+        }
+
         internal AGV GetAvailableAGV()
         {
             AGV availableAgv = AGVs.First(); 
