@@ -118,7 +118,7 @@ namespace HarborSimulationTest
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
             Console.WriteLine(ship.Containers.Count());
-            containerHandler.RemovePercentageOfContainersFromSource(0.5M, ship);
+            containerHandler.RemovePercentageOfContainersFromSource(0.2M, ship);
             Console.WriteLine(ship.Containers.Count()); 
         
 

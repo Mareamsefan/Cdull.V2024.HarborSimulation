@@ -410,8 +410,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         Console.WriteLine(harbor.CurrentTime);
                         if (loadingType == LoadingType.Load)
                         {
-                                AddContainerToShip(ship, numberOfContainers, harbor, startColumnId, endColumnId);
-                                Console.WriteLine(harbor.CurrentTime); 
+                                //AddContainerToShip(ship, numberOfContainers, harbor, startColumnId, endColumnId);
+                                //Console.WriteLine(harbor.CurrentTime); 
                         }
                         else if (loadingType == LoadingType.Unload)
                         {
