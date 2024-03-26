@@ -42,6 +42,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
+
+        /// <summary>
+        /// Checks if the specified crane is available.
+        /// </summary>
+        /// <param name="crane">The crane to check.</param>
+        /// <returns>True if the crane is available, otherwise false.</returns>
         public bool GetAvailableCrane(Crane crane)
         {
             if (crane != null && crane.IsAvailable)

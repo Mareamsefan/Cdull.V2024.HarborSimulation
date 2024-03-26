@@ -8,6 +8,10 @@ using System.Xml.Linq;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
+
+    /// <summary>
+    /// Represents a storage column in the harbor for storing containers.
+    /// </summary>
     public class StorageColumn
     {
         public int ColumnId { get; set;  }
@@ -21,6 +25,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal bool IsAvailable { get; set; }
         internal int Location { get; set; }
 
+
+        /// <summary>
+        /// Represents a storage column in the harbor for storing containers.
+        /// </summary>
         public StorageColumn(int location, int columnId, int columnLength, int columnWidth, int columnHeight)
         {
             ColumnId = columnId;
@@ -31,7 +39,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Location = location;
             Crane = new PortalCrane();
 
-            // Calculate total capacity based on length, width, and height
             Capacity = Length * Width * Height;
         }
 
@@ -162,6 +169,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return $"{ColumnId}"; 
         }
 
+
+        /// <summary>
+        /// Checks if the storage column has enough space for the specified containers.
+        /// </summary>
+        /// <param name="containers">The list of containers to check.</param>
+        /// <returns>True if the storage column has enough space; otherwise, false.</returns>
         public bool HasEnoughSpaceForContainers(List<Container> containers)
         {
             int requiredSpace = containers.Sum(container => (int)container.Size);

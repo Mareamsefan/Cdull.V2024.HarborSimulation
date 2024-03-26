@@ -78,7 +78,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             {
         
 
-                //10% av container fjernes 
+                
                 if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0 && harbor.GetCurrentTime().Second == 0)
                 {
                     historyHandler.SaveHarborHistory(harbor.GetCurrentTime(), harbor);
@@ -125,7 +125,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 {
                     harbor.DockedShips.ForEach(ship =>
                     {
-                        if(ship.DockedAt.numberOfShipsPerDay < 20)
+                        if(ship.DockedAt.numberOfShipsPerDay < 7)
                         {
                             foreach (ScheduledContainerHandling scheduledContainerHandling in ship.ScheduledContainerHandlings)
                             {

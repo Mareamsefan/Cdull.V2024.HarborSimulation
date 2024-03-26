@@ -37,7 +37,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             width = columnWidth;
             distance = columnDistance;
 
-            // Opprett en liste med størrelse lik length, width og height
+            
             ColumnList = Enumerable.Repeat(0, columnHeight * columnWidth * columnDistance).ToList();
         }
 

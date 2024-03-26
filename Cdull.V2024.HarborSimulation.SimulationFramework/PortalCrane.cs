@@ -14,12 +14,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal Container Container { get; set; }
 
 
+        /// <summary>
+        /// Initializes a new instance of the PortalCrane class.
+        /// </summary>
         public PortalCrane()
         {
-            // 1 min 
             handlingTime = 0; 
             IsAvailable = true;
         }
+
+        // <summary>
+        /// Lifts a container with the portal crane.
+        /// </summary>
+        /// <param name="container">The container to be lifted.</param>
+        /// <exception cref="InvalidOperationException">Thrown when the portal crane is already loaded with cargo.</exception>
 
         public void LiftContainer(Container container)
         {
