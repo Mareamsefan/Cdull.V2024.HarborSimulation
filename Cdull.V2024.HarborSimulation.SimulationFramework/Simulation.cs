@@ -21,7 +21,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         /// <param name="docks">The list of docks in the harbor.</param>
         /// <exception cref="ArgumentNullException">Thrown when the harbor, list of ships, or list of docks is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the start time is after the end time or if either the list of ships or list of docks is empty.</exception>
-        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks)
+        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, List<AGV> agvs)
         {
             // Ensure harbor, ships, and docks are not null
             if (harbor == null)
@@ -39,7 +39,12 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 throw new ArgumentNullException(nameof(docks), "List of docks cannot be null.");
             }
 
-         
+            if (agvs == null)
+            {
+                throw new ArgumentNullException(nameof(agvs), "List of agvs cannot be null.");
+            }
+
+
             if (startTime > endTime)
             {
                 throw new ArgumentException("Start time cannot be after end time.", nameof(startTime));
@@ -63,14 +68,34 @@ namespace Cdull.V2024.HarborSimulation.TestClient
       
             harbor.Docks.AddRange(docks);
             harbor.Ships.AddRange(ships);
+            harbor.AGVs.AddRange(agvs);
 
             while (harbor.GetCurrentTime() < endTime)
             {
         
+                //10% av container fjernes 
                 if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0 && harbor.GetCurrentTime().Second == 0)
                 {
-                    historyHandler.SaveHarborHistory(harbor.GetCurrentTime(), harbor); 
+                    historyHandler.SaveHarborHistory(harbor.GetCurrentTime(), harbor);
+                    harbor.ContainerStorage.StorageColumns.ForEach(storageColumn =>
+                    {
+                        storageColumn.Containers.ForEach(container =>
+                        {
+                            container.numberOfDaysInStorage++; 
+                        });
+                    }); 
                 }
+
+                harbor.ContainerStorage.StorageColumns.ForEach(storageColumn =>
+                {
+                    storageColumn.Containers.ForEach(container =>
+                    {
+                        if(container.numberOfDaysInStorage == 4)
+                        {
+                            //Console.WriteLine("IT WORKS GUYS :))))"); 
+                        }
+                    });
+                });
 
                 harbor.QueueShipsToDock();
 
@@ -87,15 +112,44 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 }
                 if (harbor.DockedShips.Any())
                 {
-                    containerHandler.PerformScheduledContainerHandling(harbor);
+                   containerHandler.PerformScheduledContainerHandling(harbor); 
+                    
                     harbor.DockedShips.ForEach(ship =>
                     {
                         if (!ship.Model.Equals(Model.ContainerShip))
                         {
                             ship.IsReadyToSail = true;
                         }
-                    }); 
-                 
+                    });
+                    
+                    foreach (var key in containerHandler.ScheduledContainerHandling.Keys.ToList()) 
+                    {
+                        Ship ship = key.Item1;
+                        DateTime handlingTime = key.Item2;
+                        var handlingInfo = containerHandler.ScheduledContainerHandling[key];
+
+                        if (harbor.GetCurrentTime().Date == handlingTime.Date)
+                        {
+                            foreach (var info in handlingInfo)
+                            {
+                                int startColumnId = info.Item1;
+                                int endColumnId = info.Item2;
+                                int numberOfContainers = info.Item3;
+                                LoadingType loadingType = info.Item4;
+                                Console.WriteLine(harbor.CurrentTime);
+                                if (loadingType == LoadingType.Load)
+                                {
+                                    Console.WriteLine("THIS WORKS 22222 --->");
+                                }
+                                else if (loadingType == LoadingType.Unload)
+                                {
+                                    Console.WriteLine("THIS WORKS 22222");
+                                }
+
+                                containerHandler.ScheduledContainerHandling.Remove(key);
+                            }
+                        }
+                    }
 
 
                     sailing.StartScheduledSailings(harbor, historyHandler);

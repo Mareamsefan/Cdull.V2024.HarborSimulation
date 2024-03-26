@@ -15,14 +15,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public Model Model { get; set; }
         public Size Size { get; set; }
         internal bool HasDocked { get; set; }
-        internal List<Container> Containers { get; } = new List<Container>(); 
+        public List<Container> Containers { get; } = new List<Container>(); 
         internal List<string> History { get; } = new List<String>();
         internal string DockedAtTime { get; set; }
         internal string SailedAtTime { get; set; }
         public bool IsSailing { get; set; }
         public bool IsReadyToSail{ get; set; }
         internal bool IsWaitingForSailing { get; set; }
-        internal int Speed { get; private set; }
+        internal float Speed { get; private set; }
         internal Dock? DockedAt { get; set; }
         internal int CurrentLocation {  get; set; }
         internal bool HasReachedDestination { get; set; }

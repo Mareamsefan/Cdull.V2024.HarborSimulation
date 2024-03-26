@@ -1,4 +1,5 @@
 ﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+using System;
 using System.Text;
 using System.Xml.Linq;
 
@@ -11,14 +12,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
         private string name;
         internal List<StorageColumn> StorageColumns { get; set; } = new List<StorageColumn>();
+        internal List<int> LocationIndexes { get; set; } = new List<int> ();
         public int Capacity { get; set; }
 
 
 
-        public ContainerStorage(string cargoStorageName)
+
+        public ContainerStorage(string cargoStorageName, int startLocationIndex, int endLocationIndex)
         {
             name = cargoStorageName;
 
+            for (int i = startLocationIndex; i <= endLocationIndex; i++)
+            {
+                LocationIndexes.Add(i);
+            }
         } 
         
         public StorageColumn GetSpecificColumn(int columnId)
@@ -37,8 +44,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         public void AddStorageColumn(StorageColumn column)
         {
-            StorageColumns.Add(column); 
-            Capacity += column.Capacity;
+            if (!LocationIndexes.Contains(column.Location))
+            {
+                throw new ArgumentException("The specified column location is outside the range of this storage."); 
+            }
+            else {
+                StorageColumns.Add(column);
+                Capacity += column.Capacity;
+            }
+         
         }
         public int GetOccupiedSpace()
         {
