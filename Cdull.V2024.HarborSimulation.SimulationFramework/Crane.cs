@@ -20,14 +20,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public Crane(string craneName)
         {
             Name = craneName;
-            handlingTime = 60;
+            handlingTime = 0;
         }
 
         public void LiftContainer(Container container)
         {
             if (Container != null)
             {
-                throw new InvalidOperationException("AGV already loaded with cargo.");
+                throw new InvalidOperationException("Crane already loaded with cargo.");
             }
             Container = container;
         }

@@ -19,10 +19,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Initializes a new instance of Container class with the specified name and weight.
         /// </summary>
         /// <param name="cargoName">The name of the cargo.</param>
-        public Container(string cargoName, ContainerSize containerSize)
+        public Container(string containerName, ContainerSize containerSize)
         {
             Id = ++lastId;
-            Name = cargoName;
+            Name = containerName;
             Size = containerSize;
             numberOfDaysInStorage = 0; 
 
@@ -32,7 +32,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Retrieves the history of the container.
         /// </summary>
         /// <returns>A list of strings representing the c's history.</returns>
-        public List<string> GetCargoHistory()
+        public List<string> GetContainerHistory()
         {
             return History;
         }

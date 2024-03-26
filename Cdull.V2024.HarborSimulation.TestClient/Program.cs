@@ -22,7 +22,7 @@ namespace HarborSimulationTest
             List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
 
 
-            List<AGV> agvs = harbor.InitializeAGVs(20, 7, 1000); 
+            List<AGV> agvs = harbor.InitializeAGVs(20, 1000); 
 
             // Oppretter en liste over skip.
             List<Ship> ships = new List<Ship>();
@@ -118,8 +118,12 @@ namespace HarborSimulationTest
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
             Console.WriteLine(ship.Containers.Count());
-            containerHandler.RemovePercentageOfContainersFromSource(0.2M, ship);
-            Console.WriteLine(ship.Containers.Count()); 
+            //containerHandler.RemovePercentageOfContainersFromSource(0.2M, ship);
+            Console.WriteLine(ship.Containers.Count());
+            ship.InitializeContainers(10, ContainerSize.Large); 
+           
+            Dock dock = docks.First(); 
+            containerHandler.MoveContainerFromShipToAGV(ship, agvs.First(), dock.Cranes.First(), harbor);
         
 
         }

@@ -121,7 +121,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                             ship.IsReadyToSail = true;
                         }
                     });
-                    
+
                     foreach (var key in containerHandler.ScheduledContainerHandling.Keys.ToList()) 
                     {
                         Ship ship = key.Item1;
