@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
+    /// <summary>
+    /// Represents a driver responsible for controlling the movement of vehicles/boats in and out of the harbor.
+    /// </summary>
     internal class Driver
     {
 
@@ -18,6 +21,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
+        /// <summary>
+        /// Initializes a new instance of the Driver class with default values.
+        /// </summary>
         public Driver()
         {
 
@@ -30,6 +36,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
+        /// <summary>
+        /// Moves the AGV towards its destination.
+        /// </summary>
+        /// <param name="agvLocation">The current location of the AGV.</param>
+        /// <param name="moveToLocation">The destination location to move to.</param>
+        /// <returns>True if the AGV has not yet reached its destination, otherwise false.</returns>
         internal bool AgvMove(int agvLocation, int moveToLocation)
         {
             float speed = (agvSpeed / 3.6f);
@@ -75,7 +87,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             if (HasReachedDestination)
             {
-                return false; // Stopper metoden hvis destinasjonen allerede er nådd
+                return false; 
             }
 
 
@@ -87,12 +99,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
             else
             {
-                // Oppdaterer posisjonen basert på hastighet
-                // Her bruker vi tid i sekunder
+                
                 CurrentLocation += (int)(speed / 3.6f);
             }
 
-            return !HasReachedDestination; // Fortsetter simuleringen hvis destinasjonen ikke er nådd ennå
+            return !HasReachedDestination;
         }
 
 

@@ -70,9 +70,9 @@ namespace HarborSimulationTest
             StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
             StorageColumn column2 = new StorageColumn(300, 2, 15, 6, 4);
             StorageColumn column3 = new StorageColumn(400, 3, 15, 6, 4);
-            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
-            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
-            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
+            StorageColumn column4 = new StorageColumn(200, 1, 15, 6, 4);
+            StorageColumn column5 = new StorageColumn(200, 1, 15, 6, 4);
+            StorageColumn column6 = new StorageColumn(200, 1, 15, 6, 4);
             containerStorage.AddStorageColumn(column);
             containerStorage.AddStorageColumn(column2);
             containerStorage.AddStorageColumn(column3);

@@ -18,6 +18,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
+        /// <summary>
+        /// Initializes a new instance of the ContainerStorage class with the specified name and location indexes range.
+        /// </summary>
+        /// <param name="cargoStorageName">The name of the container storage.</param>
+        /// <param name="startLocationIndex">The starting location index.</param>
+        /// <param name="endLocationIndex">The ending location index.</param>
         public ContainerStorage(string cargoStorageName, int startLocationIndex, int endLocationIndex)
         {
             name = cargoStorageName;
@@ -26,8 +32,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 LocationIndexes.Add(i);
             }
-        } 
-        
+        }
+
+        /// <summary>
+        /// Retrieves the storage column with the specified ID.
+        /// </summary>
+        /// <param name="columnId">The ID of the storage column to retrieve.</param>
+        /// <returns>The storage column with the specified ID.</returns>
         public StorageColumn GetSpecificColumn(int columnId)
         {
            StorageColumn correctColumn = StorageColumns.First(); 
@@ -42,6 +53,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return correctColumn;
         }
 
+        /// <summary>
+        /// Adds a storage column to the container storage.
+        /// </summary>
+        /// <param name="column">The storage column to add.</param>
+        /// <exception cref="ArgumentException">Thrown when the specified column location is outside the range of this storage.</exception>
         public void AddStorageColumn(StorageColumn column)
         {
             if (!LocationIndexes.Contains(column.Location))
@@ -54,6 +70,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
          
         }
+
+        // <summary>
+        /// Calculates and returns the total occupied space in the container storage.
+        /// </summary>
+        /// <returns>The total occupied space in the container storage.</returns>
         public int GetOccupiedSpace()
         {
             int occupiedSpace = 0; 

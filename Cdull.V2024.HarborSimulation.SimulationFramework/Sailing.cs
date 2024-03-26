@@ -72,6 +72,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
+        /// <summary>
+        /// Initiates sailing of a ship towards a destination.
+        /// </summary>
+        /// <param name="ship">The ship to sail.</param>
+        /// <param name="harbor">The harbor where the ship is located.</param>
+        /// <param name="destinationLocation">The destination location to sail to.</param>
         internal void Sail(Ship ship, Harbor harbor, int destinationLocation)
         {
             Driver driver = new Driver();
@@ -150,7 +156,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             if (!ScheduledSailings.ContainsKey(shipModel))
             {
-                // Returner en tom liste hvis det ikke er noen planlagte seilaser for denne skipstypen
+               
                 return new List<(DateTime, int, RecurringType)>();
             }
 
