@@ -13,6 +13,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal string Name { get; set; }
         internal List<String> History { get; } = new List<String>();
         internal ContainerSize Size { get; set; }
+        internal int numberOfDaysInStorage { get; set; }
 
         /// <summary>
         /// Initializes a new instance of Container class with the specified name and weight.
@@ -23,6 +24,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Id = ++lastId;
             Name = cargoName;
             Size = containerSize;
+            numberOfDaysInStorage = 0; 
 
         }
 

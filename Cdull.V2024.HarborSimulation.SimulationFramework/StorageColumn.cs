@@ -16,16 +16,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal int Width { get; private set; }
         public int Capacity { get; set; }
         internal List<Container> Containers {  get; set; } = new List<Container>();
+        internal PortalCrane Crane { get; set; } 
         internal int OccupiedSpace { get; set; }
         internal bool IsAvailable { get; set; }
+        internal int Location { get; set; }
 
-        public StorageColumn(int columnId, int columnLength, int columnWidth, int columnHeight)
+        public StorageColumn(int location, int columnId, int columnLength, int columnWidth, int columnHeight)
         {
             ColumnId = columnId;
             Length = columnLength;
             Width = columnWidth;
             Height = columnHeight;
             IsAvailable = true;
+            Location = location;
+            Crane = new PortalCrane();
 
             // Calculate total capacity based on length, width, and height
             Capacity = Length * Width * Height;

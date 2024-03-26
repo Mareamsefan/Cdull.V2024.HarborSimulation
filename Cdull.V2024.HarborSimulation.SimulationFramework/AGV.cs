@@ -10,13 +10,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
         internal int Id { get; set; }
         internal int Counter { get; set; }
-        internal double speed { get; set; }
+        internal float speed { get; set; }
         internal bool IsAvailable { get; set; }
         internal Container Container { get; set; }
         internal int Location { get; set; }
 
 
-        public AGV(int agvLocation ,double agvSpeed)
+        public AGV(int agvLocation ,float agvSpeed)
         {
             Counter++;
             Id = Counter;
