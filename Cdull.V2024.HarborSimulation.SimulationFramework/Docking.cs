@@ -7,14 +7,11 @@ using System.Xml.Linq;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
-
-    // <summary>
+    /// <summary>
     /// Represents a docking operation in the harbor.
     /// </summary>
     internal class Docking
     {
-
-
 
         /// <summary>
         /// Attempts to dock a ship at the specified dock in the harbor.
@@ -35,7 +32,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             try
             {
-                historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Docked at {ship.DockedAtTime} on {ship.DockedAt.Name} ship containers: {ship.Containers.Count}");
+                historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Docked at {ship.DockedAtTime} on {ship.DockedAt.Name}");
             }
             catch (Exception ex)
             {
@@ -62,11 +59,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// If a ship successfully docks, it is removed from the queue and added to the list of docked ships.
         /// If there are no available docks or the ship is currently sailing, it remains in the queue.
         /// </remarks>
-        /// <exception cref="InvalidOperationException">Thrown when there are no waiting ships in the queue.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when the ship's docked status cannot be updated.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when an event cannot be added to the ship's history.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when the ship cannot be added to the list of docked ships.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when a ship cannot be dequeued from the waiting queue.</exception>
         internal void DockShip(Harbor harbor, Ship ship)
         {
             Dock availableDock = harbor.AvailableDockOfSize(ship.Size);

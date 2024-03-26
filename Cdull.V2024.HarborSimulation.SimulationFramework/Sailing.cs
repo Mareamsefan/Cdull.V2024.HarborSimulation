@@ -84,7 +84,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             HistoryHandler historyHandler = HistoryHandler.GetInstance(); 
             driver.Move(destinationLocation, ship.Speed);
             ship.SailedAtTime = harbor.GetCurrentTime().ToString();
-            historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Sailed at {ship.SailedAtTime} to destination:{destinationLocation}  ship containers: {ship.Containers.Count} --");
+            historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Sailed at {ship.SailedAtTime} to destination:{destinationLocation}");
             ship.IsSailing = true;
             harbor.SailingShips.Add(ship);
             harbor.RaiseShipDeparted(ship);

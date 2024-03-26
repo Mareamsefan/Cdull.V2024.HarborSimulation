@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿
 using Cdull.V2024.HarborSimulation.SimulationFramework;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Events;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions;
 using Cdull.V2024.HarborSimulation.TestClient;
 
 namespace HarborSimulationTest
@@ -14,7 +11,8 @@ namespace HarborSimulationTest
         static void Main(string[] args)
         {
 
-            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 100, 500);
+            // Lager en overordnet plass for plasssering av largingskolonner, og velger indeksrekkevidde for plasseringen. 
+            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 1000);
             // Oppretter en ny havn med navnet "ExceptiontestHarbor" og en lastelager for gods med kapasitet på 10000 enheter.
             Harbor harbor = new Harbor("ExceptiontestHarbor", containerStorage);
 
@@ -29,6 +27,9 @@ namespace HarborSimulationTest
             // Oppretter en liste over skip.
             List<Ship> ships = new List<Ship>();
 
+            // Legger til 5 skip av typen LNGCarrier og størrelse medium med currentlocation 2000m unna Harbor:
+            ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
+
             // Legger til 5 skip av typen ContainerShip, med 5 små containere med currentLocation 1500m unna Harbor: 
             ships.AddRange(harbor.InitializeShips(1500, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Small));
 
@@ -38,11 +39,11 @@ namespace HarborSimulationTest
             // Lager en test containership som viser at man kan lage et og et ship: 
             Ship ship = new Ship("TestContainerShip", Model.ContainerShip, Size.Small, 1000);
 
-            ship.InitializeContainers(5, ContainerSize.Small); 
+            ship.InitializeContainers(5, ContainerSize.Small);
+            
+            ships.Add(ship);
 
-            // Legger til 5 skip av typen LNGCarrier og størrelse medium med currentlocation 2000m unna Harbor:
-            ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
-            ships.Add(ship); 
+         
 
             // Oppretter en instans av simuleringen.
             IHarborSimulation driver = new Simulation();
@@ -66,19 +67,51 @@ namespace HarborSimulationTest
             // Planlegger seiling for LNGCarrier skip med starttidspunkt 2024-01-02, antall skip 40, og med daglig gjentakelse.
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
-            //Lager 24 Lange lagringskolonner: 
-            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
-            StorageColumn column2 = new StorageColumn(300, 2, 15, 6, 4);
-            StorageColumn column3 = new StorageColumn(400, 3, 15, 6, 4);
-            StorageColumn column4 = new StorageColumn(200, 1, 15, 6, 4);
-            StorageColumn column5 = new StorageColumn(200, 1, 15, 6, 4);
-            StorageColumn column6 = new StorageColumn(200, 1, 15, 6, 4);
-            containerStorage.AddStorageColumn(column);
-            containerStorage.AddStorageColumn(column2);
-            containerStorage.AddStorageColumn(column3);
+            //Lager 24 Lange og 7 korte lagringskolonner: 
+            var columnsToAdd = new List<StorageColumn>
+            {
+                new StorageColumn(37, 1, 18, 6, 4),
+                new StorageColumn(74, 2, 18, 6, 4),
+                new StorageColumn(111, 3, 18, 6, 4),
+                new StorageColumn(148, 1, 18, 6, 4),
+                new StorageColumn(185, 1, 18, 6, 4),
+                new StorageColumn(222, 1, 18, 6, 4),
+                new StorageColumn(259, 1, 18, 6, 4),
+                new StorageColumn(296, 1, 18, 6, 4),
+                new StorageColumn(333, 1, 18, 6, 4),
+                new StorageColumn(370, 1, 18, 6, 4),
+                new StorageColumn(407, 1, 18, 6, 4),
+                new StorageColumn(444, 1, 18, 6, 4),
+                new StorageColumn(481, 1, 18, 6, 4),
+                new StorageColumn(518, 1, 18, 6, 4),
+                new StorageColumn(555, 1, 18, 6, 4),
+                new StorageColumn(592, 1, 18, 6, 4),
+                new StorageColumn(629, 1, 18, 6, 4),
+                new StorageColumn(666, 1, 18, 6, 4),
+                new StorageColumn(703, 1, 18, 6, 4),
+                new StorageColumn(740, 1, 18, 6, 4),
+                new StorageColumn(777, 1, 18, 6, 4),
+                new StorageColumn(814, 1, 18, 6, 4),
+                new StorageColumn(851, 1, 18, 6, 4),
+                new StorageColumn(888, 1, 18, 6, 4),
+                new StorageColumn(666, 1, 15, 6, 4),
+                new StorageColumn(703, 1, 15, 6, 4),
+                new StorageColumn(740, 1, 15, 6, 4),
+                new StorageColumn(777, 1, 15, 6, 4),
+                new StorageColumn(814, 1, 15, 6, 4),
+                new StorageColumn(851, 1, 15, 6, 4),
+                new StorageColumn(888, 1, 15, 6, 4),
 
+            };
+
+            foreach (var column in columnsToAdd)
+            {
+                containerStorage.AddStorageColumn(column);
+            }
+
+            
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
-            column.InitializeContainers(10, ContainerSize.Large); 
+          
             containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
             containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 7),  1, 2, 10, LoadingType.Load);
             ships.ForEach(ship =>
@@ -89,10 +122,9 @@ namespace HarborSimulationTest
                     containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load);
                 }
             });
-
+            //Sjekker alle handlingene for test-shipet: 
             Console.WriteLine(containerHandler.CheckScheduledCargoHandling(ship));
          
-           
             // Kjører simuleringen.
             driver.Run(harbor, startTime, endTime, ships, docks, agvs);
 
@@ -107,19 +139,15 @@ namespace HarborSimulationTest
             Console.WriteLine(historyHandler.GetShipHistory(ship1));
 
             // Henter det siste skipet i havnen og skriver ut historikk for det.
-            Ship ship2 = harbor.GetShips().Last();
-            Console.WriteLine(historyHandler.GetShipHistory(ship2));
+            //Ship ship2 = harbor.GetShips().Last();
+            //Console.WriteLine(historyHandler.GetShipHistory(ship2));
          
 
             // Skriver ut historikk for alle skip i havnen.
-            Console.WriteLine(historyHandler.GetShipsHistory());
-            Console.WriteLine(ship.Containers.Count());
-            //containerHandler.RemovePercentageOfContainersFromSource(0.2M, ship);
-            Console.WriteLine(ship.Containers.Count());
-            ship.InitializeContainers(10, ContainerSize.Large); 
-           
-            Dock dock = docks.First(); 
-           
+            Console.WriteLine(historyHandler.GetShipsHistory());    
+            
+     
+      
         
 
         }

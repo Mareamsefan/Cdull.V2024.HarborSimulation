@@ -3,16 +3,14 @@
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     /// <summary>
-    /// Represents a crane used in harbor to move containers from/to ships/harbor.
+    /// Represents a crane used in the harbor to Move containers from/to ships/harbor.
     /// </summary>
     public class Crane
     {
         private string Name { get; set; }
         internal int handlingTime { get; set; }
-        internal bool IsAvailable { get; set; }   
-        internal bool Done { get; set; }
-        internal Container Container { get; set; }
-
+        internal bool IsAvailable { get; set; }
+        internal Container? Container { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the Crane class with the specified name.
@@ -23,9 +21,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Name = craneName;
             handlingTime = 0;
             IsAvailable = true;
-            Done = false; 
         }
-
 
         /// <summary>
         /// Lifts a container and loads it onto the crane.
@@ -40,7 +36,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
             Container = container;
         }
-
-
     }
+
 }

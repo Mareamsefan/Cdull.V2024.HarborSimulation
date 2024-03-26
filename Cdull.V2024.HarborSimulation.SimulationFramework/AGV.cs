@@ -12,7 +12,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
     public class AGV
     {
-        internal int Id { get; set; }
+        public int Id { get; set; }
         internal int Counter { get; set; }
         internal bool IsAvailable { get; set; }
         internal Container Container { get; set; }

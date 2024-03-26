@@ -17,7 +17,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Private constructor to prevent external instantiation.
         /// </summary>
         private HistoryHandler() { }
-
         /// <summary>
         /// Gets the singleton instance of the <see cref="HistoryHandler"/> class.
         /// </summary>

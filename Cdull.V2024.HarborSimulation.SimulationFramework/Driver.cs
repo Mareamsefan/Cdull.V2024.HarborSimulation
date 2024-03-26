@@ -11,14 +11,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     /// </summary>
     internal class Driver
     {
-
         internal int CurrentLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
-        internal bool agvHasReachedDestination { get; set; }
-        internal int agvSpeed { get; set; }
-        internal float move {  get; set; }
-
-
+        internal bool AgvHasReachedDestination { get; set; }
+        internal int AgvSpeed { get; set; }
+        internal float MoveDistance {  get; set; }
 
 
         /// <summary>
@@ -29,8 +26,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             CurrentLocation = 0;
             HasReachedDestination = false;
-            agvHasReachedDestination = false;
-            agvSpeed = 7;
+            AgvHasReachedDestination = false;
+            AgvSpeed = 7;
            
 
         }
@@ -40,35 +37,33 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Moves the AGV towards its destination.
         /// </summary>
         /// <param name="agvLocation">The current location of the AGV.</param>
-        /// <param name="moveToLocation">The destination location to move to.</param>
+        /// <param name="moveToLocation">The destination location to Move to.</param>
         /// <returns>True if the AGV has not yet reached its destination, otherwise false.</returns>
         internal bool AgvMove(int agvLocation, int moveToLocation)
         {
-            float speed = (agvSpeed / 3.6f);
+            float speed = (AgvSpeed / 3.6f);
             double calcDistance = Math.Pow(moveToLocation - agvLocation, 2);
             double distance = Math.Sqrt(calcDistance);
             
-            if (agvHasReachedDestination)
+            if (AgvHasReachedDestination)
             {
                 return false;
             }
 
-            if (move < distance)
+            if (MoveDistance < distance)
             {
-                if (distance > move)
+                if (distance > MoveDistance)
                 {
-                    move += speed;
-                    Console.WriteLine("Move: " + move);
-                    Console.WriteLine("speed: " + speed);
+                    MoveDistance += speed;
                 }
             }
 
-            if (move == distance)
+            if (MoveDistance == distance)
             {
-                agvHasReachedDestination = true;
+                AgvHasReachedDestination = true;
             }
 
-            return !agvHasReachedDestination; 
+            return !AgvHasReachedDestination; 
         }
 
 
@@ -83,14 +78,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <exception cref="InvalidOperationException">Thrown when the speed of the ship is negative.</exception>
         internal bool Move(int range, float speed)
         {
-
-
             if (HasReachedDestination)
             {
                 return false; 
             }
-
-
 
             if (CurrentLocation >= range)
             {
