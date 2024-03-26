@@ -28,11 +28,11 @@ namespace HarborSimulationTest
             List<Ship> ships = new List<Ship>();
 
             // Legger til 5 skip av typen ContainerShip og størrelse stor, med lastekapasitet på 100 enheter.
-            ships.AddRange(harbor.InitializeShips(2000, 5, Model.ContainerShip, Size.Large, 10, ContainerSize.Small));
+            ships.AddRange(harbor.InitializeShips(2000, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Small));
 
 
             Ship ship = new Ship("mari", Model.ContainerShip, Size.Small, 2000);
-            ship.InitializeContainers(10, ContainerSize.Small); 
+            ship.InitializeContainers(5, ContainerSize.Small); 
 
             // Legger til 5 skip av typen LNGCarrier og størrelse medium, med lastekapasitet på 50 enheter.
             ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
