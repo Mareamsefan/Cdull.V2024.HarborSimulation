@@ -17,7 +17,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public PortalCrane()
         {
             // 1 min 
-            handlingTime = 60; 
+            handlingTime = 0; 
             IsAvailable = true;
         }
 
@@ -25,7 +25,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             if (Container != null)
             {
-                throw new InvalidOperationException("AGV already loaded with cargo.");
+                throw new InvalidOperationException("Portalcrane already loaded with cargo.");
             }
             Container = container;
         }  

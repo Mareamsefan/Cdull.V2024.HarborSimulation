@@ -29,6 +29,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal bool IsLoadingCompleted { get; set; }
         internal bool IsUnloadingCompleted { get; set; }
 
+        public List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
+
+
         /// <summary>
         /// Initializes a new instance of the Ship class.
         /// </summary>

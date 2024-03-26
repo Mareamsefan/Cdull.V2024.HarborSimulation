@@ -22,7 +22,7 @@ namespace HarborSimulationTest
             List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
 
 
-            List<AGV> agvs = harbor.InitializeAGVs(20, 7, 1000); 
+            List<AGV> agvs = harbor.InitializeAGVs(20, 1000); 
 
             // Oppretter en liste over skip.
             List<Ship> ships = new List<Ship>();
@@ -70,33 +70,21 @@ namespace HarborSimulationTest
             containerStorage.AddStorageColumn(column3);
 
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
-            //column.InitializeContainers(10, ContainerSize.Large); 
-            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload, harbor);
-            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 7),  1, 2, 10, LoadingType.Load, harbor);
+            column.InitializeContainers(10, ContainerSize.Large); 
+            containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
+            containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 7),  1, 2, 10, LoadingType.Load);
             ships.ForEach(ship =>
             {
                 if (ship.Model.Equals(Model.ContainerShip))
                 {
-                    containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 6), 2, 3, 10, LoadingType.Unload, harbor);
-                    containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load, harbor);
+                    containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 6), 2, 3, 10, LoadingType.Unload);
+                    containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load);
                 }
-
             });
-   
-            List<(int, int, int, DateTime, LoadingType)> sailings = containerHandler.CheckScheduledCargoHandling(ship);
-            foreach (var keys in sailings)
-            {
-                int startCloumnId = keys.Item1;
-                int endCloumnId = keys.Item2;
-                int numberOfContainers = keys.Item3;
-                DateTime loadingTime = keys.Item4;
-                LoadingType loadingType = keys.Item5;
 
-                Console.WriteLine($"LoadingTime: {loadingTime}, LoadingType: {loadingType} , numberOfContainers: {numberOfContainers}, startID:{startCloumnId}" +
-                    $" endID: {endCloumnId}");
-
-            }
-
+            Console.WriteLine(containerHandler.CheckScheduledCargoHandling(ship));
+         
+           
             // Kjører simuleringen.
             driver.Run(harbor, startTime, endTime, ships, docks, agvs);
 
@@ -118,8 +106,12 @@ namespace HarborSimulationTest
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
             Console.WriteLine(ship.Containers.Count());
-            containerHandler.RemovePercentageOfContainersFromSource(0.2M, ship);
-            Console.WriteLine(ship.Containers.Count()); 
+            //containerHandler.RemovePercentageOfContainersFromSource(0.2M, ship);
+            Console.WriteLine(ship.Containers.Count());
+            ship.InitializeContainers(10, ContainerSize.Large); 
+           
+            Dock dock = docks.First(); 
+           
         
 
         }
