@@ -137,15 +137,22 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                                             containerHandler.MoveContainerFromAGVToStorageColumn(harbor.ContainerStorage,
                                             scheduledContainerHandling.StartColumnId, scheduledContainerHandling.EndColumnId, agv);
                                         }
+                                        harbor.RaiseShipCompletedUnloading(ship);
 
                                     }
 
                                     else if (scheduledContainerHandling.LoadingType == LoadingType.Load)
                                     {
-                                        AGV agv = containerHandler.MoveContainerFromStorageColumnToAGV(harbor.ContainerStorage,
-                                            scheduledContainerHandling.StartColumnId, harbor);
-                                        containerHandler.MoveContainerFromAGVToShip(agv, ship);
-                                    }
+                                        foreach (Container container in ship.Containers.ToList())
+                                        {
+
+                                            AGV agv = containerHandler.MoveContainerFromStorageColumnToAGV(harbor.ContainerStorage,
+                                           scheduledContainerHandling.StartColumnId, harbor);
+                                            containerHandler.MoveContainerFromAGVToShip(agv, ship);
+                                        }
+                                        harbor.RaiseShipCompletedUnloading(ship);
+                                    }     
+                                   
                                 }
                             }
                         }
