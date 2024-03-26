@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using System.Timers;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
@@ -70,9 +72,13 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.Ships.AddRange(ships);
             harbor.AGVs.AddRange(agvs);
 
+
+    
             while (harbor.GetCurrentTime() < endTime)
             {
-   
+        
+
+                
                 if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0 && harbor.GetCurrentTime().Second == 0)
                 {
                     historyHandler.SaveHarborHistory(harbor.GetCurrentTime(), harbor);

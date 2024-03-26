@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
+    /// <summary>
+    /// Represents an Automated Guided Vehicle (AGV) used in the harbor.
+    /// </summary>
+
     public class AGV
     {
         internal int Id { get; set; }
@@ -14,7 +18,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal Container Container { get; set; }
         internal int Location { get; set; }
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AGV"/> class with the specified location.
+        /// </summary>
+        /// <param name="agvLocation">The initial location of the AGV within the harbor.</param>
         public AGV(int agvLocation)
         {
             Counter++;
@@ -23,6 +30,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             IsAvailable = true;
         }
 
+        /// <summary>
+        /// Loads the specified container onto the AGV.
+        /// </summary>
+        /// <param name="container">The container to be loaded onto the AGV.</param>
+        /// <remarks>
+        /// This method loads the specified container onto the AGV for transportation within the harbor.
+        /// </remarks>
         public void LoadContainerToAGV(Container container)
         {
           

@@ -26,6 +26,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Done = false; 
         }
 
+
+        /// <summary>
+        /// Lifts a container and loads it onto the crane.
+        /// </summary>
+        /// <param name="container">The container to be lifted.</param>
+        /// <exception cref="InvalidOperationException">Thrown when the crane is already loaded with cargo.</exception>
         public void LiftContainer(Container container)
         {
             if (Container != null)

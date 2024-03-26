@@ -7,10 +7,23 @@ using System.Xml.Linq;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
+
+    // <summary>
+    /// Represents a docking operation in the harbor.
+    /// </summary>
     internal class Docking
     {
 
 
+
+        /// <summary>
+        /// Attempts to dock a ship at the specified dock in the harbor.
+        /// </summary>
+        /// <param name="ship">The ship to be docked.</param>
+        /// <param name="availableDock">The available dock to dock the ship.</param>
+        /// <param name="harbor">The harbor object containing available docks and ships.</param>
+        /// <returns>True if the ship successfully docks, otherwise false.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when there is an error updating the ship's status.</exception>
         private bool Dock(Ship ship, Dock availableDock, Harbor harbor)
         {
             HistoryHandler historyHandler = HistoryHandler.GetInstance();

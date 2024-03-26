@@ -132,7 +132,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 if (!ships.Any(s => s.Name == ship.Name))
                 {
                     ships.Add(ship);
-                    // Only initialize cargo if the ship model is a container ship
+                    
                     if (shipModel == Model.ContainerShip)
                     {
                         ship.InitializeContainers(numberOfContainers, containerSize);
@@ -143,6 +143,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
+        /// <summary>
+        /// Initializes a specified number of Automated Guided Vehicles (AGVs) at a given location.
+        /// </summary>
+        /// <param name="numberOfAGV">The number of AGVs to initialize.</param>
+        /// <param name="agvLocation">The location where the AGVs should be initialized.</param>
+        /// <returns>A list of initialized AGVs.</returns>
+        /// <exception cref="ArgumentException">Thrown when the number of AGVs is less than or equal to zero.</exception>
         public List<AGV> InitializeAGVs(int numberOfAGV, int agvLocation)
         {
             List<AGV> agvs = new List<AGV>();
@@ -161,6 +168,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return agvs;
         }
 
+        /// <summary>
+        /// Initializes storage columns in the harbor.
+        /// </summary>
+        /// <param name="columnLocation">The location of the columns.</param>
+        /// <param name="numberOfColumns">The number of columns to initialize.</param>
+        /// <param name="columnLength">The length of each column.</param>
+        /// <param name="columnWidth">The width of each column.</param>
+        /// <param name="columnHeight">The height of each column.</param>
+        /// <returns>A list of initialized storage columns.</returns>
         public List<StorageColumn> InitializeStorageColumns(int coulmnLocation, int numberOfColumns, int columnLength, int columnWidth, int columnHeight)
         {
             List<StorageColumn> columns = new List<StorageColumn>();
@@ -179,6 +195,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return columns;
         }
 
+        /// <summary>
+        /// Gets an available AGV from the list of AGVs.
+        /// </summary>
+        /// <returns>The available AGV.</returns>
         internal AGV GetAvailableAGV()
         {
             AGV availableAgv = AGVs.First(); 

@@ -12,6 +12,10 @@ using System.Timers;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
+
+    /// <summary>
+    /// Handles the movement and manipulation of containers within the harbor.
+    /// </summary>
     public class ContainerHandler
     {
         private static readonly ContainerHandler instance = new ContainerHandler();
@@ -32,6 +36,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return instance;
         }
 
+
+        /// <summary>
+        /// Moves a container from a ship to an Automated Guided Vehicle (AGV).
+        /// </summary>
+        /// <param name="ship">The ship from which the container is being moved.</param>
+        /// <param name="container">The container being moved.</param>
+        /// <param name="harbor">The harbor instance.</param>
+        /// <returns>The AGV to which the container is moved.</returns>
         public AGV MoveContainerFromShipToAGV(Ship ship, Container container,  Harbor harbor)
         {
             Dock dock = ship.DockedAt;
@@ -67,16 +79,25 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             crane.handlingTime++; 
             return agv;
         }
+
+
+        /// <summary>
+        /// Moves a container from an AGV to a storage column within the container storage.
+        /// </summary>
+        /// <param name="containerStorage">The container storage instance.</param>
+        /// <param name="startColumnId">The ID of the starting column.</param>
+        /// <param name="endColumnId">The ID of the ending column.</param>
+        /// <param name="agv">The AGV from which the container is being moved.</param>
         public void MoveContainerFromAGVToStorageColumn(ContainerStorage containerStorage, int startColumnId,
             int endColumnId, AGV agv)
         {
             StorageColumn column = containerStorage.GetSpecificColumn(startColumnId);
             PortalCrane portalCrane = column.Crane;
             portalCrane.IsAvailable = false;
-            // Sjekk om AGV har last
+           
      
             portalCrane.handlingTime++;
-            Container container = agv.Container; // Få tak i containeren fra AGV-en
+            Container container = agv.Container;
 
             if (column.Capacity == column.OccupiedSpace)
             {
@@ -87,7 +108,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     throw new ArgumentOutOfRangeException("columnId", "Column ID is outside the valid range.");
 
             }
-                // Fjern containeren fra AGV-en og legg til i lagringskolonnen
+                
             if (portalCrane.handlingTime == 60)
             {
                 agv.Container = null;
@@ -103,6 +124,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             
            
         }
+
+        /// <summary>
+        /// Moves a container from a storage column to an AGV.
+        /// </summary>
+        /// <param name="containerStorage">The container storage instance.</param>
+        /// <param name="columnId">The ID of the column from which the container is being moved.</param>
+        /// <param name="harbor">The harbor instance.</param>
+        /// <returns>The AGV to which the container is moved.</returns>
         public AGV MoveContainerFromStorageColumnToAGV(ContainerStorage containerStorage, int columnId, Harbor harbor)
         {
             StorageColumn column = containerStorage.GetSpecificColumn(columnId);
@@ -136,6 +165,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
           
         }
 
+
+        /// <summary>
+        /// Moves a container from an AGV to a ship.
+        /// </summary>
+        /// <param name="agv">The AGV from which the container is being moved.</param>
+        /// <param name="ship">The ship to which the container is being moved.</param>
         public void MoveContainerFromAGVToShip(AGV agv, Ship ship)
         {
             Dock dock = ship.DockedAt;
@@ -169,7 +204,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
          
         }
 
-
+        /// <summary>
+        /// Removes a specified percentage of containers from either a ship or a storage column.
+        /// </summary>
+        /// <param name="percentageDecimal">The percentage of containers to be removed.</param>
+        /// <param name="ship">The ship from which containers are being removed.</param>
+        /// <param name="storageColumn">The storage column from which containers are being removed.</param>
         public void RemovePercentageOfContainersFromSource(decimal percentageDecimal, Ship ship = null, StorageColumn storageColumn = null)
         {
             int percentage = (int)(1 - percentageDecimal);
@@ -187,11 +227,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     if (ship.Containers.Any())
                     {
-                        ship.Containers.RemoveAt(0); // Fjerner det første elementet i listen
+                        Container container = ship.Containers[0];
+                        ship.Containers.RemoveAt(0); 
+                        container.History.Add($"{container.Name} was picked up by a truck, and left the harbor.");
                     }
                     else
                     {
-                        break; // Avslutter løkken hvis det ikke er flere containere igjen i skipet
+                        break; 
                     }
                 }
             }
@@ -203,11 +245,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     if (storageColumn.Containers.Any())
                     {
-                        storageColumn.Containers.RemoveAt(0); // Fjerner det første elementet i listen
+                        storageColumn.Containers.RemoveAt(0);
                     }
                     else
                     {
-                        break; // Avslutter løkken hvis det ikke er flere containere igjen i kolonnen
+                        break;
                     }
                 }
             }
@@ -215,6 +257,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
+        /// <summary>
+        /// Schedules container handling operations for a ship.
+        /// </summary>
+        /// <param name="ship">The ship for which container handling is being scheduled.</param>
+        /// <param name="handlingTime">The time at which the handling operation is scheduled.</param>
+        /// <param name="startColumnId">The ID of the starting column.</param>
+        /// <param name="endColumnId">The ID of the ending column.</param>
+        /// <param name="numberofContainers">The number of containers to be handled.</param>
+        /// <param name="loadingType">The type of loading (unload/load).</param>
         public void ScheduleContainerHandling(Ship ship, DateTime handlingTime, int startColumnId,
         int endColumnId, int numberofContainers, LoadingType loadingType)
         {
@@ -230,12 +281,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-
+        /// <summary>
+        /// Checks and returns information about scheduled cargo handling operations for a ship.
+        /// </summary>
+        /// <param name="ship">The ship for which scheduled cargo handling operations are being checked.</param>
+        /// <returns>A string containing information about scheduled cargo handling operations.</returns>
         public string CheckScheduledCargoHandling(Ship ship)
         {
             StringBuilder sb = new StringBuilder();
 
-            // Legg til informasjon om hver planlagte containerbehandling for skipet
+           
             foreach (var handling in ship.ScheduledContainerHandlings)
             {
                 sb.AppendLine($"Handling time: {handling.HandlingTime}");
@@ -243,7 +298,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 sb.AppendLine($"End column ID: {handling.EndColumnId}");
                 sb.AppendLine($"Number of containers: {handling.NumberOfContainers}");
                 sb.AppendLine($"Loading type: {handling.LoadingType}");
-                sb.AppendLine(); // Legg til en tom linje mellom hver håndtering
+                sb.AppendLine();
             }
 
             return sb.ToString();
