@@ -25,7 +25,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         /// <exception cref="ArgumentException">Thrown when the start time is after the end time or if either the list of ships or list of docks is empty.</exception>
         public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, List<AGV> agvs)
         {
-            // Ensure harbor, ships, and docks are not null
+      
             if (harbor == null)
             {
                 throw new ArgumentNullException(nameof(harbor), "Harbor instance cannot be null.");
@@ -91,27 +91,19 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                     }); 
                     
                 }
-
                 harbor.ContainerStorage.StorageColumns.ForEach(storageColumn =>
                 {
-                    // Lag en kopi av listen over containere i lagringskolonnen
+            
                     var containersCopy = storageColumn.Containers.ToList();
 
-                    // Iterer over kopien av listen
                     containersCopy.ForEach(container =>
                     {
                         if (container.numberOfDaysInStorage == 4)
                         {
-                            //Console.WriteLine("IT WORKS GUYS :))))"); 
+                            containerHandler.RemovePercentageOfContainersFromSource(0.1m, storageColumn: storageColumn);
                         }
                     });
-
-
-                }); 
-
-
-
-
+                });
 
 
                 harbor.QueueShipsToDock();
