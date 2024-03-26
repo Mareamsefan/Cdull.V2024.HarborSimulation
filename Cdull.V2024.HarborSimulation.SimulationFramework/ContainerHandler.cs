@@ -11,7 +11,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     public class ContainerHandler
     {
         private static readonly ContainerHandler instance = new ContainerHandler();
-        private Dictionary<(Ship, DateTime), List<(int, int, int, LoadingType)>> ScheduledContainerHandling = new Dictionary<(Ship, DateTime), List<(int, int, int, LoadingType)>>();
+        internal Dictionary<(Ship, DateTime), List<(int, int, int, LoadingType)>> ScheduledContainerHandling = new Dictionary<(Ship, DateTime), List<(int, int, int, LoadingType)>>();
 
 
         /// <summary>
@@ -29,7 +29,170 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return instance;
         }
 
+        public void MoveContainerFromShipToAGV(Ship ship, AGV agv)
+        {
+            if (ship == null)
+            {
+                throw new ArgumentNullException(nameof(ship), "Ship cannot be null.");
+            }
 
+            if (agv == null)
+            {
+                throw new ArgumentNullException(nameof(agv), "AGV cannot be null.");
+            }
+
+            // Sjekk om skipet har last
+            if (ship.Containers.Any())
+            {
+                Container container = ship.Containers.First(); // Få tak i den første cargoen fra skipet
+
+                // Fjern cargo fra skipet
+                ship.Containers.Remove(container);
+
+                // Legg til cargo i AGV
+                agv.LoadContainerToAGV(container);
+
+                // Oppdater historien til cargo
+                container.History.Add($"{container.Name} moved from Ship {ship.Name} to AGV {agv.Id}");
+            }
+            else
+            {
+                // Hvis ingen handling kan utføres, kaster vi en unntak eller utfører annen håndtering etter behov
+                throw new InvalidOperationException("Unable to move container from Ship to AGV.");
+            }
+        }
+        public void MoveContainerFromAGVToStorageColumn(StorageColumn column, AGV agv)
+        {
+            if (column == null)
+            {
+                throw new ArgumentNullException(nameof(column), "StorageColumn cannot be null.");
+            }
+
+            if (agv == null)
+            {
+                throw new ArgumentNullException(nameof(agv), "AGV cannot be null.");
+            }
+
+            // Sjekk om AGV har last
+            if (agv.Container != null)
+            {
+                Container container = agv.Container; // Få tak i containeren fra AGV-en
+
+                // Fjern containeren fra AGV-en og legg til i lagringskolonnen
+                agv.Container = null;
+
+                column.AddContainer(container);
+
+                // Oppdater historien til containeren
+                container.History.Add($"{container.Name} moved from AGV {agv.Id} to StorageColumn {column.ColumnId}");
+            }
+            else
+            {
+                // Hvis AGV-en er tom, kast unntak eller utfør annen håndtering etter behov
+                throw new InvalidOperationException("AGV has no container available to move to StorageColumn.");
+            }
+        }
+        public void MoveContainerFromStorageColumnToAGV(StorageColumn column, AGV agv)
+        {
+            if (column == null)
+            {
+                throw new ArgumentNullException(nameof(column), "StorageColumn cannot be null.");
+            }
+
+            if (agv == null)
+            {
+                throw new ArgumentNullException(nameof(agv), "AGV cannot be null.");
+            }
+
+            if (column.Containers.Any())
+            {
+                Container container = column.Containers.First(); // Get the first container from the storage column
+
+                // Remove container from the storage column and load onto AGV
+                column.RemoveContainer(container);
+                agv.LoadContainerToAGV(container);
+
+                // Update container history
+                container.History.Add($"{container.Name} moved from StorageColumn {column.ColumnId} to AGV {agv.Id}");
+            }
+            else
+            {
+                throw new InvalidOperationException("Unable to move container from StorageColumn to AGV: No container available in the storage column.");
+            }
+        }
+
+        public void MoveContainerFromAGVToShip(AGV agv, Ship ship)
+        {
+            if (agv == null)
+            {
+                throw new ArgumentNullException(nameof(agv), "AGV cannot be null.");
+            }
+
+            if (ship == null)
+            {
+                throw new ArgumentNullException(nameof(ship), "Ship cannot be null.");
+            }
+
+            if (agv.Container != null)
+            {
+                Container container = agv.Container; // Get the container from the AGV
+
+                // Remove container from the AGV and load onto the ship
+                agv.Container = null;
+                ship.Containers.Add(container);
+
+                // Update container history
+                container.History.Add($"{container.Name} moved from AGV {agv.Id} to Ship {ship.Name}");
+            }
+            else
+            {
+                throw new InvalidOperationException("Unable to move container from AGV to Ship: AGV has no container available.");
+            }
+        }
+
+
+        public void RemovePercentageOfContainersFromSource(decimal percentageDecimal, Ship ship = null, StorageColumn storageColumn = null)
+        {
+            int percentage = (int)(1 - percentageDecimal);
+
+            if (ship == null && storageColumn == null)
+            {
+                throw new ArgumentException("Both Ship and StorageColumn cannot be null.");
+            }
+
+            if (ship != null)
+            {
+                int numberOfContainersToRemove = (int)(ship.Containers.Count * percentageDecimal);
+
+                for (int i = 0; i < numberOfContainersToRemove; i++)
+                {
+                    if (ship.Containers.Any())
+                    {
+                        ship.Containers.RemoveAt(0); // Fjerner det første elementet i listen
+                    }
+                    else
+                    {
+                        break; // Avslutter løkken hvis det ikke er flere containere igjen i skipet
+                    }
+                }
+            }
+            else if (storageColumn != null)
+            {
+                int numberOfContainersToRemove = (int)(storageColumn.Containers.Count * percentageDecimal);
+
+                for (int i = 0; i < numberOfContainersToRemove; i++)
+                {
+                    if (storageColumn.Containers.Any())
+                    {
+                        storageColumn.Containers.RemoveAt(0); // Fjerner det første elementet i listen
+                    }
+                    else
+                    {
+                        break; // Avslutter løkken hvis det ikke er flere containere igjen i kolonnen
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Adds container from docked ships to the container storage in the harbor.
@@ -88,10 +251,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                             // Fjern containeren fra skipet
                             ship.Containers.Remove(container);
                         }
-
                         // Marker at tømming av skipet er fullført
                         ship.IsUnloadingCompleted = true;
-
                         // Utløs hendelse om at tømming av skipet er fullført
                         harbor.RaiseShipCompletedUnloading(ship);
                         agv.IsAvailable = true;
@@ -116,20 +277,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             return false;
         }
-
-
-
-        /// <summary>
-        /// Adds container from the container storage to the docked ships.
-        /// </summary>
-        /// <param name="numberOfContainers">The maximum number of container items to add to each ship.</param>
-        /// <remarks>
-        /// This method iterates through all docked ships and attempts to add container to each ship up to the specified limit.
-        /// It removes container items from the container storage and adds them to the ship's container list.
-        /// The method also updates container history with Loading information.
-        /// </remarks>
-        /// <exception cref="ArgumentException">Thrown when the number of container to add is not greater than zero.</exception>
-        /// <exception cref="InsufficientContainerException">Thrown when there is not enough container in the container storage.</exception>
         internal void AddContainerToShip(Ship ship, int numberOfContainers, Harbor harbor, int startColumnId, int endColumnId)
         {
             if (numberOfContainers <= 0)
@@ -143,8 +290,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
             if (harbor.GetAvailableAGV() != null)
             {
-                AGV agv = harbor.GetAvailableAGV();
-                agv.IsAvailable = false;
 
                 if (ship.Containers.Count < numberOfContainers)
                 {
@@ -156,7 +301,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         for (int columnId = startColumnId; columnId <= endColumnId; columnId++)
                         {
                             StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(columnId);
-
+                          
                             // Sjekk om det er nok containere i kolonnen og om skipet kan ta imot flere containere
                             if (storageColumn.Containers.Count > 0 && !ship.IsLoadingCompleted)
                             {
@@ -168,7 +313,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                                 addedContainer = true;
                                 break; // Avslutt løkken når en container er lagt til i skipet
                             }
-                            agv.IsAvailable = true;
+                           
                         }
                         // Kast unntak hvis det ikke ble lagt til noen container i skipet
                         if (!addedContainer)
@@ -180,14 +325,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 }
                 ship.IsReadyToSail = true;
                 ship.IsLoadingCompleted = true;
-
+               
                 // Utløs hendelse hvis lasting av skipet er fullført og tømming av skipet også er fullført
                 if (ship.IsUnloadingCompleted)
                 {
                     harbor.RaiseShipCompletedLoading(ship);
                 }
+               
             }
         }
+
+
 
 
         public void ScheduleContainerHandling(Ship ship, ContainerStorage containerStorage, DateTime handlingTime, int startColumnId,
@@ -238,17 +386,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
         }
         internal void PerformScheduledContainerHandling(Harbor harbor)
-        {
+        {   
             // Gå gjennom alle nøklene i dictionaryen
             foreach (var key in ScheduledContainerHandling.Keys.ToList()) // Kopierer nøklene for å unngå endring under iterering
             {
                 Ship ship = key.Item1;
                 DateTime handlingTime = key.Item2;
                 var handlingInfo = ScheduledContainerHandling[key];
-
+            
+               
                 // Sjekk om handlingstiden allerede har passert
-                if (handlingTime <= harbor.CurrentTime)
+                if (harbor.GetCurrentTime().Hour == handlingTime.Hour && harbor.GetCurrentTime().Minute == handlingTime.Minute
+                        && harbor.GetCurrentTime().Second == handlingTime.Second)
                 {
+                    
                     // Utfør containerhåndteringen
                     foreach (var info in handlingInfo)
                     {
@@ -256,20 +407,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         int endColumnId = info.Item2;
                         int numberOfContainers = info.Item3;
                         LoadingType loadingType = info.Item4;
-
-                        // Utfør containerhåndteringen for hvert segment av kolonnene
-                        for (int columnId = startColumnId; columnId <= endColumnId; columnId++)
+                        Console.WriteLine(harbor.CurrentTime);
+                        if (loadingType == LoadingType.Load)
                         {
-                            if (loadingType == LoadingType.Load)
-                            {
-                                AddContainerToShip(ship, numberOfContainers, harbor, startColumnId, endColumnId); 
-                            }
-                            else if (loadingType == LoadingType.Unload)
-                            {
-                                AddContainerToStorage(ship, harbor, startColumnId, endColumnId); 
-                            }
+                                //AddContainerToShip(ship, numberOfContainers, harbor, startColumnId, endColumnId);
+                                //Console.WriteLine(harbor.CurrentTime); 
                         }
-
+                        else if (loadingType == LoadingType.Unload)
+                        {
+                                AddContainerToStorage(ship, harbor, startColumnId, endColumnId); 
+                        }
+                        
                         // Fjern handlingen fra dictionaryen etter at den er utført
                         ScheduledContainerHandling.Remove(key);
                     }

@@ -14,7 +14,7 @@ namespace HarborSimulationTest
         static void Main(string[] args)
         {
 
-            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage");
+            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 100, 500);
             // Oppretter en ny havn med navnet "ExceptiontestHarbor" og en lastelager for gods med kapasitet på 10000 enheter.
             Harbor harbor = new Harbor("ExceptiontestHarbor", containerStorage);
 
@@ -62,9 +62,9 @@ namespace HarborSimulationTest
             // Planlegger seiling for LNGCarrier skip med starttidspunkt 2024-01-02, antall skip 40, og med daglig gjentakelse.
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
-            StorageColumn column = new StorageColumn(1, 15, 6, 4);
-            StorageColumn column2 = new StorageColumn(2, 15, 6, 4);
-            StorageColumn column3 = new StorageColumn(3, 15, 6, 4);
+            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
+            StorageColumn column2 = new StorageColumn(300, 2, 15, 6, 4);
+            StorageColumn column3 = new StorageColumn(400, 3, 15, 6, 4);
             containerStorage.AddStorageColumn(column);
             containerStorage.AddStorageColumn(column2);
             containerStorage.AddStorageColumn(column3);
@@ -98,7 +98,7 @@ namespace HarborSimulationTest
             }
 
             // Kjører simuleringen.
-            driver.Run(harbor, startTime, endTime, ships, docks);
+            driver.Run(harbor, startTime, endTime, ships, docks, agvs);
 
             // Tester at den nye generiske historikk-klassen fungerer for havn og skip.
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
@@ -117,6 +117,9 @@ namespace HarborSimulationTest
 
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
+            Console.WriteLine(ship.Containers.Count());
+            containerHandler.RemovePercentageOfContainersFromSource(0.2M, ship);
+            Console.WriteLine(ship.Containers.Count()); 
         
 
         }

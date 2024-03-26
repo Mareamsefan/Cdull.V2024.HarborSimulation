@@ -6,9 +6,10 @@
     public class Crane
     {
         private string Name { get; set; }
-        internal int Speed { get; set; }
-        private bool IsCraneAvalible {  get; set; }
-        private bool IsCraneOutOfFuntion { get; set; }
+        internal int handlingTime { get; set; }
+        internal bool IsAvailable { get; set; }     
+        internal Container Container { get; set; }
+
 
         /// <summary>
         /// Initializes a new instance of the Crane class with the specified name.
@@ -17,11 +18,18 @@
         public Crane(string craneName)
         {
             Name = craneName;
-            IsCraneAvalible = true;
-            IsCraneOutOfFuntion = false;
-            Speed = 100; 
+            handlingTime = 60;
         }
 
-     
+        public void LiftContainer(Container container)
+        {
+            if (Container != null)
+            {
+                throw new InvalidOperationException("AGV already loaded with cargo.");
+            }
+            Container = container;
+        }
+
+
     }
 }

@@ -7,26 +7,29 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <summary>
         /// Represents a Poralcrane used in harbor to move containers from AVG to container storage.
         /// </summary>
-        public string Id {  get; set; } 
-        public double MaxCapacity { get; set; }
-        private bool IsPortalCraneAvalible { get; set; }
-        private bool IsPortalCraneOutOffFuntion { get; set; }
+  
+        internal bool IsAvailable { get; set; }
 
-        private int PortalCraneSpeed { get; set; }  
+        internal int handlingTime { get; set; }
+        internal Container Container { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the PortalCrane class with specified name.
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="MaxCapacity"></param>
-        public PortalCrane(string portalCraneId, double MaxCapacity)
+
+        public PortalCrane()
         {
-            Id = portalCraneId;
-            MaxCapacity = MaxCapacity;
-            IsPortalCraneAvalible = true;
-            IsPortalCraneOutOffFuntion = false;
-            PortalCraneSpeed = 20; 
+            // 1 min 
+            handlingTime = 60; 
+            IsAvailable = true;
         }
+
+        public void LiftContainer(Container container)
+        {
+            if (Container != null)
+            {
+                throw new InvalidOperationException("AGV already loaded with cargo.");
+            }
+            Container = container;
+        }
+
     }
 
 }
