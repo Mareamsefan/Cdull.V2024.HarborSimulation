@@ -173,8 +173,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="columnLocation">The location of the columns.</param>
         /// <param name="numberOfColumns">The number of columns to initialize.</param>
-        /// <param name="columnLength">The length of each column.</param>
-        /// <param name="columnWidth">The width of each column.</param>
+        /// <param name="columnLength">The Length of each column.</param>
+        /// <param name="columnWidth">The Width of each column.</param>
         /// <param name="columnHeight">The height of each column.</param>
         /// <returns>A list of initialized storage columns.</returns>
         public List<StorageColumn> InitializeStorageColumns(int coulmnLocation, int numberOfColumns, int columnLength, int columnWidth, int columnHeight)

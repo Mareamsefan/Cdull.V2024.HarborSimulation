@@ -5,6 +5,41 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>HarborSimulationFramework</Title>
+    <Description>      The Harbor Simulation Framework is a comprehensive .NET library designed to simulate the operations and logistics of a harbor environment. It provides a set of classes and methods to model various elements such as ships, containers, storage columns, AGVs (Automated Guided Vehicles), cranes, and more. 
+
+      Key features of the Harbor Simulation Framework include:
+
+      - Ship Management: Users can define and simulate the behavior of different types of ships entering and exiting the harbor. This includes docking, loading, and unloading cargo, as well as managing ship queues.
+
+      - Container Handling: The framework enables the modeling of container movements between ships, storage columns, and AGVs. It simulates container loading and unloading operations, as well as storage space allocation within the harbor.
+
+      - Automated Guided Vehicles (AGVs): AGVs play a crucial role in transporting containers within the harbor. The framework allows users to simulate AGV movements, route optimization, and interaction with other harbor elements.
+
+      - Crane Operations: Cranes are used for lifting and moving containers between ships, storage columns, and AGVs. The framework provides functionality to simulate crane operations, including container lifting, loading, and unloading.
+
+      - Real-time Monitoring: Users can monitor various metrics and parameters of the harbor simulation in real-time, such as container throughput, storage utilization, and waiting times.
+
+      Overall, the Harbor Simulation Framework serves as a powerful tool for studying and optimizing the logistics and operations of a harbor environment. It offers flexibility, scalability, and extensibility, making it suitable for a wide range of simulation scenarios and research purposes.</Description>
+    <Copyright>Copyright (c) [2024] [Cdull.Hiof]</Copyright>
+    <RepositoryUrl>https://github.com/Mareamsefan/Cdull.V2024.HarborSimulation</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Mareamsefan/Cdull.V2024.HarborSimulation</PackageProjectUrl>
+    <RepositoryType>git.</RepositoryType>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackAsTool>True</PackAsTool>
+    <PackageIcon>CDULL.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Downloads\CDULL.png" Link="icon\CDULL.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="icon\" />
+  </ItemGroup>
 
 </Project>

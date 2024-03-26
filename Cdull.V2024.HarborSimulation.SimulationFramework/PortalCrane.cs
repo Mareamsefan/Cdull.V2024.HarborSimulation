@@ -5,7 +5,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     public class PortalCrane
     {
         /// <summary>
-        /// Represents a Poralcrane used in harbor to move containers from AVG to container storage.
+        /// Represents a Poralcrane used in harbor to Move containers from AVG to container storage.
         /// </summary>
   
         internal bool IsAvailable { get; set; }

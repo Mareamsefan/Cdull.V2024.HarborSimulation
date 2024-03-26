@@ -42,7 +42,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-
         /// <summary>
         /// Checks if the specified crane is available.
         /// </summary>

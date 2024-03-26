@@ -72,9 +72,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 crane.IsAvailable = true;
                 crane.handlingTime = 0; 
 
-              
-
-
             }
             crane.handlingTime++; 
             return agv;
@@ -82,12 +79,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
         /// <summary>
-        /// Moves a container from an AGV to a storage column within the container storage.
+        /// Moves a container from an Automated Guided Vehicle (AGV) to a storage column within the container storage.
         /// </summary>
-        /// <param name="containerStorage">The container storage instance.</param>
-        /// <param name="startColumnId">The ID of the starting column.</param>
+        /// <param name="containerStorage">The instance of the container storage where the operation takes place.</param>
+        /// <param name="startColumnId">The ID of the starting column where the container will be moved.</param>
         /// <param name="endColumnId">The ID of the ending column.</param>
         /// <param name="agv">The AGV from which the container is being moved.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the start column ID is not within the valid range defined by the container storage.</exception>
+        /// <exception cref="InsufficientStorageSpaceException">Thrown when there is not enough space in the storage column to add the container.</exception>
+
         public void MoveContainerFromAGVToStorageColumn(ContainerStorage containerStorage, int startColumnId,
             int endColumnId, AGV agv)
         {
@@ -106,9 +106,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             else if (column.ColumnId < startColumnId || column.ColumnId > endColumnId)
             {
                     throw new ArgumentOutOfRangeException("columnId", "Column ID is outside the valid range.");
-
             }
-                
+
+
+            else if (column.Capacity - column.OccupiedSpace < 1)
+            {
+                throw new InsufficientStorageSpaceException(column.ColumnId, column.Capacity - column.OccupiedSpace, 1);
+            }
+
             if (portalCrane.handlingTime == 60)
             {
                 agv.Container = null;
@@ -119,19 +124,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 container.History.Add($"{container.Name} moved from AGV {agv.Id} to StorageColumn {column.ColumnId}");
                 portalCrane.IsAvailable = true;
                 portalCrane.handlingTime = 0;
-                Console.WriteLine("Denne kjører");
             }
-            
-           
         }
 
         /// <summary>
-        /// Moves a container from a storage column to an AGV.
+        /// Moves a container from a storage column to an Automated Guided Vehicle (AGV).
         /// </summary>
-        /// <param name="containerStorage">The container storage instance.</param>
+        /// <param name="containerStorage">The instance of the container storage from which the container is being moved.</param>
         /// <param name="columnId">The ID of the column from which the container is being moved.</param>
-        /// <param name="harbor">The harbor instance.</param>
+        /// <param name="harbor">The instance of the harbor where the operation takes place.</param>
         /// <returns>The AGV to which the container is moved.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when no container is available in the storage column.</exception>
+
         public AGV MoveContainerFromStorageColumnToAGV(ContainerStorage containerStorage, int columnId, Harbor harbor)
         {
             StorageColumn column = containerStorage.GetSpecificColumn(columnId);
@@ -160,9 +164,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             
             else
             {
-                throw new InvalidOperationException("Unable to move container from StorageColumn to AGV: No container available in the storage column.");
+                throw new InvalidOperationException("Unable to Move container from StorageColumn to AGV: No container available in the storage column.");
             }
-          
         }
 
 
@@ -196,11 +199,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 crane.LiftContainer(container);
                 crane.Container = null;
                 ship.Containers.Add(container);
+                ship.IsReadyToSail = true;
                 crane.IsAvailable = true;
                 container.History.Add($"{container.Name} moved from AGV {agv.Id} to Ship {ship.Name}");
               
-            }
-            
+            }    
          
         }
 

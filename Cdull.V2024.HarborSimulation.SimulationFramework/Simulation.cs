@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text;
 using System.Timers;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
@@ -115,8 +114,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                     {
                         docking.DockShip(harbor, ship);
                         containerHandler.RemovePercentageOfContainersFromSource(0.15m, ship);
-                        ship.DockedAt.numberOfShipsPerDay++;
-
+                       
                     }
                    
 
@@ -125,7 +123,13 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 {
                     harbor.DockedShips.ForEach(ship =>
                     {
-                        if(ship.DockedAt.numberOfShipsPerDay < 7)
+                        ship.DockedAt.numberOfShipsPerDay++;
+
+                        if (!ship.Model.Equals(Model.ContainerShip))
+                        {
+                            ship.IsReadyToSail = true; 
+                        }
+                        if (ship.DockedAt.numberOfShipsPerDay < 7)
                         {
                             foreach (ScheduledContainerHandling scheduledContainerHandling in ship.ScheduledContainerHandlings)
                             {

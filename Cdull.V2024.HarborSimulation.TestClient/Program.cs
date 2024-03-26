@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿
 using Cdull.V2024.HarborSimulation.SimulationFramework;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Events;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions;
 using Cdull.V2024.HarborSimulation.TestClient;
 
 namespace HarborSimulationTest
@@ -14,7 +11,8 @@ namespace HarborSimulationTest
         static void Main(string[] args)
         {
 
-            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 100, 500);
+            // Lager en overordnet plass for plasssering av largingskolonner, og velger indeksrekkevidde for plasseringen. 
+            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 1000);
             // Oppretter en ny havn med navnet "ExceptiontestHarbor" og en lastelager for gods med kapasitet på 10000 enheter.
             Harbor harbor = new Harbor("ExceptiontestHarbor", containerStorage);
 
@@ -29,6 +27,9 @@ namespace HarborSimulationTest
             // Oppretter en liste over skip.
             List<Ship> ships = new List<Ship>();
 
+            // Legger til 5 skip av typen LNGCarrier og størrelse medium med currentlocation 2000m unna Harbor:
+            ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
+
             // Legger til 5 skip av typen ContainerShip, med 5 små containere med currentLocation 1500m unna Harbor: 
             ships.AddRange(harbor.InitializeShips(1500, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Small));
 
@@ -38,11 +39,11 @@ namespace HarborSimulationTest
             // Lager en test containership som viser at man kan lage et og et ship: 
             Ship ship = new Ship("TestContainerShip", Model.ContainerShip, Size.Small, 1000);
 
-            ship.InitializeContainers(5, ContainerSize.Small); 
+            ship.InitializeContainers(5, ContainerSize.Small);
+            
+            ships.Add(ship);
 
-            // Legger til 5 skip av typen LNGCarrier og størrelse medium med currentlocation 2000m unna Harbor:
-            ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
-            ships.Add(ship); 
+         
 
             // Oppretter en instans av simuleringen.
             IHarborSimulation driver = new Simulation();
@@ -138,15 +139,15 @@ namespace HarborSimulationTest
             Console.WriteLine(historyHandler.GetShipHistory(ship1));
 
             // Henter det siste skipet i havnen og skriver ut historikk for det.
-            Ship ship2 = harbor.GetShips().Last();
-            Console.WriteLine(historyHandler.GetShipHistory(ship2));
+            //Ship ship2 = harbor.GetShips().Last();
+            //Console.WriteLine(historyHandler.GetShipHistory(ship2));
          
 
             // Skriver ut historikk for alle skip i havnen.
-            Console.WriteLine(historyHandler.GetShipsHistory());
+            Console.WriteLine(historyHandler.GetShipsHistory());    
             
      
-           
+      
         
 
         }
