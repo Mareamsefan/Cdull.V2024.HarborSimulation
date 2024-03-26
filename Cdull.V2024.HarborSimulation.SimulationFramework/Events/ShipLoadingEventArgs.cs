@@ -7,18 +7,22 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Events
     /// </summary>
     public class ShipLoadingEventArgs : EventArgs
     {
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShipLoadingEventArgs"/> class with the ship that has completed loading.
+        /// Gets the ship that has completed Loading.
         /// </summary>
-        /// <param name="completedLoadingShip">The ship that has completed loading.</param>
+        public Ship CompletedLoadingShip { get; private set; }
+        public Harbor Harbor { get; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipLoadingEventArgs"/> class with the ship that has completed Loading.
+        /// </summary>
+        /// <param name="completedLoadingShip">The ship that has completed Loading.</param>
         public ShipLoadingEventArgs(Ship completedLoadingShip)
         {
             CompletedLoadingShip = completedLoadingShip;
         }
+       
 
-        /// <summary>
-        /// Gets the ship that has completed loading.
-        /// </summary>
-        public Ship CompletedLoadingShip { get; private set; }
+      
     }
 }

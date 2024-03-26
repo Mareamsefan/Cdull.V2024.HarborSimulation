@@ -12,8 +12,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     public class Ship
     {
         public string Name { get; set; }
-        internal Model Model { get; set; }
-        internal Size Size { get; set; }
+        public Model Model { get; set; }
+        public Size Size { get; set; }
         internal bool HasDocked { get; set; }
         internal List<Container> Containers { get; } = new List<Container>(); 
         internal List<string> History { get; } = new List<String>();
@@ -35,7 +35,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="shipName">The name of the ship.</param>
         /// <param name="shipModel">The model of the ship.</param>
         /// <param name="shipSize">The size of the ship.</param>
-        public Ship (string shipName, Model shipModel, Size shipSize)
+        public Ship (string shipName, Model shipModel, Size shipSize, int shipCurrentLocation)
         {
             Name = shipName;
             Model = shipModel;
@@ -48,7 +48,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             SailedAtTime = "";
             Speed = GetSpeedFromModel(shipModel);
             IsReadyToSail = false;
-            CurrentLocation =  GenerateRandomDestination(1000, 10000); 
+            CurrentLocation =   shipCurrentLocation; 
         }
         /// <summary>
         /// Generates a random destination for the ship.
@@ -77,7 +77,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         /// <param name="number">The number of container units to initialize.</param>
         /// <param name="size">The size of each container unit. Default is set to CargoSize.Large.</param>
-        internal void InitializeContainers(int number, ContainerSize size = ContainerSize.Large)
+        public void InitializeContainers(int number, ContainerSize size = ContainerSize.Large)
         {
             if (Model != Model.ContainerShip)
             {

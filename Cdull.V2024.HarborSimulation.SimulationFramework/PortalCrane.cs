@@ -25,7 +25,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             MaxCapacity = MaxCapacity;
             IsPortalCraneAvalible = true;
             IsPortalCraneOutOffFuntion = false;
-            PortalCraneSpeed = 20; // i sek?
+            PortalCraneSpeed = 20; 
         }
     }
 

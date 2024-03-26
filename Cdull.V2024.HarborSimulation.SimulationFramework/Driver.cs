@@ -11,6 +11,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         internal int CurrentLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
+        internal bool agvHasReachedDestination { get; set; }
+        internal int agvSpeed { get; set; }
+        internal int agvLocation { get; set; }
+
+
 
 
         public Driver()
@@ -18,7 +23,28 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             CurrentLocation = 0;
             HasReachedDestination = false;
+            agvHasReachedDestination = false;
+            agvSpeed = 7;
+            agvLocation = agvLocation;
 
+        }
+
+
+        internal void AgvMove(int agvLocation, int moveToLocation)
+        {
+            int speed = (int)(agvSpeed / 3.6f);
+            int move = 0;
+            int calcDistance = moveToLocation - agvLocation;
+            double distance = Math.Sqrt(calcDistance ^ 2);
+
+            if(moveToLocation > agvLocation)
+            {
+                move += speed;
+            }
+            if(move == distance)
+            {
+                agvHasReachedDestination = true;
+            }
         }
 
 
@@ -32,6 +58,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <exception cref="InvalidOperationException">Thrown when the speed of the ship is negative.</exception>
         internal bool Move(int range, float speed)
         {
+
 
             if (HasReachedDestination)
             {
