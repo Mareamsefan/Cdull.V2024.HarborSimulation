@@ -93,20 +93,23 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
                 harbor.ContainerStorage.StorageColumns.ForEach(storageColumn =>
                 {
-                    storageColumn.Containers.ForEach(container =>
-                    {
-                        if(container.numberOfDaysInStorage == 4)
-                        {
-  
-                            containerHandler.RemovePercentageOfContainersFromSource(0.1m, storageColumn: storageColumn);
+                    // Lag en kopi av listen over containere i lagringskolonnen
+                    var containersCopy = storageColumn.Containers.ToList();
 
+                    // Iterer over kopien av listen
+                    containersCopy.ForEach(container =>
+                    {
+                        if (container.numberOfDaysInStorage == 4)
+                        {
+                            containerHandler.RemovePercentageOfContainersFromSource(0.1m, storageColumn: storageColumn);
                         }
                     });
                 });
 
 
-               
-                
+
+
+
 
                 harbor.QueueShipsToDock();
 
