@@ -32,7 +32,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             return instance;
         }
 
-        public AGV MoveContainerFromShipToAGV(Ship ship, Harbor harbor)
+        public AGV MoveContainerFromShipToAGV(Ship ship, Container container,  Harbor harbor)
         {
             Dock dock = ship.DockedAt;
             Crane crane = dock.Cranes.First();
@@ -42,18 +42,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     if (dock.GetAvailableCrane(c))
                     {
-                        crane = c;
-                        break;
+                        crane = c;      
                     }
                 }
             }
-           
 
             AGV agv = harbor.GetAvailableAGV();
             crane.IsAvailable = false;
-
-            Container container = ship.Containers.First();
-           
 
             if (crane.handlingTime == 30) {
             
@@ -63,7 +58,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 agv.LoadContainerToAGV(container);
                 container.History.Add($"{container.Name} moved from Ship {ship.Name} to AGV {agv.Id}");
                 crane.IsAvailable = true;
-                crane.Done = true;
+                crane.handlingTime = 0; 
+
               
 
 
@@ -71,35 +67,41 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             crane.handlingTime++; 
             return agv;
         }
-        public void MoveContainerFromAGVToStorageColumn(ContainerStorage containerStorage, int columnId, AGV agv)
+        public void MoveContainerFromAGVToStorageColumn(ContainerStorage containerStorage, int startColumnId,
+            int endColumnId, AGV agv)
         {
-           
-            StorageColumn column = containerStorage.GetSpecificColumn(columnId);
+            StorageColumn column = containerStorage.GetSpecificColumn(startColumnId);
             PortalCrane portalCrane = column.Crane;
             portalCrane.IsAvailable = false;
             // Sjekk om AGV har last
-            if (agv.Container != null)
-            {
-                portalCrane.handlingTime++;
-                Container container = agv.Container; // Få tak i containeren fra AGV-en
+     
+            portalCrane.handlingTime++;
+            Container container = agv.Container; // Få tak i containeren fra AGV-en
 
-                // Fjern containeren fra AGV-en og legg til i lagringskolonnen
-                if (portalCrane.handlingTime == 60)
-                {
-                    agv.Container = null;
-                    portalCrane.LiftContainer(container);
-                    portalCrane.Container = null;
-                    column.AddContainer(container);
-                    container.History.Add($"{container.Name} moved from AGV {agv.Id} to StorageColumn {column.ColumnId}");
-                    Console.WriteLine(agv); 
-                    portalCrane.IsAvailable = true;
-                }
-            }/*
-            else
+            if (column.Capacity == column.OccupiedSpace)
             {
-                // Hvis AGV-en er tom, kast unntak eller utfør annen håndtering etter behov
-                throw new InvalidOperationException("AGV has no container available to move to StorageColumn.");
-            }*/
+                column = containerStorage.GetSpecificColumn(startColumnId++);
+            }
+            else if (column.ColumnId < startColumnId || column.ColumnId > endColumnId)
+            {
+                    throw new ArgumentOutOfRangeException("columnId", "Column ID is outside the valid range.");
+
+            }
+                // Fjern containeren fra AGV-en og legg til i lagringskolonnen
+            if (portalCrane.handlingTime == 60)
+            {
+                agv.Container = null;
+                portalCrane.LiftContainer(container);
+                portalCrane.Container = null;
+                column.AddContainer(container);
+                column.OccupySpace(container);
+                container.History.Add($"{container.Name} moved from AGV {agv.Id} to StorageColumn {column.ColumnId}");
+                portalCrane.IsAvailable = true;
+                portalCrane.handlingTime = 0;
+                Console.WriteLine("Denne kjører");
+            }
+            
+           
         }
         public AGV MoveContainerFromStorageColumnToAGV(ContainerStorage containerStorage, int columnId, Harbor harbor)
         {
@@ -109,13 +111,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             AGV agv = harbor.GetAvailableAGV();
 
             if (column.Containers.Any())
-            {
+            {   
+              
                 portalCrane.handlingTime++;
                 Container container = column.Containers.First();
 
                 if (portalCrane.handlingTime == 60)
                 {
                     column.RemoveContainer(container);
+                    column.deOccupySpace(container, harbor);
                     portalCrane.LiftContainer(container);
                     portalCrane.Container = null;
                     agv.LoadContainerToAGV(container);
