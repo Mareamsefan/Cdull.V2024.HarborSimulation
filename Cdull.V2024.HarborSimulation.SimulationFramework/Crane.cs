@@ -9,7 +9,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
         private string Name { get; set; }
         internal int handlingTime { get; set; }
-        internal bool IsAvailable { get; set; }     
+        internal bool IsAvailable { get; set; }   
+        internal bool Done { get; set; }
         internal Container Container { get; set; }
 
 
@@ -21,6 +22,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             Name = craneName;
             handlingTime = 0;
+            IsAvailable = true;
+            Done = false; 
         }
 
         public void LiftContainer(Container container)

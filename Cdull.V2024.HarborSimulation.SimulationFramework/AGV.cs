@@ -25,11 +25,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         public void LoadContainerToAGV(Container container)
         {
-            if (Container != null)
-            {
-                throw new InvalidOperationException("AGV already loaded with cargo.");
-            }
+          
             Container = container;
+              
         }
     }
 }

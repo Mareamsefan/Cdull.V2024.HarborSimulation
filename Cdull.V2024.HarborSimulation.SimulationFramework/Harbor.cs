@@ -163,10 +163,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         internal AGV GetAvailableAGV()
         {
-            if (AGVs.Count == 0)
-            {
-                throw new ArgumentNullException(nameof(Dock), "Harbor cannot have Zero AGVs.");
-            }
+            AGV availableAgv = AGVs.First(); 
 
             foreach (AGV agv in AGVs)
             {
@@ -176,7 +173,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 }
             }
 
-            return null;
+            return availableAgv; 
         }
 
         /// <summary>

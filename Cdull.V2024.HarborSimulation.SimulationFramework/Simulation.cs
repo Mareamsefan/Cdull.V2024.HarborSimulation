@@ -73,6 +73,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             while (harbor.GetCurrentTime() < endTime)
             {
         
+
                 //10% av container fjernes 
                 if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0 && harbor.GetCurrentTime().Second == 0)
                 {
@@ -84,6 +85,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                             container.numberOfDaysInStorage++; 
                         });
                     }); 
+                    
                 }
 
                 harbor.ContainerStorage.StorageColumns.ForEach(storageColumn =>
@@ -112,10 +114,28 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 }
                 if (harbor.DockedShips.Any())
                 {
-                    containerHandler.PerformScheduledContainerHandling(harbor); 
+                    Ship ship = harbor.DockedShips.First(); 
+                    foreach(ScheduledContainerHandling scheduledContainerHandling in ship.ScheduledContainerHandlings)
+                    {
+                        if (harbor.GetCurrentTime().Date == scheduledContainerHandling.HandlingTime.Date)
+                        {
+                            if (scheduledContainerHandling.LoadingType == LoadingType.Unload)
+                            {
+                                AGV agv = containerHandler.MoveContainerFromShipToAGV(ship, harbor);
+                                
 
-                  
-                   
+                                containerHandler.MoveContainerFromAGVToStorageColumn(harbor.ContainerStorage,
+                                scheduledContainerHandling.StartColumnId, agv);
+                            }
+
+                            else if (scheduledContainerHandling.LoadingType == LoadingType.Load)
+                            {
+                                AGV agv = containerHandler.MoveContainerFromStorageColumnToAGV(harbor.ContainerStorage,
+                                    scheduledContainerHandling.StartColumnId, harbor);
+                                containerHandler.MoveContainerFromAGVToShip(agv, ship);
+                            }
+                        }
+                    }   
 
                     sailing.StartScheduledSailings(harbor, historyHandler);
                 }

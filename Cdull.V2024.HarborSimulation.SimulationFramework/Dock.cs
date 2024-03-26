@@ -40,6 +40,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
+        public bool GetAvailableCrane(Crane crane)
+        {
+            if (crane != null && crane.IsAvailable)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
 
     }

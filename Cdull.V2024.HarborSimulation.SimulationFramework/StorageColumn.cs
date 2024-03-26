@@ -161,5 +161,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             return $"{ColumnId}"; 
         }
+
+        public bool HasEnoughSpaceForContainers(List<Container> containers)
+        {
+            int requiredSpace = containers.Sum(container => (int)container.Size);
+
+            return Capacity - OccupiedSpace >= requiredSpace;
+        }
+
+
     }
 }

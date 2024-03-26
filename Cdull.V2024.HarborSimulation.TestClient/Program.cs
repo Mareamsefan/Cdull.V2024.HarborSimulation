@@ -71,31 +71,20 @@ namespace HarborSimulationTest
 
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
             column.InitializeContainers(10, ContainerSize.Large); 
-            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload, harbor);
-            containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 7),  1, 2, 10, LoadingType.Load, harbor);
+            containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
+            containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 7),  1, 2, 10, LoadingType.Load);
             ships.ForEach(ship =>
             {
                 if (ship.Model.Equals(Model.ContainerShip))
                 {
-                    containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 6), 2, 3, 10, LoadingType.Unload, harbor);
-                    containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load, harbor);
+                    containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 6), 2, 3, 10, LoadingType.Unload);
+                    containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load);
                 }
             });
-   
-            List<(int, int, int, DateTime, LoadingType)> cargohandlings = containerHandler.CheckScheduledCargoHandling(ship);
-            foreach (var keys in cargohandlings)
-            {
-                int startCloumnId = keys.Item1;
-                int endCloumnId = keys.Item2;
-                int numberOfContainers = keys.Item3;
-                DateTime loadingTime = keys.Item4;
-                LoadingType loadingType = keys.Item5;
 
-                Console.WriteLine($"LoadingTime: {loadingTime}, LoadingType: {loadingType} , numberOfContainers: {numberOfContainers}, startID:{startCloumnId}" +
-                    $" endID: {endCloumnId}");
-
-            }
-
+            Console.WriteLine(containerHandler.CheckScheduledCargoHandling(ship));
+         
+           
             // Kjører simuleringen.
             driver.Run(harbor, startTime, endTime, ships, docks, agvs);
 
@@ -122,7 +111,7 @@ namespace HarborSimulationTest
             ship.InitializeContainers(10, ContainerSize.Large); 
            
             Dock dock = docks.First(); 
-            containerHandler.MoveContainerFromShipToAGV(ship, agvs.First(), dock.Cranes.First(), harbor);
+           
         
 
         }
