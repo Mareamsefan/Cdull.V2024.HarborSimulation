@@ -66,19 +66,51 @@ namespace HarborSimulationTest
             // Planlegger seiling for LNGCarrier skip med starttidspunkt 2024-01-02, antall skip 40, og med daglig gjentakelse.
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
-            //Lager 24 Lange lagringskolonner: 
-            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
-            StorageColumn column2 = new StorageColumn(300, 2, 15, 6, 4);
-            StorageColumn column3 = new StorageColumn(400, 3, 15, 6, 4);
-            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
-            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
-            StorageColumn column = new StorageColumn(200, 1, 15, 6, 4);
-            containerStorage.AddStorageColumn(column);
-            containerStorage.AddStorageColumn(column2);
-            containerStorage.AddStorageColumn(column3);
+            //Lager 24 Lange og 7 korte lagringskolonner: 
+            var columnsToAdd = new List<StorageColumn>
+            {
+                new StorageColumn(37, 1, 18, 6, 4),
+                new StorageColumn(74, 2, 18, 6, 4),
+                new StorageColumn(111, 3, 18, 6, 4),
+                new StorageColumn(148, 1, 18, 6, 4),
+                new StorageColumn(185, 1, 18, 6, 4),
+                new StorageColumn(222, 1, 18, 6, 4),
+                new StorageColumn(259, 1, 18, 6, 4),
+                new StorageColumn(296, 1, 18, 6, 4),
+                new StorageColumn(333, 1, 18, 6, 4),
+                new StorageColumn(370, 1, 18, 6, 4),
+                new StorageColumn(407, 1, 18, 6, 4),
+                new StorageColumn(444, 1, 18, 6, 4),
+                new StorageColumn(481, 1, 18, 6, 4),
+                new StorageColumn(518, 1, 18, 6, 4),
+                new StorageColumn(555, 1, 18, 6, 4),
+                new StorageColumn(592, 1, 18, 6, 4),
+                new StorageColumn(629, 1, 18, 6, 4),
+                new StorageColumn(666, 1, 18, 6, 4),
+                new StorageColumn(703, 1, 18, 6, 4),
+                new StorageColumn(740, 1, 18, 6, 4),
+                new StorageColumn(777, 1, 18, 6, 4),
+                new StorageColumn(814, 1, 18, 6, 4),
+                new StorageColumn(851, 1, 18, 6, 4),
+                new StorageColumn(888, 1, 18, 6, 4),
+                new StorageColumn(666, 1, 15, 6, 4),
+                new StorageColumn(703, 1, 15, 6, 4),
+                new StorageColumn(740, 1, 15, 6, 4),
+                new StorageColumn(777, 1, 15, 6, 4),
+                new StorageColumn(814, 1, 15, 6, 4),
+                new StorageColumn(851, 1, 15, 6, 4),
+                new StorageColumn(888, 1, 15, 6, 4),
 
+            };
+
+            foreach (var column in columnsToAdd)
+            {
+                containerStorage.AddStorageColumn(column);
+            }
+
+            
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
-            column.InitializeContainers(10, ContainerSize.Large); 
+          
             containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
             containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 7),  1, 2, 10, LoadingType.Load);
             ships.ForEach(ship =>
@@ -89,10 +121,9 @@ namespace HarborSimulationTest
                     containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load);
                 }
             });
-
+            //Sjekker alle handlingene for test-shipet: 
             Console.WriteLine(containerHandler.CheckScheduledCargoHandling(ship));
          
-           
             // Kjører simuleringen.
             driver.Run(harbor, startTime, endTime, ships, docks, agvs);
 
@@ -113,12 +144,8 @@ namespace HarborSimulationTest
 
             // Skriver ut historikk for alle skip i havnen.
             Console.WriteLine(historyHandler.GetShipsHistory());
-            Console.WriteLine(ship.Containers.Count());
-            //containerHandler.RemovePercentageOfContainersFromSource(0.2M, ship);
-            Console.WriteLine(ship.Containers.Count());
-            ship.InitializeContainers(10, ContainerSize.Large); 
-           
-            Dock dock = docks.First(); 
+            
+     
            
         
 
