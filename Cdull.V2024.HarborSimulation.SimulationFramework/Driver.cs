@@ -30,14 +30,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-        internal void AgvMove(int agvLocation, int moveToLocation)
+        internal bool AgvMove(int agvLocation, int moveToLocation)
         {
-            int speed = (int)(agvSpeed / 3.6f);
-            int move = 0;
+            float speed = agvSpeed / 3.6f;
+            float move = 0;
             int calcDistance = moveToLocation - agvLocation;
-            double distance = Math.Sqrt(calcDistance ^ 2);
+            int calcDistance2 = calcDistance ^ 2;
+            double distance = Math.Sqrt(calcDistance2);
 
-            if(moveToLocation > agvLocation)
+            if (agvHasReachedDestination)
+            {
+                return false;
+            }
+
+            if(distance > move)
             {
                 move += speed;
             }
@@ -45,6 +51,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 agvHasReachedDestination = true;
             }
+
+            return !agvHasReachedDestination;
         }
 
 
