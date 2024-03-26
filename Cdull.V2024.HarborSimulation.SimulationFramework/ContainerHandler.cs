@@ -11,8 +11,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     public class ContainerHandler
     {
         private static readonly ContainerHandler instance = new ContainerHandler();
-        internal Dictionary<(Ship, DateTime), List<(int, int, int, LoadingType)>> ScheduledContainerHandling = new Dictionary<(Ship, DateTime), List<(int, int, int, LoadingType)>>();
-
+       
 
         /// <summary>
         /// Private constructor to prevent external instantiation.
@@ -336,8 +335,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-
-
         public void ScheduleContainerHandling(Ship ship, ContainerStorage containerStorage, DateTime handlingTime, int startColumnId,
         int endColumnId, int numberofContainers, LoadingType loadingType, Harbor harbor)
         {
@@ -376,82 +373,76 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 }
 
                 // Opprett en unik nøkkel for hvert skip og hver kolonne
-                var key = (ship, handlingTime);
+                var key = (handlingTime);
 
                 // Legg til den planlagte håndteringen i dictionarien
-                if (!ScheduledContainerHandling.ContainsKey(key))
+                if (!ship.ScheduledContainerHandling.ContainsKey(key))
                 {
-                    ScheduledContainerHandling[key] = [(startColumnId, endColumnId, numberofContainers, loadingType)];
+                    ship.ScheduledContainerHandling[key] = [(startColumnId, endColumnId, numberofContainers, loadingType)];
                 }
             }
         }
-        internal void PerformScheduledContainerHandling(Harbor harbor)
-        {   
-            // Gå gjennom alle nøklene i dictionaryen
-            foreach (var key in ScheduledContainerHandling.Keys.ToList()) // Kopierer nøklene for å unngå endring under iterering
+        internal void PerformScheduledContainerHandling(Ship ship, Harbor harbor)
+        {
+            List<DateTime> keysToRemove = new List<DateTime>();
+            foreach (var key in ship.ScheduledContainerHandling.Keys.ToList())
             {
-                Ship ship = key.Item1;
-                DateTime handlingTime = key.Item2;
-                var handlingInfo = ScheduledContainerHandling[key];
-            
-               
-                // Sjekk om handlingstiden allerede har passert
+                DateTime handlingTime = key;
+                var handlingInfo = ship.ScheduledContainerHandling[key];
+
                 if (harbor.GetCurrentTime().Hour == handlingTime.Hour && harbor.GetCurrentTime().Minute == handlingTime.Minute
                         && harbor.GetCurrentTime().Second == handlingTime.Second)
                 {
-                    
-                    // Utfør containerhåndteringen
+
                     foreach (var info in handlingInfo)
                     {
                         int startColumnId = info.Item1;
                         int endColumnId = info.Item2;
                         int numberOfContainers = info.Item3;
                         LoadingType loadingType = info.Item4;
-                        Console.WriteLine(harbor.CurrentTime);
+           
                         if (loadingType == LoadingType.Load)
                         {
-                                //AddContainerToShip(ship, numberOfContainers, harbor, startColumnId, endColumnId);
-                                //Console.WriteLine(harbor.CurrentTime); 
+                            //AddContainerToShip(ship, numberOfContainers, harbor, startColumnId, endColumnId);
+                            //Console.WriteLine(harbor.CurrentTime); 
+                            
                         }
                         else if (loadingType == LoadingType.Unload)
                         {
-                                AddContainerToStorage(ship, harbor, startColumnId, endColumnId); 
+                            // AddContainerToStorage(ship, harbor, startColumnId, endColumnId); 
+                            AGV agv = harbor.GetAvailableAGV(); 
+                            MoveContainerFromShipToAGV(ship,agv );
                         }
-                        
-                        // Fjern handlingen fra dictionaryen etter at den er utført
-                        ScheduledContainerHandling.Remove(key);
+
+                        keysToRemove.Add(key);
                     }
                 }
             }
-        }
-
-
-
-        public List<(int, int, int, DateTime, LoadingType)> CheckScheduledCargoHandling(Ship ship)
+            foreach (var key in keysToRemove)
+            {
+               ship.ScheduledContainerHandling.Remove(key);
+            }
+        }     
+    
+    
+    public List<(int, int, int, DateTime, LoadingType)> CheckScheduledCargoHandling(Ship ship)
         {
             // Opprett en liste for å lagre informasjonen om planlagte containerhåndteringer for skipet
             List<(int, int, int,  DateTime, LoadingType)> scheduledHandlingInfo = new List<(int, int, int, DateTime, LoadingType)>();
 
             // Gå gjennom alle nøklene i dictionaryen
-            foreach (var key in ScheduledContainerHandling.Keys)
+            foreach (var key in ship.ScheduledContainerHandling.Keys)
             {
-                Ship keyShip = key.Item1; 
                 // Hent ut skipet fra nøkkelen
-                foreach(var value in ScheduledContainerHandling[key]){
+                foreach(var value in ship.ScheduledContainerHandling[key]){
 
-                    // Sjekk om skipet fra nøkkelen er det samme som det gitte skipet
-                    if (keyShip == ship)
-                    {
-                        // Hvis ja, legg til all informasjonen om planlagt containerhåndtering for dette skipet
-                        scheduledHandlingInfo.Add((value.Item2, value.Item1, value.Item3, key.Item2, value.Item4));
-                    }
+                    // Hvis ja, legg til all informasjonen om planlagt containerhåndtering for dette skipet
+                    scheduledHandlingInfo.Add((value.Item2, value.Item1, value.Item3,key, value.Item4));
                 }
             }
             // Returner listen med informasjon om planlagte containerhåndteringer
             return scheduledHandlingInfo;
         }
-
-
 
     }
 }

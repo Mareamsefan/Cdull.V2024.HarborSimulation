@@ -70,7 +70,7 @@ namespace HarborSimulationTest
             containerStorage.AddStorageColumn(column3);
 
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
-            //column.InitializeContainers(10, ContainerSize.Large); 
+            column.InitializeContainers(10, ContainerSize.Large); 
             containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload, harbor);
             containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 7),  1, 2, 10, LoadingType.Load, harbor);
             ships.ForEach(ship =>
@@ -80,11 +80,10 @@ namespace HarborSimulationTest
                     containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 6), 2, 3, 10, LoadingType.Unload, harbor);
                     containerHandler.ScheduleContainerHandling(ship, containerStorage, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load, harbor);
                 }
-
             });
    
-            List<(int, int, int, DateTime, LoadingType)> sailings = containerHandler.CheckScheduledCargoHandling(ship);
-            foreach (var keys in sailings)
+            List<(int, int, int, DateTime, LoadingType)> cargohandlings = containerHandler.CheckScheduledCargoHandling(ship);
+            foreach (var keys in cargohandlings)
             {
                 int startCloumnId = keys.Item1;
                 int endCloumnId = keys.Item2;

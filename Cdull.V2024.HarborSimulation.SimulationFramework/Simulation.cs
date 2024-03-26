@@ -112,45 +112,10 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 }
                 if (harbor.DockedShips.Any())
                 {
-                   containerHandler.PerformScheduledContainerHandling(harbor); 
-                    
-                    harbor.DockedShips.ForEach(ship =>
-                    {
-                        if (!ship.Model.Equals(Model.ContainerShip))
-                        {
-                            ship.IsReadyToSail = true;
-                        }
-                    });
-                    
-                    foreach (var key in containerHandler.ScheduledContainerHandling.Keys.ToList()) 
-                    {
-                        Ship ship = key.Item1;
-                        DateTime handlingTime = key.Item2;
-                        var handlingInfo = containerHandler.ScheduledContainerHandling[key];
+                    containerHandler.PerformScheduledContainerHandling(harbor); 
 
-                        if (harbor.GetCurrentTime().Date == handlingTime.Date)
-                        {
-                            foreach (var info in handlingInfo)
-                            {
-                                int startColumnId = info.Item1;
-                                int endColumnId = info.Item2;
-                                int numberOfContainers = info.Item3;
-                                LoadingType loadingType = info.Item4;
-                                Console.WriteLine(harbor.CurrentTime);
-                                if (loadingType == LoadingType.Load)
-                                {
-                                    Console.WriteLine("THIS WORKS 22222 --->");
-                                }
-                                else if (loadingType == LoadingType.Unload)
-                                {
-                                    Console.WriteLine("THIS WORKS 22222");
-                                }
-
-                                containerHandler.ScheduledContainerHandling.Remove(key);
-                            }
-                        }
-                    }
-
+                  
+                   
 
                     sailing.StartScheduledSailings(harbor, historyHandler);
                 }
