@@ -67,6 +67,11 @@ namespace HarborSimulationTest
             // Planlegger seiling for LNGCarrier skip med starttidspunkt 2024-01-02, antall skip 40, og med daglig gjentakelse.
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
+            List<int> columLocations = new List<int>
+            {
+                37, 74, 111, 148, 185, 222, 259, 292, 333, 270, 407, 444, 481, 518
+            };
+            List<StorageColumn> storageColumns = harbor.InitializeStorageColumns();
             //Lager 24 Lange og 7 korte lagringskolonner: 
             var columnsToAdd = new List<StorageColumn>
             {
