@@ -36,6 +36,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <summary>
         /// Moves the AGV towards its destination.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// Driver driver = new Driver();
+        /// driver.AgvMove(120, 80);
+        /// </code>
+        /// results in <c>Driver</c> moving an <c>AGV</c> from location 120, to location 80
+        /// <see cref="AGV"/>
+        /// </example>
         /// <param name="agvLocation">The current location of the AGV.</param>
         /// <param name="moveToLocation">The destination location to Move to.</param>
         /// <returns>True if the AGV has not yet reached its destination, otherwise false.</returns>
@@ -71,6 +79,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <summary>
         /// Moves the ship towards its destination.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// Driver driver = new Driver();
+        /// Ship ship = new Ship("TestContainerShip", Model.ContainerShip, Size.Small, 1000);
+        /// if (!driver.Move(ship.CurrentLocation,ship.Speed))
+        ///         { Console.WriteLine(ship)}
+        /// </code>
+        /// results in printing out the ship after it has reached its destination.
+        /// <see cref="Ship"/>
+        /// </example>
         /// <remarks>
         /// This method calculates the new location of the ship based on its speed and updates its current location.
         /// If the ship reaches its destination, the HasReachedDestination property is set to true.
