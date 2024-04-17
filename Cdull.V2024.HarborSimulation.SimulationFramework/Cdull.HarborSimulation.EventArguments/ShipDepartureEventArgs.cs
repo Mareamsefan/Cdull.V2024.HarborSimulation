@@ -1,7 +1,8 @@
 ﻿using System;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework.Events
+namespace Cdull.Habbrbimulation.EventArguments
+
 {
     /// <summary>
     /// Provides data for the ShipDeparture event.

@@ -33,14 +33,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\..\Downloads\CDULL.png" Link="icon\CDULL.png">
+    <None Include="..\..\..\..\Downloads\CDULL.png" Link="Cdull.HarborSimulation.Static\CDULL.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="icon\" />
+    <Folder Include="Cdull.HarborSimulation.Static\" />
   </ItemGroup>
 
 </Project>

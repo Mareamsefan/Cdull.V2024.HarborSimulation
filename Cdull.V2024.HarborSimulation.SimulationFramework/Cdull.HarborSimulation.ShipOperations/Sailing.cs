@@ -1,13 +1,12 @@
-﻿
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Const;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions;
 
 /// <summary>
 /// Represents the scheduling and execution of ship sailings.
 /// </summary>
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.ShipOperations
 {
     public class Sailing
     {
@@ -83,7 +82,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal void Sail(Ship ship, Harbor harbor, int destinationLocation)
         {
             Driver driver = new Driver();
-            HistoryHandler historyHandler = HistoryHandler.GetInstance(); 
+            HistoryHandler historyHandler = HistoryHandler.GetInstance();
             driver.Move(destinationLocation, ship.Speed);
             ship.SailedAtTime = harbor.GetCurrentTime().ToString();
             historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Sailed at {ship.SailedAtTime} to destination:{destinationLocation}");
@@ -91,7 +90,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             harbor.SailingShips.Add(ship);
             harbor.RaiseShipDeparted(ship);
             ship.HasReachedDestination = true;
-       
+
         }
         /// <summary>
         /// Starts the scheduled sailings for ships in the harbor.
@@ -120,7 +119,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     {
                         continue;
                     }
-                    if (harbor.GetCurrentTime().Hour == sailingTime.Hour && harbor.GetCurrentTime().Minute == sailingTime.Minute 
+                    if (harbor.GetCurrentTime().Hour == sailingTime.Hour && harbor.GetCurrentTime().Minute == sailingTime.Minute
                         && harbor.GetCurrentTime().Second == sailingTime.Second)
                     {
                         foreach (Ship ship in harbor.Ships)
@@ -129,8 +128,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                             {
                                 if (harbor.RemoveShipFromDock(ship))
                                 {
-                                    Sail(ship,harbor,destinationLocation); 
-                         
+                                    Sail(ship, harbor, destinationLocation);
+
                                 }
                             }
                             else if (ship.HasReachedDestination)
@@ -158,7 +157,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             if (!ScheduledSailings.ContainsKey(shipModel))
             {
-               
+
                 return new List<(DateTime, int, RecurringType)>();
             }
 

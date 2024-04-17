@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework.Enums
+namespace Cdull.HarborSimulation.Const
 {
     public enum LoadingType
     {
-        Load, 
+        Load,
         Unload
     }
 
