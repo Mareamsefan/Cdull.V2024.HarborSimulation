@@ -1,0 +1,27 @@
+﻿<Window x:Class="HarborSimulationGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HarborSimulationGUI"
+        mc:Ignorable="d"
+        Title="Harbor Simulation" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <TextBox x:Name="DockNameTextBox" Width="200" Margin="5" Text="Enter dock name"/>
+            <ComboBox x:Name="DockSizeComboBox" Width="200" Margin="5">
+                <ComboBoxItem Content="Small"/>
+                <ComboBoxItem Content="Medium"/>
+                <ComboBoxItem Content="Large"/>
+            </ComboBox>
+            <Button Content="Create Dock" Click="CreateDock_Click" Margin="5"/>
+        </StackPanel>
+
+        <ListBox x:Name="DockListBox" Grid.Row="1" Margin="10"/>
+    </Grid>
+</Window>

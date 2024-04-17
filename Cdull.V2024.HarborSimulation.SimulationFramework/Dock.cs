@@ -8,8 +8,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     /// </summary>
     public class Dock
     {
-        internal string Name { get; set; }
-        internal Size Size { get; set; }
+        public string Name { get; set; }
+        public Size Size { get; set; }
         internal bool IsAvailable { get; set; }
         public List<Crane> Cranes { get; set; } = new List<Crane>();
         internal Ship? OccupiedBy { get; set; }
