@@ -1,4 +1,5 @@
-﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure
 {
 
     /// <summary>
@@ -14,13 +15,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     /// </summary>
     public class StorageColumn
     {
-        public int ColumnId { get; set;  }
+        public int ColumnId { get; set; }
         internal int Height { get; private set; }
         internal int Length { get; private set; }
         internal int Width { get; private set; }
         public int Capacity { get; set; }
-        internal List<Container> Containers {  get; set; } = new List<Container>();
-        internal PortalCrane Crane { get; set; } 
+        internal List<Container> Containers { get; set; } = new List<Container>();
+        internal PortalCrane Crane { get; set; }
         internal int OccupiedSpace { get; set; }
         internal bool IsAvailable { get; set; }
         internal int Location { get; set; }
@@ -57,7 +58,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentNullException(nameof(container), "Containers parameter cannot be null.");
             }
 
-           
+
             if (!Containers.Contains(container))
             {
                 Containers.Add(container);
@@ -118,7 +119,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             {
                 OccupiedSpace += (int)container.Size;
             }
-        
+
             else
             {
                 IsAvailable = false;
@@ -140,7 +141,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             if (OccupiedSpace <= Capacity && OccupiedSpace > 0)
             {
-                OccupiedSpace -= (int)container.Size; 
+                OccupiedSpace -= (int)container.Size;
                 harbor.ContainerStorage.Capacity -= (int)container.Size;
                 IsAvailable = true;
             }
@@ -166,7 +167,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>A string containing information about the harbor simulation, including harbor name, current time, ship counts, and container storage details.</returns>
         public override string ToString()
         {
-            return $"{ColumnId}"; 
+            return $"{ColumnId}";
         }
 
 

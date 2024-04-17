@@ -27,8 +27,9 @@
     <PackageProjectUrl>https://github.com/Mareamsefan/Cdull.V2024.HarborSimulation</PackageProjectUrl>
     <RepositoryType>git.</RepositoryType>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackAsTool>True</PackAsTool>
+    <PackAsTool>False</PackAsTool>
     <PackageIcon>CDULL.png</PackageIcon>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

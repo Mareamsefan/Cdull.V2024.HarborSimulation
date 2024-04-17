@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Timers;
-using Cdull.V2024.HarborSimulation.SimulationFramework;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
-namespace Cdull.V2024.HarborSimulation.TestClient
+namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     /// <summary>
     /// Represents the simulation of a harbor.

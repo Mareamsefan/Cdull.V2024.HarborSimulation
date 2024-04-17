@@ -1,8 +1,9 @@
 ﻿
 using Cdull.V2024.HarborSimulation.SimulationFramework;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Events;
-using Cdull.V2024.HarborSimulation.TestClient;
 
 namespace HarborSimulationTest
 {
@@ -67,52 +68,18 @@ namespace HarborSimulationTest
             // Planlegger seiling for LNGCarrier skip med starttidspunkt 2024-01-02, antall skip 40, og med daglig gjentakelse.
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
-            List<int> columLocations = new List<int>
-            {
-                37, 74, 111, 148, 185, 222, 259, 292, 333, 270, 407, 444, 481, 518
-            };
-            List<StorageColumn> storageColumns = harbor.InitializeStorageColumns();
-            //Lager 24 Lange og 7 korte lagringskolonner: 
-            var columnsToAdd = new List<StorageColumn>
-            {
-                new StorageColumn(37, 1, 18, 6, 4),
-                new StorageColumn(74, 2, 18, 6, 4),
-                new StorageColumn(111, 3, 18, 6, 4),
-                new StorageColumn(148, 1, 18, 6, 4),
-                new StorageColumn(185, 1, 18, 6, 4),
-                new StorageColumn(222, 1, 18, 6, 4),
-                new StorageColumn(259, 1, 18, 6, 4),
-                new StorageColumn(296, 1, 18, 6, 4),
-                new StorageColumn(333, 1, 18, 6, 4),
-                new StorageColumn(370, 1, 18, 6, 4),
-                new StorageColumn(407, 1, 18, 6, 4),
-                new StorageColumn(444, 1, 18, 6, 4),
-                new StorageColumn(481, 1, 18, 6, 4),
-                new StorageColumn(518, 1, 18, 6, 4),
-                new StorageColumn(555, 1, 18, 6, 4),
-                new StorageColumn(592, 1, 18, 6, 4),
-                new StorageColumn(629, 1, 18, 6, 4),
-                new StorageColumn(666, 1, 18, 6, 4),
-                new StorageColumn(703, 1, 18, 6, 4),
-                new StorageColumn(740, 1, 18, 6, 4),
-                new StorageColumn(777, 1, 18, 6, 4),
-                new StorageColumn(814, 1, 18, 6, 4),
-                new StorageColumn(851, 1, 18, 6, 4),
-                new StorageColumn(888, 1, 18, 6, 4),
-                new StorageColumn(666, 1, 15, 6, 4),
-                new StorageColumn(703, 1, 15, 6, 4),
-                new StorageColumn(740, 1, 15, 6, 4),
-                new StorageColumn(777, 1, 15, 6, 4),
-                new StorageColumn(814, 1, 15, 6, 4),
-                new StorageColumn(851, 1, 15, 6, 4),
-                new StorageColumn(888, 1, 15, 6, 4),
+            List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407 };
+            List<int> shortColumnLocations = new List<int> { 74, 148, 222, 292, 270, 444 };
 
-            };
-
-            foreach (var column in columnsToAdd)
-            {
-                containerStorage.AddStorageColumn(column);
-            }
+            List<StorageColumn> storageColumns = harbor.InitializeStorageColumns(
+                longColumnLocations,
+                shortColumnLocations,
+                longColumnLength: 18,
+                shortColumnLength: 15,
+                numberOfLongColumns: 24,
+                numberOfShortColumns: 7,
+                columnWidth: 6,
+                columnHeight: 4);
 
             
             ContainerHandler containerHandler = ContainerHandler.GetInstance();

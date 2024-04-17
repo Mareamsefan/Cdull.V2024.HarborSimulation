@@ -1,9 +1,10 @@
-﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 using System;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure
 {
     /// <summary>
     /// Represents a storage facility for container items.
@@ -12,7 +13,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     {
         public string Name { get; set; }
         internal List<StorageColumn> StorageColumns { get; set; } = new List<StorageColumn>();
-        internal List<int> LocationIndexes { get; set; } = new List<int> ();
+        internal List<int> LocationIndexes { get; set; } = new List<int>();
         internal int Capacity { get; set; }
 
 
@@ -40,11 +41,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>The storage column with the specified ID.</returns>
         public StorageColumn GetSpecificColumn(int columnId)
         {
-           StorageColumn correctColumn = StorageColumns.First(); 
+            StorageColumn correctColumn = StorageColumns.First();
 
-           foreach(StorageColumn storageColumn in StorageColumns)
+            foreach (StorageColumn storageColumn in StorageColumns)
             {
-                if(storageColumn.ColumnId.Equals(columnId))
+                if (storageColumn.ColumnId.Equals(columnId))
                 {
                     correctColumn = storageColumn;
                 }
@@ -61,13 +62,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             if (!LocationIndexes.Contains(column.Location))
             {
-                throw new ArgumentException("The specified column location is outside the range of this storage."); 
+                throw new ArgumentException("The specified column location is outside the range of this storage.");
             }
-            else {
+            else
+            {
                 StorageColumns.Add(column);
                 Capacity += column.Capacity;
             }
-         
+
         }
 
         /// <summary>
@@ -76,11 +78,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>The total occupied space in the container storage.</returns>
         public int GetOccupiedSpace()
         {
-            int occupiedSpace = 0; 
+            int occupiedSpace = 0;
             StorageColumns.ForEach(column =>
             {
                 occupiedSpace += column.OccupiedSpace;
-            }); 
+            });
             return occupiedSpace;
         }
 

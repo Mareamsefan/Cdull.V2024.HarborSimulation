@@ -1,7 +1,6 @@
-﻿
-using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure
 {
     /// <summary>
     /// Represents container that can be loaded onto ships in the harbor simulation.
@@ -9,9 +8,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
     public class Container
     {
         private static int lastId = 0;
-        internal int Id; 
+        internal int Id;
         internal string Name { get; set; }
-        internal List<String> History { get; } = new List<String>();
+        internal List<string> History { get; } = new List<string>();
         internal ContainerSize Size { get; set; }
         internal int numberOfDaysInStorage { get; set; }
 
@@ -24,7 +23,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             Id = ++lastId;
             Name = containerName;
             Size = containerSize;
-            numberOfDaysInStorage = 0; 
+            numberOfDaysInStorage = 0;
 
         }
 
