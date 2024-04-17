@@ -1,10 +1,6 @@
-﻿using System;
-using System.ComponentModel.Design;
-using System.Text;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations;
 
-
-namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 {
     /// <summary>
     /// Represents a ship in the harbor simulation.

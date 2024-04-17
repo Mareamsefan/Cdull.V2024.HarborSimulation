@@ -1,8 +1,6 @@
-﻿using System;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure;
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework.Events
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
 {
     /// <summary>
     /// Provides data for the ShipLoading event.
@@ -23,8 +21,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Events
         {
             CompletedLoadingShip = completedLoadingShip;
         }
-       
 
-      
+
+
     }
 }

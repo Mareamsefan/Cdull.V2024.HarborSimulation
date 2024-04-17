@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 {
     /// <summary>
     ///  Represents an exception that is thrown when there is not enough space in the cargo storage.
@@ -11,8 +11,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions
         /// Initializes a new instance of the <see cref="DuplicatedIdException"/> class with a specified error message.
         /// </summary>
         /// <param name="message"></param>
-	    public DuplicatedIdException(string message) : base(message) 
-        { 
+	    public DuplicatedIdException(string message) : base(message)
+        {
 
         }
 

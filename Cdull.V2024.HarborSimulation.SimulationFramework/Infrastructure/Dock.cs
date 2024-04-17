@@ -1,6 +1,6 @@
-﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 {
     /// <summary>
     /// Represents a dock in the harbor.

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework.Enums
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 {
     /// <summary>
     /// Represents the model types of ships and docks.

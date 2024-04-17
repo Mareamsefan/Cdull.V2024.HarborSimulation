@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 {
     /// <summary>
     /// Represents a crane used in the harbor to Move containers from/to ships/harbor.

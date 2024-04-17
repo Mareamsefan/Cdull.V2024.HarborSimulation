@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
 {
     /// <summary>
     /// Represents an exception that is thrown when there is insufficient cargo in the cargo storage.
