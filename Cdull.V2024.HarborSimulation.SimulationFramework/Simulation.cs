@@ -19,7 +19,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="docks">The list of docks in the harbor.</param>
         /// <exception cref="ArgumentNullException">Thrown when the harbor, list of ships, or list of docks is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the start time is after the end time or if either the list of ships or list of docks is empty.</exception>
-        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, List<AGV> agvs)
+        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, List<AGV> agvs, List<StorageColumn> storageColumns)
         {
       
             if (harbor == null)
@@ -67,6 +67,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             harbor.Docks.AddRange(docks);
             harbor.Ships.AddRange(ships);
             harbor.AGVs.AddRange(agvs);
+            foreach(StorageColumn storageColumn in storageColumns)
+            {
+               harbor.ContainerStorage.AddStorageColumn(storageColumn);
+            }
 
 
     

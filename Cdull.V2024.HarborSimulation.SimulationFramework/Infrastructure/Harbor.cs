@@ -10,16 +10,46 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class Harbor
     {
+        /// <summary>
+        /// Gets or sets the name of the harbor.
+        /// </summary>
         internal string Name { get; set; }
+        /// <summary>
+        /// Gets or sets the currentime of the simulation. 
+        /// </summary>
         internal DateTime CurrentTime { get; set; }
-        internal int Location { get; set; }
+        /// <summary>
+        /// Gets or sets the range of locations within the harbor. 
+        /// </summary>
+        internal Range LocationRange { get; set; }
+        /// <summary>
+        /// Gets or sets the total list of docks in the harbor. 
+        /// </summary>
         internal List<Dock> Docks { get; set; } = new List<Dock>();
+        /// <summary>
+        /// Gets or sets the total list of ships in the harbor. 
+        /// </summary>
         internal List<Ship> Ships { get; set; } = new List<Ship>();
+        /// <summary>
+        /// Gets or sets the list of docked ships in the harbor. 
+        /// </summary>
         internal List<Ship> DockedShips { get; set; } = new List<Ship>();
+        /// <summary>
+        /// Gets or sets the list of sailing ships in the harbor. 
+        /// </summary>
         internal List<Ship> SailingShips { get; set; } = new List<Ship>();
+        /// <summary>
+        /// Gets or sets the queue of ships waiting for docking in the harbor. 
+        /// </summary>
         internal Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
+        /// <summary>
+        /// Gets or sets the list of AGVs (Automated Guided Vehicles) in the harbor.
+        /// </summary>
         internal List<AGV> AGVs { get; set; } = new List<AGV>();
-
+        /// <summary>
+        /// Gets or sets the container storage that contains Storagecolumns in the harbor. 
+        /// </summary>
+        internal ContainerStorage ContainerStorage { get; set; }
 
         /// <summary>
         /// Event raised when a ship departs from the harbor.
@@ -40,23 +70,37 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 
 
 
-        internal ContainerStorage ContainerStorage { get; set; }
 
 
         /// <summary>
-        /// Initializes a new instance of the Harbor class with the specified name and cargo storage.
+        /// Initializes a new instance of the Harbor class with the specified name, location range, and cargo storage.
         /// </summary>
         /// <param name="harborName">The name of the harbor.</param>
-        /// <param name="harborCargoStorage">The cargo storage capacity for the harbor.</param>
-        /// <remarks>
-        /// This constructor initializes a harbor with the given name and cargo storage.
-        /// It sets the harbor's location to the default value of 0.
-        /// </remarks>
-
-        public Harbor(string harborName, ContainerStorage harborContainerStorage)
+        /// <param name="locationRange">The range of locations for the harbor.</param>
+        /// <param name="harborContainerStorage">The cargo storage capacity for the harbor.</param>
+        /// <example>
+        /// This example demonstrates how to create a Harbor instance:
+        /// <code>
+        /// class Program
+        /// {
+        ///     static void Main(string[] args)
+        ///     {
+        ///         // Create a ContainerStorage instance for the harbor
+        ///         ContainerStorage harborContainerStorage = new ContainerStorage(1000);
+        ///
+        ///         // Define the range representing the location of the harbor (e.g., from 0 to 100)
+        ///         Range harborLocationRange = new Range(0, 100);
+        ///
+        ///         // Create a new instance of Harbor with the specified name, location range, and cargo storage
+        ///         Harbor harbor = new Harbor("Oslo Harbor", harborLocationRange, harborContainerStorage);
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
+        public Harbor(string harborName, Range locationRange, ContainerStorage harborContainerStorage)
         {
             Name = harborName;
-            Location = 0;
+            LocationRange = locationRange;
             ContainerStorage = harborContainerStorage;
         }
 

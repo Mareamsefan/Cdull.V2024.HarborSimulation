@@ -9,19 +9,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         public string Name { get; set; }
         internal List<StorageColumn> StorageColumns { get; set; } = new List<StorageColumn>();
         internal List<int> LocationIndexes { get; set; } = new List<int>();
-        internal int Capacity { get; set; }
+        public int Capacity { get; set; }
 
 
 
         /// <summary>
         /// Initializes a new instance of the ContainerStorage class with the specified name and location indexes range.
         /// </summary>
-        /// <param name="cargoStorageName">The name of the container storage.</param>
+        /// <param name="containerStorageName">The name of the container storage.</param>
         /// <param name="startLocationIndex">The starting location index.</param>
         /// <param name="endLocationIndex">The ending location index.</param>
-        public ContainerStorage(string cargoStorageName, int startLocationIndex, int endLocationIndex)
+        public ContainerStorage(string containerStorageName, int startLocationIndex, int endLocationIndex)
         {
-            Name = cargoStorageName;
+            Name = containerStorageName;
 
             for (int i = startLocationIndex; i <= endLocationIndex; i++)
             {
