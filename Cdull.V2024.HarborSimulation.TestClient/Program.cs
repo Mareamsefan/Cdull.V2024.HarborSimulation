@@ -4,87 +4,85 @@ using Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure;
 using Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations;
 
-namespace HarborSimulationTest
+namespace Cdull.V2024.HarborSimulation.TestClient
 {
     class Program
     {
         static void Main(string[] args)
         {
+            // Scenario setup:
+            // Setting up a harbor with docks, ships, AGVs, and cargo handling operations.
 
-            // Lager en overordnet plass for plasssering av largingskolonner, og velger indeksrekkevidde for plasseringen. 
-            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 1000);
-            // Oppretter en ny havn med navnet "ExceptiontestHarbor" og en lastelager for gods med kapasitet på 10000 enheter.
-            Harbor harbor = new Harbor("ExceptiontestHarbor", containerStorage);
+            // Creating a container storage with a range of locations and a capacity of 500 units.
+            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500);
 
-           //Lager 3 kaiplasser som skal betjenes av 7 kraner:
-           //Kaiplassene betjener maks 20 ship og minst 3. 
+            // Defining the range representing the location indices at the harbor.
+            Range harborLocationRange = new Range(0, 1000);
+
+            // Creating a new harbor named "TestHarbor" with a cargo storage capacity of 10000 units.
+            Harbor harbor = new Harbor("TestHarbor", harborLocationRange, containerStorage);
+
+            // Creating 3 large docks with 7 cranes collectively.
             List<Dock> docks = harbor.InitializeDocks(2, Size.Large, 3);
-            docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1)); 
+            docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
 
-            //Lager 20 AGV-er som skal flytte på containere: 
-            List<AGV> agvs = harbor.InitializeAGVs(20, 1000); 
+            // Creating 20 AGVs for container movement.
+            List<AGV> agvs = harbor.InitializeAGVs(20, 1000);
 
-            // Oppretter en liste over skip.
+            // Creating a list to hold ships.
             List<Ship> ships = new List<Ship>();
 
-            // Legger til 5 skip av typen LNGCarrier og størrelse medium med currentlocation 2000m unna Harbor:
+            // Adding 5 medium-sized LNGCarrier ships with a current location 2000m away from the harbor.
             ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
 
-            // Legger til 5 skip av typen ContainerShip, med 5 små containere med currentLocation 1500m unna Harbor: 
+            // Adding 5 large ContainerShip ships with 5 small containers each, located 1500m away from the harbor.
             ships.AddRange(harbor.InitializeShips(1500, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Small));
 
-            // Legger til 5 skip av typen ContainerShip, med 5 store containere med currentlocation 1700m unna Harbor: 
+            // Adding 5 large ContainerShip ships with 5 large containers each, located 1700m away from the harbor.
             ships.AddRange(harbor.InitializeShips(1700, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Large));
 
-            // Lager en test containership som viser at man kan lage et og et ship: 
-            Ship ship = new Ship("TestContainerShip", Model.ContainerShip, Size.Small, 1000);
+            // Creating a test ContainerShip to demonstrate individual ship creation.
+            Ship testShip = new Ship("TestContainerShip", Model.ContainerShip, Size.Small, 1000);
+            testShip.InitializeContainers(5, ContainerSize.Small);
+            ships.Add(testShip);
 
-            ship.InitializeContainers(5, ContainerSize.Small);
-            
-            ships.Add(ship);
-
-         
-
-            // Oppretter en instans av simuleringen.
+            // Creating an instance of the simulation driver.
             IHarborSimulation driver = new Simulation();
 
-            // Setter starttid og sluttid for simuleringen.
+            // Setting the start and end times for the simulation.
             DateTime startTime = new DateTime(2024, 1, 1);
             DateTime endTime = new DateTime(2024, 1, 15);
 
-            // Legger til hendelsesbehandlere for avgang, ankomst, fullført lossing og fullført lasting i havnen.
+            // Adding event handlers for ship departure, arrival, unloading, and loading in the harbor.
             harbor.DepartedShip += Harbor_ShipDeparted;
             harbor.ArrivedShip += Harbor_ShipArrived;
             harbor.CompletedUnloadingShip += Harbor_ShipCompletedUnloading;
             harbor.CompletedloadingShip += Harbor_ShipCompletedLoading;
 
-            // Lager en instans av seiling.
+            // Creating an instance of the sailing scheduler.
             Sailing sailing = Sailing.GetInstance();
 
-            // Planlegger seiling for container skip med starttidspunkt 2024-01-02, antall skip 50, og med ukentlig gjentakelse.
+            // Scheduling sailing for ContainerShip ships starting on January 2, 2024, with 50 ships, repeating weekly.
             sailing.ScheduleSailing(harbor, Model.ContainerShip, new DateTime(2024, 1, 2), 50, RecurringType.Weekly);
 
-            // Planlegger seiling for LNGCarrier skip med starttidspunkt 2024-01-02, antall skip 40, og med daglig gjentakelse.
+            // Scheduling sailing for LNGCarrier ships starting on January 2, 2024, with 40 ships, repeating daily.
             sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
+            // Setting up storage columns at specific locations.
             List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407 };
             List<int> shortColumnLocations = new List<int> { 74, 148, 222, 292, 270, 444 };
 
             List<StorageColumn> storageColumns = harbor.InitializeStorageColumns(
-                longColumnLocations,
-                shortColumnLocations,
-                longColumnLength: 18,
-                shortColumnLength: 15,
-                numberOfLongColumns: 24,
-                numberOfShortColumns: 7,
-                columnWidth: 6,
-                columnHeight: 4);
+                longColumnLocations, shortColumnLocations, 18, 15, 24, 7, 6, 4);
 
-            
+            // Creating a container handler instance.
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
-          
-            containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
-            containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 7),  1, 2, 10, LoadingType.Load);
+
+            // Scheduling container handling operations for the test ship on specific dates.
+            containerHandler.ScheduleContainerHandling(testShip, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
+            containerHandler.ScheduleContainerHandling(testShip, new DateTime(2024, 1, 7), 1, 2, 10, LoadingType.Load);
+
+            // Scheduling container handling operations for ContainerShip ships.
             ships.ForEach(ship =>
             {
                 if (ship.Model.Equals(Model.ContainerShip))
@@ -93,35 +91,34 @@ namespace HarborSimulationTest
                     containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load);
                 }
             });
-            //Sjekker alle handlingene for test-shipet: 
-            Console.WriteLine(containerHandler.CheckScheduledCargoHandling(ship));
-         
-            // Kjører simuleringen.
-            driver.Run(harbor, startTime, endTime, ships, docks, agvs);
 
-            // Tester at den nye generiske historikk-klassen fungerer for havn og skip.
+            // Checking all scheduled cargo handling operations for the test ship.
+            Console.WriteLine(containerHandler.CheckScheduledCargoHandling(testShip));
+
+            // Running the simulation.
+            driver.Run(harbor, startTime, endTime, ships, docks, agvs, storageColumns);
+
+            // Testing the new generic history class for harbor and ships.
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
 
-            // Skriver ut historikk for havnen den 2024-01-02.
+            // Printing history for the harbor on January 2, 2024.
             Console.WriteLine(historyHandler.GetHarborHistory(new DateTime(2024, 1, 2)));
 
-            // Henter det første skipet i havnen og skriver ut historikk for det.
+            // Retrieving the first ship in the harbor and printing its history.
             Ship ship1 = harbor.GetShips().First();
             Console.WriteLine(historyHandler.GetShipHistory(ship1));
 
-            // Henter det siste skipet i havnen og skriver ut historikk for det.
-            //Ship ship2 = harbor.GetShips().Last();
-            //Console.WriteLine(historyHandler.GetShipHistory(ship2));
-         
+            // Retrieving the last ship in the harbor and printing its history.
+            Ship ship2 = harbor.GetShips().Last();
+            Console.WriteLine(historyHandler.GetShipHistory(ship2));
 
-            // Skriver ut historikk for alle skip i havnen.
-            Console.WriteLine(historyHandler.GetShipsHistory());    
-            
-     
-      
-        
-
+            // Printing history for all ships in the harbor.
+            Console.WriteLine(historyHandler.GetShipsHistory());
         }
+
+
+
+
 
         private static void Harbor_ShipDeparted(object? sender, ShipDepartureEventArgs e)
         {
