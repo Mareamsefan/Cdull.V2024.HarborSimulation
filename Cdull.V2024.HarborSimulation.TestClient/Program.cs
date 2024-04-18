@@ -17,11 +17,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // The capacity of the container storage is determined by the storage columns it contains.
             ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500);
 
-            // Defining the range representing the location indices at the harbor.
-            Range harborLocationRange = new Range(0, 1000);
-
-            // Creating a new harbor named "TestHarbor" with a cargo storage capacity of 10000 units.
-            Harbor harbor = new Harbor("TestHarbor", harborLocationRange, containerStorage);
+            // Creating a new harbor named "TestHarbor" with a location index range of 1000 (from 0-1000)
+            Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage);
 
             // Creating 3 large docks with 7 cranes collectively.
             List<Dock> docks = harbor.InitializeDocks(2, Size.Large, 3);

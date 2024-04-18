@@ -68,15 +68,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         public event EventHandler<ShipLoadingEventArgs> CompletedloadingShip;
 
-
-
-
-
         /// <summary>
         /// Initializes a new instance of the Harbor class with the specified name, location range, and cargo storage.
         /// </summary>
         /// <param name="harborName">The name of the harbor.</param>
-        /// <param name="locationRange">The range of locations for the harbor.</param>
+        /// <param name="locationRange">The range of locations for the harbor, starting from 0.</param>
         /// <param name="harborContainerStorage">The cargo storage capacity for the harbor.</param>
         /// <example>
         /// This example demonstrates how to create a Harbor instance:
@@ -87,20 +83,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         ///     {
         ///         // Create a ContainerStorage instance for the harbor
         ///         ContainerStorage harborContainerStorage = new ContainerStorage(1000);
-        ///
-        ///         // Define the range representing the location of the harbor (e.g., from 0 to 100)
-        ///         Range harborLocationRange = new Range(0, 100);
-        ///
+        ///   
         ///         // Create a new instance of Harbor with the specified name, location range, and cargo storage
-        ///         Harbor harbor = new Harbor("Oslo Harbor", harborLocationRange, harborContainerStorage);
+        ///         Harbor harbor = new Harbor("Oslo Harbor", 1000, harborContainerStorage);
         ///     }
         /// }
         /// </code>
         /// </example>
-        public Harbor(string harborName, Range locationRange, ContainerStorage harborContainerStorage)
+
+        public Harbor(string harborName, int locationRange, ContainerStorage harborContainerStorage)
         {
             Name = harborName;
-            LocationRange = locationRange;
+            LocationRange = new Range(0, locationRange);
             ContainerStorage = harborContainerStorage;
         }
 
