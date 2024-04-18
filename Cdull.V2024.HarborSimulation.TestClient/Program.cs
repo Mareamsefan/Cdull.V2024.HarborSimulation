@@ -68,10 +68,12 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             // Setting up storage columns at specific locations.
             List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407 };
-            List<int> shortColumnLocations = new List<int> { 74, 148, 222, 292, 270, 444 };
+            List<int> shortColumnLocations = new List<int> { 30, 74, 148, 222, 292, 270, 444 };
 
+            // Setting up 4 storage columns at each of the longColumnLocations, and 1 storage column at each of the 
+            // shortColumnLocations, resulting in a total of 24 long storage columns and 7 small storage columns.
             List<StorageColumn> storageColumns = harbor.InitializeStorageColumns(
-                longColumnLocations, shortColumnLocations, 18, 15, 24, 7, 6, 4);
+                longColumnLocations, shortColumnLocations, 18, 15, 4, 1, 6, 4);
 
             // Creating a container handler instance.
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
