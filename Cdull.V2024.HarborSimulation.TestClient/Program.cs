@@ -13,7 +13,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Scenario setup:
             // Setting up a harbor with docks, ships, AGVs, and cargo handling operations.
 
-            // Creating a container storage with a range of locations and a capacity of 500 units.
+            // Creating a container storage with a location range for the storage columns to be located. 
+            // The capacity of the container storage is determined by the storage columns it contains.
             ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500);
 
             // Defining the range representing the location indices at the harbor.
