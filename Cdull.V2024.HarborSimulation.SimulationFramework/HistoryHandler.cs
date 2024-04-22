@@ -114,7 +114,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="ship">The ship for which the event is recorded.</param>
         /// <param name="eventDescription">The description of the event.</param>
         /// <exception cref="ArgumentNullException">Thrown when the ship parameter is null.</exception>
-        public void AddEventToShipHistory(Ship ship, string eventDescription)
+        internal void AddEventToShipHistory(Ship ship, string eventDescription)
         {
             if (ship == null)
             {

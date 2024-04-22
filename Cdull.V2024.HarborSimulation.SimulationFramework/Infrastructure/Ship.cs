@@ -24,8 +24,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         internal bool HasReachedDestination { get; set; }
         internal bool IsLoadingCompleted { get; set; }
         internal bool IsUnloadingCompleted { get; set; }
-
-        public List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
+        internal List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
 
 
         /// <summary>
@@ -96,12 +95,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// Retrieves the container carried by the ship.
         /// </summary>
         /// <returns>A list of Containers objects representing the ship's container.</returns>
-        public List<Container> GetShipCargo()
+        public List<Container> GetShipContainers()
         {
             return Containers;
         }
-
-
 
 
 

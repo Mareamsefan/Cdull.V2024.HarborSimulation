@@ -34,7 +34,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         /// <param name="columnId">The ID of the storage column to retrieve.</param>
         /// <returns>The storage column with the specified ID.</returns>
-        public StorageColumn GetSpecificColumn(int columnId)
+        internal StorageColumn GetSpecificColumn(int columnId)
         {
             StorageColumn correctColumn = StorageColumns.First();
 
@@ -53,7 +53,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         /// <param name="column">The storage column to add.</param>
         /// <exception cref="ArgumentException">Thrown when the specified column location is outside the range of this storage.</exception>
-        public void AddStorageColumn(StorageColumn column)
+        internal void AddStorageColumn(StorageColumn column)
         {
             if (!LocationIndexes.Contains(column.Location))
             {
