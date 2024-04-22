@@ -12,6 +12,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <summary>
         /// Represents the recurring types for scheduling ship sailings.
         /// </summary>
+        None,
         Daily,
         Weekly
     }

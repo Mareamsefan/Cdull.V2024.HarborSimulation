@@ -1,4 +1,5 @@
 ﻿using Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations;
+using Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 {
@@ -26,6 +27,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         internal bool IsUnloadingCompleted { get; set; }
 
         public List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
+        public List<Sailing> ScheduledSailings { get; set; } = new List<Sailing>();
 
 
         /// <summary>
@@ -49,17 +51,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             IsReadyToSail = false;
             CurrentLocation = shipCurrentLocation;
         }
-        /// <summary>
-        /// Generates a random destination for the ship.
-        /// </summary>
-        /// <param name="min">The minimum destination value.</param>
-        /// <param name="max">The maximum destination value.</param>
-        /// <returns>The randomly generated destination.</returns>
-        public int GenerateRandomDestination(int min, int max)
-        {
-            Random random = new Random();
-            return random.Next(min, max + 1);
-        }
+       
 
         /// <summary>
         /// Gets the speed of the ship based on its model.

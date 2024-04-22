@@ -40,10 +40,13 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             ships.AddRange(harbor.InitializeShips(1700, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Large));
 
             // Creating a test ContainerShip to demonstrate individual ship creation.
-            Ship testShip = new Ship("TestContainerShip", Model.ContainerShip, Size.Small, 1000);
-            testShip.InitializeContainers(5, ContainerSize.Small);
-            ships.Add(testShip);
-
+            Ship ContainerTestShip = new Ship("ContainerTestShip", Model.ContainerShip, Size.Small, 1000);
+            ContainerTestShip.InitializeContainers(5, ContainerSize.Small);
+            Ship LNGCarrierTestShip = new Ship("LNGCarrierTestShip", Model.LNGCarrier, Size.Medium, 2500);
+        
+            ships.Add(ContainerTestShip);
+            ships.Add(LNGCarrierTestShip);
+                
             // Creating an instance of the simulation driver.
             IHarborSimulation driver = new Simulation();
 
@@ -57,15 +60,23 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.CompletedUnloadingShip += Harbor_ShipCompletedUnloading;
             harbor.CompletedloadingShip += Harbor_ShipCompletedLoading;
 
-            // Creating an instance of the sailing scheduler.
-            Sailing sailing = Sailing.GetInstance();
+           
+           
 
             // Scheduling sailing for ContainerShip ships starting on January 2, 2024, with 50 ships, repeating weekly.
-            sailing.ScheduleSailing(harbor, Model.ContainerShip, new DateTime(2024, 1, 2), 50, RecurringType.Weekly);
+            ScheduleSailing.ScheduleSailings(harbor, Model.ContainerShip, new DateTime(2024, 1, 2), 50, RecurringType.Weekly);
 
             // Scheduling sailing for LNGCarrier ships starting on January 2, 2024, with 40 ships, repeating daily.
-            sailing.ScheduleSailing(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
+            ScheduleSailing.ScheduleSailings(harbor, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Daily);
 
+            ScheduleSailing.ScheduleOneSailing(harbor, LNGCarrierTestShip, new DateTime(2024, 1, 5), 50, RecurringType.None);
+
+
+            List<Sailing> sailings = ScheduleSailing.CheckScheduledSailings(harbor, Model.LNGCarrier);
+            sailings.ForEach(sailing =>
+                Console.WriteLine(sailing.ToString())
+            );
+            
             // Setting up storage columns at specific locations.
             List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407 };
             List<int> shortColumnLocations = new List<int> { 30, 74, 148, 222, 292, 270, 444 };
@@ -79,8 +90,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
 
             // Scheduling container handling operations for the test ship on specific dates.
-            containerHandler.ScheduleContainerHandling(testShip, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
-            containerHandler.ScheduleContainerHandling(testShip, new DateTime(2024, 1, 7), 1, 2, 10, LoadingType.Load);
+            containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
+            containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 7), 1, 2, 10, LoadingType.Load);
 
             // Scheduling container handling operations for ContainerShip ships.
             ships.ForEach(ship =>
@@ -93,7 +104,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             });
 
             // Checking all scheduled cargo handling operations for the test ship.
-            Console.WriteLine(containerHandler.CheckScheduledCargoHandling(testShip));
+            Console.WriteLine(containerHandler.CheckScheduledCargoHandling(ContainerTestShip));
 
             // Running the simulation.
             driver.Run(harbor, startTime, endTime, ships, docks, agvs, storageColumns);
@@ -109,8 +120,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine(historyHandler.GetShipHistory(ship1));
 
             // Retrieving the last ship in the harbor and printing its history.
-            Ship ship2 = harbor.GetShips().Last();
-            Console.WriteLine(historyHandler.GetShipHistory(ship2));
+            //Ship ship2 = harbor.GetShips().Last();
+           // Console.WriteLine(historyHandler.GetShipHistory(ship2));
 
             // Printing history for all ships in the harbor.
             Console.WriteLine(historyHandler.GetShipsHistory());

@@ -50,7 +50,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
-            Sailing sailing = Sailing.GetInstance();
 
             Driver driver = new Driver(); 
             Docking docking = new Docking();
@@ -169,7 +168,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         }
                     }); 
                   
-                    sailing.StartScheduledSailings(harbor, historyHandler);
+                    ScheduledSailingsExecutor.ExecuteScheduledSailings(harbor);
                 }
 
 
