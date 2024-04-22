@@ -15,12 +15,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// Schedules sailings for a specific ship model.
         /// </summary>
         /// <param name="harbor">The harbor where the ships are docked.</param>
+        /// <param name="ships">The list of the total ships on harbor.</param>
         /// <param name="shipModel">The model of the ship.</param>
         /// <param name="sailingTime">The time at which the sailing is scheduled to occur.</param>
         /// <param name="destinationLocation">The destination location of the sailing.</param>
         /// <param name="recurringType">The type of recurring sailing, if any.</param>
 
-        public static void ScheduleSailings(Harbor harbor, Model shipModel, DateTime sailingTime, int destinationLocation, RecurringType recurringType)
+        public static void ScheduleSailings(Harbor harbor, List<Ship> ships,  Model shipModel, DateTime sailingTime, int destinationLocation, RecurringType recurringType)
         {
             if (sailingTime < harbor.CurrentTime)
             {
@@ -32,7 +33,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
                 throw new ArgumentException("Destination location cannot be negative.");
             }
 
-            foreach (Ship ship in harbor.Ships)
+            foreach (Ship ship in ships)
             {
                 if (ship.Model.Equals(shipModel))
                 {
@@ -44,7 +45,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
                     // Legg til den nye seilasen i skipets liste over planlagte seilaser
                     Sailing sailing = new Sailing(sailingTime, destinationLocation, recurringType);
                     ship.ScheduledSailings.Add(sailing);
-                    Console.WriteLine("THIS SHIP GETS A SAILING: " + ship.Name);
                 }
             }
         }
@@ -86,11 +86,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// <param name="harbor">The harbor where the ships are docked.</param>
         /// <param name="shipModel">The model of the ship to check sailings for.</param>
         /// <returns>A list of scheduled sailings for the specified ship model.</returns>
-        public static List<Sailing> CheckScheduledSailings(Harbor harbor, Model shipModel)
+        public static List<Sailing> CheckScheduledSailings(Harbor harbor, List<Ship> ships, Model shipModel)
         {
             List<Sailing> allScheduledSailings = new List<Sailing>();
 
-            foreach (Ship ship in harbor.Ships)
+            foreach (Ship ship in ships)
             {
                 if (ship.Model == shipModel)
                 {

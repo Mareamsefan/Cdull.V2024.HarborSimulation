@@ -18,13 +18,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         internal string SailedAtTime { get; set; }
         public bool IsSailing { get; set; }
         public bool IsReadyToSail { get; set; }
-        internal bool IsWaitingForSailing { get; set; }
         internal float Speed { get; private set; }
         internal Dock? DockedAt { get; set; }
         internal int CurrentLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
-        internal bool IsLoadingCompleted { get; set; }
-        internal bool IsUnloadingCompleted { get; set; }
+        internal ShipSailingState SailingState { get; set; }
 
         public List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
         public List<Sailing> ScheduledSailings { get; set; } = new List<Sailing>();
@@ -44,7 +42,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             HasDocked = false;
             IsSailing = false;
             DockedAt = null;
-            IsWaitingForSailing = false;
             DockedAtTime = "";
             SailedAtTime = "";
             Speed = GetSpeedFromModel(shipModel);

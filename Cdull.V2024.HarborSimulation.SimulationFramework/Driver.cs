@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+using System.Threading.Tasks;
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
     /// <summary>
@@ -10,7 +11,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal bool HasReachedDestination { get; set; }
         internal bool AgvHasReachedDestination { get; set; }
         internal int AgvSpeed { get; set; }
-        internal float MoveDistance {  get; set; }
+        internal float MoveDistance { get; set; }
 
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             HasReachedDestination = false;
             AgvHasReachedDestination = false;
             AgvSpeed = 7;
-           
+
 
         }
 
@@ -39,7 +40,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             float speed = (AgvSpeed / 3.6f);
             double calcDistance = Math.Pow(moveToLocation - agvLocation, 2);
             double distance = Math.Sqrt(calcDistance);
-            
+
             if (AgvHasReachedDestination)
             {
                 return false;
@@ -58,7 +59,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 AgvHasReachedDestination = true;
             }
 
-            return !AgvHasReachedDestination; 
+            return !AgvHasReachedDestination;
         }
 
 
@@ -75,17 +76,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             if (HasReachedDestination)
             {
-                return false; 
+                return false;
             }
 
             if (CurrentLocation >= range)
             {
                 HasReachedDestination = true;
-  
+
             }
             else
             {
-                
+
                 CurrentLocation += (int)(speed / 3.6f);
             }
 
@@ -93,5 +94,23 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
+
+        public async Task<bool> MoveAsync(int destinationLocation, float speed)
+        {
+            if (HasReachedDestination)
+            {
+                return false;
+            }
+
+            float distanceToTravel = destinationLocation - CurrentLocation;
+            float timeToTravel = distanceToTravel / speed; // Beregner tiden det tar å reise til destinasjonen basert på hastigheten
+
+            await Task.Delay(TimeSpan.FromSeconds(timeToTravel)); // Simulerer tiden det tar å reise til destinasjonen
+
+            HasReachedDestination = true;
+            CurrentLocation = destinationLocation;
+
+            return true;
+        }
     }
 }
