@@ -50,10 +50,10 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Scheduling sailing for ContainerShip ships starting on January 2, 2024, with 50 ships, repeating weekly.
             // ScheduleSailing.ScheduleSailings(harbor, ships, Model.ContainerShip, new DateTime(2024, 1, 2), 50, RecurringType.Weekly);
 
-            // Scheduling sailing for LNGCarrier ships starting on January 2, 2024, with 40 ships, repeating daily.
+            //Scheduling sailing for LNGCarrier ships starting on January 2, 2024, with 40 ships, repeating daily.
             ScheduleSailing.ScheduleSailings(harbor, ships, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Weekly);
 
-            ScheduleSailing.ScheduleOneSailing(harbor, LNGCarrierTestShip, new DateTime(2024, 1, 10), 500, RecurringType.None);
+            ScheduleSailing.ScheduleOneSailing(harbor, LNGCarrierTestShip, new DateTime(2024, 1, 10), 50, RecurringType.None);
          
                 
             // Creating an instance of the simulation driver.

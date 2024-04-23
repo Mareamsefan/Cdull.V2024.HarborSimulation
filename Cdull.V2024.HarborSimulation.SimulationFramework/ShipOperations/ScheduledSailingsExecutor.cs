@@ -14,16 +14,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// </summary>
         /// <param name="harbor">The harbor where the ships are docked.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="harbor"/> is null.</exception>
-        public static void ExecuteScheduledSailings (Harbor harbor)
+        public static async Task ExecuteScheduledSailings (Harbor harbor)
         {
             if (harbor == null)
             {
                 throw new ArgumentNullException(nameof(harbor), "Harbor cannot be null.");
             }
-
+            Driver driver = new Driver();
             foreach (Ship ship in harbor.Ships)
             {
-                if(ship.ScheduledSailings.Any()) // Use ToList() to allow modifications during iteration
+                if(ship.ScheduledSailings.Count != 0) // Use ToList() to allow modifications during iteration
                 {
                     Sailing sailing = ship.ScheduledSailings.First();
                     if (sailing.RecurringType == RecurringType.Weekly && harbor.GetCurrentTime().DayOfWeek != sailing.DateTime.DayOfWeek)
@@ -41,19 +41,21 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
                             {
                                 // Perform sailing operations
                                 PerformSailingOperations(ship, harbor, sailing);
+                              
+                             
                                 if (sailing.RecurringType == RecurringType.None)
                                 {
                                     ship.ScheduledSailings.Remove(sailing);
                                 }
                             }
                         }
-                        else if (ship.HasReachedDestination && ship.SailingState.Equals(ShipSailingState.Arrived))
-                        {
-                            ship.IsSailing = false;
-                            harbor.SailingShips.Remove(ship);
-                            harbor.QueueShipsToDock();
-                        }
 
+                    }
+                    else if (await driver.MoveAsync(sailing.DestinationLocation, ship.Speed))
+                    {
+                        ship.IsSailing = false;
+                        harbor.SailingShips.Remove(ship);
+                        harbor.QueueShipsToDock();
                     }
                 }
             }
@@ -87,9 +89,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// <param name="sailing">The details of the scheduled sailing.</param>
         private static void PerformSailingOperations(Ship ship, Harbor harbor, Sailing sailing)
         {
-            Driver driver = new Driver();
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
-            driver.Move(sailing.DestinationLocation, ship.Speed);
             ship.SailedAtTime = harbor.GetCurrentTime().ToString();
             historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Sailed at {ship.SailedAtTime} to destination:{sailing.DestinationLocation}");
             ship.IsSailing = true;

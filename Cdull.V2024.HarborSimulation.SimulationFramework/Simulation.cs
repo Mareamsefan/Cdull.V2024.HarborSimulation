@@ -184,8 +184,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 ScheduledSailingsExecutor.ExecuteScheduledSailings(harbor);
 
 
-
-
+             
 
                 harbor.SetCurrentTime(harbor.GetCurrentTime().AddSeconds(1));
 
