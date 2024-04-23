@@ -35,7 +35,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         /// <param name="container">The container being moved.</param>
         /// <param name="harbor">The harbor instance.</param>
         /// <returns>The AGV to which the container is moved.</returns>
-        public AGV MoveContainerFromShipToAGV(Ship ship, Container container, Harbor harbor)
+        internal AGV MoveContainerFromShipToAGV(Ship ship, Container container, Harbor harbor)
         {
             Dock dock = ship.DockedAt;
             Crane crane = dock.Cranes.First();
@@ -80,7 +80,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the start column ID is not within the valid range defined by the container storage.</exception>
         /// <exception cref="InsufficientStorageSpaceException">Thrown when there is not enough space in the storage column to add the container.</exception>
 
-        public void MoveContainerFromAGVToStorageColumn(ContainerStorage containerStorage, int startColumnId,
+        internal void MoveContainerFromAGVToStorageColumn(ContainerStorage containerStorage, int startColumnId,
             int endColumnId, AGV agv)
         {
             StorageColumn column = containerStorage.GetSpecificColumn(startColumnId);
@@ -128,7 +128,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         /// <returns>The AGV to which the container is moved.</returns>
         /// <exception cref="InvalidOperationException">Thrown when no container is available in the storage column.</exception>
 
-        public AGV MoveContainerFromStorageColumnToAGV(ContainerStorage containerStorage, int columnId, Harbor harbor)
+        internal AGV MoveContainerFromStorageColumnToAGV(ContainerStorage containerStorage, int columnId, Harbor harbor)
         {
             StorageColumn column = containerStorage.GetSpecificColumn(columnId);
             PortalCrane portalCrane = column.Crane;
@@ -166,7 +166,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         /// </summary>
         /// <param name="agv">The AGV from which the container is being moved.</param>
         /// <param name="ship">The ship to which the container is being moved.</param>
-        public void MoveContainerFromAGVToShip(AGV agv, Ship ship)
+        internal void MoveContainerFromAGVToShip(AGV agv, Ship ship)
         {
             Dock dock = ship.DockedAt;
             Crane crane = dock.Cranes.First();
@@ -205,7 +205,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         /// <param name="percentageDecimal">The percentage of containers to be removed.</param>
         /// <param name="ship">The ship from which containers are being removed.</param>
         /// <param name="storageColumn">The storage column from which containers are being removed.</param>
-        public void RemovePercentageOfContainersFromSource(decimal percentageDecimal, Ship ship = null, StorageColumn storageColumn = null)
+        internal void RemovePercentageOfContainersFromSource(decimal percentageDecimal, Ship ship = null, StorageColumn storageColumn = null)
         {
             int percentage = (int)(1 - percentageDecimal);
 

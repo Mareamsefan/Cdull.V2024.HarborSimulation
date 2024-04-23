@@ -27,7 +27,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         public List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
         public List<Sailing> ScheduledSailings { get; set; } = new List<Sailing>();
 
-
         /// <summary>
         /// Initializes a new instance of the Ship class.
         /// </summary>
@@ -85,12 +84,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// Retrieves the container carried by the ship.
         /// </summary>
         /// <returns>A list of Containers objects representing the ship's container.</returns>
-        public List<Container> GetShipCargo()
+        public List<Container> GetShipContainers()
         {
             return Containers;
         }
-
-
 
 
 

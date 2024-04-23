@@ -46,7 +46,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         /// <param name="crane">The crane to check.</param>
         /// <returns>True if the crane is available, otherwise false.</returns>
-        public bool GetAvailableCrane(Crane crane)
+        internal bool GetAvailableCrane(Crane crane)
         {
             if (crane != null && crane.IsAvailable)
             {

@@ -7,7 +7,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
     /// </summary>
     internal class Docking
     {
-
         /// <summary>
         /// Attempts to dock a ship at the specified dock in the harbor.
         /// </summary>

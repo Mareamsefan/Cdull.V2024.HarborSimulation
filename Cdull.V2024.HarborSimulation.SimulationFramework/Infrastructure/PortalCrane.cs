@@ -27,8 +27,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         /// <param name="container">The container to be lifted.</param>
         /// <exception cref="InvalidOperationException">Thrown when the portal crane is already loaded with cargo.</exception>
-
-        public void LiftContainer(Container container)
+        internal void LiftContainer(Container container)
         {
             if (Container != null)
             {

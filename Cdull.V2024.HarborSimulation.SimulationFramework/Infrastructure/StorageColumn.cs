@@ -168,7 +168,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         /// <param name="containers">The list of containers to check.</param>
         /// <returns>True if the storage column has enough space; otherwise, false.</returns>
-        public bool HasEnoughSpaceForContainers(List<Container> containers)
+        internal bool HasEnoughSpaceForContainers(List<Container> containers)
         {
             int requiredSpace = containers.Sum(container => (int)container.Size);
 

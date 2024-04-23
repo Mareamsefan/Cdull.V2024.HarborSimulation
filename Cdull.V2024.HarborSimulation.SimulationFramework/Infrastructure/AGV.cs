@@ -32,7 +32,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <remarks>
         /// This method loads the specified container onto the AGV for transportation within the harbor.
         /// </remarks>
-        public void LoadContainerToAGV(Container container)
+        internal void LoadContainerToAGV(Container container)
         {
 
             Container = container;
