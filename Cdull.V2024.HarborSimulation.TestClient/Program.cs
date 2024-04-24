@@ -41,6 +41,13 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Container(string containerName, ContainerSize containerSize);
 
             List<string> GetContainerHistory();
+
+
+            int dockId = 1;
+            Size dockSize = Size.Large;
+            List<Crane> dockCranes = new List<Crane> { new Crane(1), new Crane(2) };
+            Dock dock = new Dock(dockName, dockSize, dockCranes);
+
                 
             
 
