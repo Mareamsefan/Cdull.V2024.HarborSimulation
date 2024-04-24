@@ -38,6 +38,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Crane crane = new Crane(craneId);
 
 
+            Container(string containerName, ContainerSize containerSize);
+
+            List<string> GetContainerHistory();
                 
             
 
