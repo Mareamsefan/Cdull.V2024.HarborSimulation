@@ -12,6 +12,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         {
 
 
+            OccupySpace(Container container);
+
+
             StorageColumn column = new StorageColumn();
             column.InitializeContainers(5);
 
