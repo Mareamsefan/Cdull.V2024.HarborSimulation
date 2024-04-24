@@ -30,6 +30,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             SetCurrentTime(DateTime currentTime);
 
+
+            harbor.ToString();
+
             
 
 
