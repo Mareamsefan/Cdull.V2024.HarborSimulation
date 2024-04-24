@@ -281,7 +281,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         /// </summary>
         /// <param name="ship">The ship for which scheduled cargo handling operations are being checked.</param>
         /// <returns>A string containing information about scheduled cargo handling operations.</returns>
-        public string CheckScheduledCargoHandling(Ship ship)
+        public string CheckScheduledContainerHandling(Ship ship)
         {
             StringBuilder sb = new StringBuilder();
 
