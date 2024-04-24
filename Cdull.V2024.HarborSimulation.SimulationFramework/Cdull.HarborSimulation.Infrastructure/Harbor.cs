@@ -2,10 +2,11 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Xml.Linq;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Events;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions;
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure
 {
     /// <summary>
     /// Represents a harbor in the simulation.
@@ -20,7 +21,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         internal List<Ship> DockedShips { get; set; } = new List<Ship>();
         internal List<Ship> SailingShips { get; set; } = new List<Ship>();
         internal Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
-        internal List<AGV> AGVs { get; set; } = new List<AGV> ();
+        internal List<AGV> AGVs { get; set; } = new List<AGV>();
 
 
         /// <summary>
@@ -117,8 +118,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// The ship size and number of cargo units parameters are optional, with default values assigned if not provided.
         /// </remarks>
 
-        public List<Ship> InitializeShips(int shipCurrentLocation, int numberOfShips, Model shipModel, Size shipSize = Size.Small, 
-            int numberOfContainers= 0, ContainerSize containerSize = ContainerSize.Large)
+        public List<Ship> InitializeShips(int shipCurrentLocation, int numberOfShips, Model shipModel, Size shipSize = Size.Small,
+            int numberOfContainers = 0, ContainerSize containerSize = ContainerSize.Large)
         {
             List<Ship> ships = new List<Ship>();
 
@@ -132,7 +133,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 if (!ships.Any(s => s.Name == ship.Name))
                 {
                     ships.Add(ship);
-                    
+
                     if (shipModel == Model.ContainerShip)
                     {
                         ship.InitializeContainers(numberOfContainers, containerSize);
@@ -169,30 +170,46 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
         /// <summary>
-        /// Initializes storage columns in the harbor.
+        /// Initializes the storage columns in the harbor.
         /// </summary>
-        /// <param name="columnLocation">The location of the columns.</param>
-        /// <param name="numberOfColumns">The number of columns to initialize.</param>
-        /// <param name="columnLength">The Length of each column.</param>
-        /// <param name="columnWidth">The Width of each column.</param>
-        /// <param name="columnHeight">The height of each column.</param>
+        /// <param name="longColumnLocations">The locations for long columns.</param>
+        /// <param name="shortColumnLocations">The locations for short columns.</param>
+        /// <param name="longColumnLength">The length of long columns.</param>
+        /// <param name="shortColumnLength">The length of short columns.</param>
+        /// <param name="numberOfLongColumns">The number of long columns at each location.</param>
+        /// <param name="numberOfShortColumns">The number of short columns at each location.</param>
+        /// <param name="columnWidth">The width of the columns.</param>
+        /// <param name="columnHeight">The height of the columns.</param>
         /// <returns>A list of initialized storage columns.</returns>
-        public List<StorageColumn> InitializeStorageColumns(int coulmnLocation, int numberOfColumns, int columnLength, int columnWidth, int columnHeight)
+        /// <exception cref="ArgumentException">Thrown when parameters are invalid.</exception>
+        public List<StorageColumn> InitializeStorageColumns(List<int> longColumnLocations, List<int> shortColumnLocations, int longColumnLength,
+            int shortColumnLength, int numberOfLongColumns, int numberOfShortColumns, int columnWidth, int columnHeight)
         {
+            if (longColumnLocations == null || longColumnLocations.Count == 0 ||
+                shortColumnLocations == null || shortColumnLocations.Count == 0 ||
+                numberOfLongColumns <= 0 || numberOfShortColumns <= 0)
+            {
+                throw new ArgumentException("Invalid parameters. Locations and numbers of columns should be provided.");
+            }
+
             List<StorageColumn> columns = new List<StorageColumn>();
 
-            if (numberOfColumns <= 0)
-            {
-                throw new ArgumentException("Number of columns should be greater than zero.");
-            }
-
-            for (int i = 0; i < numberOfColumns; i++)
-            {
-                StorageColumn column = new StorageColumn(coulmnLocation,i, columnLength, columnWidth, columnHeight);
-                columns.Add(column);
-            }
+            AddColumns(columns, longColumnLocations, longColumnLength, numberOfLongColumns, columnWidth, columnHeight);
+            AddColumns(columns, shortColumnLocations, shortColumnLength, numberOfShortColumns, columnWidth, columnHeight);
 
             return columns;
+        }
+
+        private void AddColumns(List<StorageColumn> columns, List<int> locations, int columnLength, int numberOfColumns, int columnWidth, int columnHeight)
+        {
+            foreach (int location in locations)
+            {
+                for (int i = 0; i < numberOfColumns; i++)
+                {
+                    StorageColumn column = new StorageColumn(location, i, columnLength, columnWidth, columnHeight);
+                    columns.Add(column);
+                }
+            }
         }
 
         /// <summary>
@@ -201,8 +218,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>The available AGV.</returns>
         internal AGV GetAvailableAGV()
         {
-            AGV availableAgv = AGVs.First(); 
-
             foreach (AGV agv in AGVs)
             {
                 if (agv.IsAvailable)
@@ -210,8 +225,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     return agv;
                 }
             }
+            return null;
 
-            return availableAgv; 
         }
 
         /// <summary>
@@ -273,6 +288,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
             return false;
         }
+
 
 
         /// <summary>

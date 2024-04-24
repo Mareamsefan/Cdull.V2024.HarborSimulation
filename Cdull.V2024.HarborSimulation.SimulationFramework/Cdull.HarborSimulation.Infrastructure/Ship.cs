@@ -4,7 +4,7 @@ using System.Text;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure
 {
     /// <summary>
     /// Represents a ship in the harbor simulation.
@@ -15,16 +15,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         public Model Model { get; set; }
         public Size Size { get; set; }
         internal bool HasDocked { get; set; }
-        public List<Container> Containers { get; } = new List<Container>(); 
-        internal List<string> History { get; } = new List<String>();
+        public List<Container> Containers { get; } = new List<Container>();
+        internal List<string> History { get; } = new List<string>();
         internal string DockedAtTime { get; set; }
         internal string SailedAtTime { get; set; }
         public bool IsSailing { get; set; }
-        public bool IsReadyToSail{ get; set; }
+        public bool IsReadyToSail { get; set; }
         internal bool IsWaitingForSailing { get; set; }
         internal float Speed { get; private set; }
         internal Dock? DockedAt { get; set; }
-        internal int CurrentLocation {  get; set; }
+        internal int CurrentLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
         internal bool IsLoadingCompleted { get; set; }
         internal bool IsUnloadingCompleted { get; set; }
@@ -38,20 +38,20 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="shipName">The name of the ship.</param>
         /// <param name="shipModel">The model of the ship.</param>
         /// <param name="shipSize">The size of the ship.</param>
-        public Ship (string shipName, Model shipModel, Size shipSize, int shipCurrentLocation)
+        public Ship(string shipName, Model shipModel, Size shipSize, int shipCurrentLocation)
         {
             Name = shipName;
             Model = shipModel;
             Size = shipSize;
             HasDocked = false;
             IsSailing = false;
-            DockedAt = null; 
+            DockedAt = null;
             IsWaitingForSailing = false;
             DockedAtTime = "";
             SailedAtTime = "";
             Speed = GetSpeedFromModel(shipModel);
             IsReadyToSail = false;
-            CurrentLocation =   shipCurrentLocation; 
+            CurrentLocation = shipCurrentLocation;
         }
         /// <summary>
         /// Generates a random destination for the ship.
@@ -95,7 +95,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
         }
 
-     
+
         /// <summary>
         /// Retrieves the container carried by the ship.
         /// </summary>
@@ -107,7 +107,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
-     
+
 
         /// <summary>
         /// Returns a string representation of the ship with only its name and model.
@@ -119,7 +119,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         }
 
 
-      
+
 
     }
 }

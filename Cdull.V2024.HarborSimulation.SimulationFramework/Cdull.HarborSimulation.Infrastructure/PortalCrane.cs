@@ -1,13 +1,14 @@
 ﻿using System;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
 
-namespace Cdull.V2024.HarborSimulation.SimulationFramework
+namespace Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure
 {
     public class PortalCrane
     {
         /// <summary>
         /// Represents a Poralcrane used in harbor to Move containers from AVG to container storage.
         /// </summary>
-  
+
         internal bool IsAvailable { get; set; }
 
         internal int handlingTime { get; set; }
@@ -19,7 +20,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// </summary>
         public PortalCrane()
         {
-            handlingTime = 0; 
+            handlingTime = 0;
             IsAvailable = true;
         }
 
@@ -36,7 +37,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new InvalidOperationException("Portalcrane already loaded with cargo.");
             }
             Container = container;
-        }  
+        }
 
     }
 

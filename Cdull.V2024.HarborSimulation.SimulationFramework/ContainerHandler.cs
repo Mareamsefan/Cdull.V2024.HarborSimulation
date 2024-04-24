@@ -1,4 +1,6 @@
-﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -44,7 +46,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="container">The container being moved.</param>
         /// <param name="harbor">The harbor instance.</param>
         /// <returns>The AGV to which the container is moved.</returns>
-        public AGV MoveContainerFromShipToAGV(Ship ship, Container container,  Harbor harbor)
+        public AGV MoveContainerFromShipToAGV(Ship ship, Container container, Harbor harbor)
         {
             Dock dock = ship.DockedAt;
             Crane crane = dock.Cranes.First();
@@ -54,7 +56,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 {
                     if (dock.GetAvailableCrane(c))
                     {
-                        crane = c;      
+                        crane = c;
                     }
                 }
             }
@@ -62,18 +64,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             AGV agv = harbor.GetAvailableAGV();
             crane.IsAvailable = false;
 
-            if (crane.handlingTime == 30) {
-            
+            if (crane.handlingTime == 30)
+            {
+
                 ship.Containers.Remove(container);
                 crane.LiftContainer(container);
                 crane.Container = null;
                 agv.LoadContainerToAGV(container);
                 container.History.Add($"{container.Name} moved from Ship {ship.Name} to AGV {agv.Id}");
                 crane.IsAvailable = true;
-                crane.handlingTime = 0; 
+                crane.handlingTime = 0;
 
             }
-            crane.handlingTime++; 
+            crane.handlingTime++;
             return agv;
         }
 
@@ -94,8 +97,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             StorageColumn column = containerStorage.GetSpecificColumn(startColumnId);
             PortalCrane portalCrane = column.Crane;
             portalCrane.IsAvailable = false;
-           
-     
+
+
             portalCrane.handlingTime++;
             Container container = agv.Container;
 
@@ -105,7 +108,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
             else if (column.ColumnId < startColumnId || column.ColumnId > endColumnId)
             {
-                    throw new ArgumentOutOfRangeException("columnId", "Column ID is outside the valid range.");
+                throw new ArgumentOutOfRangeException("columnId", "Column ID is outside the valid range.");
             }
 
 
@@ -144,8 +147,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             AGV agv = harbor.GetAvailableAGV();
 
             if (column.Containers.Any())
-            {   
-              
+            {
+
                 portalCrane.handlingTime++;
                 Container container = column.Containers.First();
 
@@ -161,7 +164,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 }
                 return agv;
             }
-            
+
             else
             {
                 throw new InvalidOperationException("Unable to Move container from StorageColumn to AGV: No container available in the storage column.");
@@ -191,7 +194,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
 
             crane.handlingTime++;
-            Container container = agv.Container; 
+            Container container = agv.Container;
 
             if (crane.handlingTime == 30)
             {
@@ -202,9 +205,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 ship.IsReadyToSail = true;
                 crane.IsAvailable = true;
                 container.History.Add($"{container.Name} moved from AGV {agv.Id} to Ship {ship.Name}");
-              
-            }    
-         
+
+            }
+
         }
 
         /// <summary>
@@ -231,12 +234,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     if (ship.Containers.Any())
                     {
                         Container container = ship.Containers[0];
-                        ship.Containers.RemoveAt(0); 
+                        ship.Containers.RemoveAt(0);
                         container.History.Add($"{container.Name} was picked up by a truck, and left the harbor.");
                     }
                     else
                     {
-                        break; 
+                        break;
                     }
                 }
             }
@@ -293,7 +296,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             StringBuilder sb = new StringBuilder();
 
-           
+
             foreach (var handling in ship.ScheduledContainerHandlings)
             {
                 sb.AppendLine($"Handling time: {handling.HandlingTime}");
@@ -306,5 +309,5 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             return sb.ToString();
         }
-    } 
+    }
 }
