@@ -34,6 +34,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Creating a container storage with a location range for the storage columns to be located. 
             // The capacity of the container storage is determined by the storage columns it contains.
             ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500);
+            Console.WriteLine(containerStorage.GetOccupiedSpace());
 
             // Creating a new harbor named "TestHarbor" with a location index range of 1000 (from 0-1000)
             Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage);
