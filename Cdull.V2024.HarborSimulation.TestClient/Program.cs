@@ -12,7 +12,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         {
 
 
-
+            StorageColumn column = new StorageColumn();
+            column.InitializeContainers(5);
 
             List<Container> GetShipContainers();
 
