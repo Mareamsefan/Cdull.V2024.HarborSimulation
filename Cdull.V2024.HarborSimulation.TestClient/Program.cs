@@ -11,6 +11,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         static void Main(string[] args)
         {
 
+            
+
             historyHandler.GetShipsHistory();
 
             historyHandler.GetHarborHistory(new DateTime(2024, 1, 2));
