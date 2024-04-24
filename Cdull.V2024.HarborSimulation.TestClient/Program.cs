@@ -13,7 +13,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
 
 
-               
+            InitializeContainers(int number, ContainerSize size = ContainerSize.Large);
+
             
             List<Dock> GetDocks();
 
