@@ -1,7 +1,4 @@
-﻿
-
-using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure;
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
@@ -19,7 +16,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// This method simulates harbor activities such as queuing ships, docking ships, adding cargo to storage, adding cargo to ships,
         /// and starting scheduled sailings within the specified time frame.
         /// </remarks>
-        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, List<AGV> agvs);
+        /// <example>
+        /// This example shows how to use the Run method.
+        /// <code>
+        /// IHarborSimulation driver = new Simulation();
+        /// driver.Run(harbor, startTime, endTime, ships, docks, agvs, storageColumns);
+        /// </code>
+        /// </example>
+        public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, List<AGV> agvs, List<StorageColumn> storageColumns);
 
 
 

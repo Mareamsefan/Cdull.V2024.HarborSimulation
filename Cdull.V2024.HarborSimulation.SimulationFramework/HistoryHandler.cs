@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure;
 using System.Text;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infastructure;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Cdull.HarborSimulation.Infrastructure;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework
 {
@@ -19,10 +16,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Private constructor to prevent external instantiation.
         /// </summary>
         private HistoryHandler() { }
+
         /// <summary>
         /// Gets the singleton instance of the <see cref="HistoryHandler"/> class.
         /// </summary>
         /// <returns>The singleton instance of the <see cref="HistoryHandler"/> class.</returns>
+        /// <example>
+        /// This example shows how to use the GetInstance method.
+        /// <code>
+        ///  HistoryHandler historyHandler = HistoryHandler.GetInstance();
+        /// </code>
+        /// </example>
         /// https://csharpindepth.com/articles/singleton (hentet: 03.03.2024) (Skeet.Jon, 2019)
         public static HistoryHandler GetInstance()
         {
@@ -46,6 +50,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="fromDate">The date for which harbor history is retrieved.</param>
         /// <returns>The harbor instance for the specified date.</returns>
         /// <exception cref="KeyNotFoundException">Thrown if harbor history is not found for the given date.</exception>
+        /// <example>
+        /// This example shows how to use the GetHarborHistory method.
+        /// <code>
+        /// historyHandler.GetHarborHistory(new DateTime(2024, 1, 2));
+        /// </code>
+        /// </example>
         public Harbor GetHarborHistory(DateTime fromDate)
         {
             if (harborHistory.ContainsKey(fromDate.Date))
@@ -62,6 +72,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// Retrieves the history of all ships.
         /// </summary>
         /// <returns>A string containing the history of all ships.</returns>
+        /// <example>
+        /// This example shows how to use the GetShipsHistory method.
+        /// <code>
+        /// historyHandler.GetShipsHistory(); 
+        /// </code>
+        /// </example>
         public string GetShipsHistory()
         {
             StringBuilder sb = new StringBuilder();
@@ -85,6 +101,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <returns>A string containing the history of the specified ship.</returns>
         /// <exception cref="ArgumentNullException">Thrown when the ship parameter is null.</exception>
         /// <exception cref="InvalidOperationException">Thrown when there is no history available for the specified ship.</exception>
+        /// <example>
+        /// This example shows how to use the GetShipHistory method.
+        /// <code>
+        /// historyHandler.GetShipHistory(ship); 
+        /// </code>
+        /// </example>
         public string GetShipHistory(Ship ship)
         {
             if (ship == null)
@@ -117,7 +139,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="ship">The ship for which the event is recorded.</param>
         /// <param name="eventDescription">The description of the event.</param>
         /// <exception cref="ArgumentNullException">Thrown when the ship parameter is null.</exception>
-        public void AddEventToShipHistory(Ship ship, string eventDescription)
+        internal void AddEventToShipHistory(Ship ship, string eventDescription)
         {
             if (ship == null)
             {
