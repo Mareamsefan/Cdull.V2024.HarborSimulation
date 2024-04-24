@@ -29,6 +29,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             // Creating a list to hold ships.
             List<Ship> ships = new List<Ship>();
+
+            List<Ship> ships = harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium);
         
 
             // Adding 5 medium-sized LNGCarrier ships with a current location 2000m away from the harbor.
