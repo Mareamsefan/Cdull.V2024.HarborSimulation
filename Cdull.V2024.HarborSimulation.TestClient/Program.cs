@@ -27,6 +27,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             DateTime GetCurrentTime();
 
+
+            SetCurrentTime(DateTime currentTime);
+
             
 
 
