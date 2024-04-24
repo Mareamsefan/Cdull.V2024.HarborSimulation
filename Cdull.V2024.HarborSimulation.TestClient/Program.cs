@@ -11,6 +11,29 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         static void Main(string[] args)
         {
 
+
+
+               
+            
+            List<Dock> GetDocks();
+
+            List<Ship> GetShips();
+            
+            List<Ship> GetDockedShips();
+            
+            List<Ship> GetSailingShips();
+
+            Queue<Ship> GetWaitingShips();
+
+            DateTime GetCurrentTime();
+
+            
+
+
+                
+            
+
+            
                List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407 };
                List<int> shortColumnLocations = new List<int> { 30, 74, 148, 222, 292, 270, 444 };
                int longColumnLength = 18;
