@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
 {   /// <summary>
-    /// Represents the scheduling and execution of ship sailings.
+    /// Represents the scheduling of ship sailings.
     /// </summary>
     public static class ScheduleSailing
     {
