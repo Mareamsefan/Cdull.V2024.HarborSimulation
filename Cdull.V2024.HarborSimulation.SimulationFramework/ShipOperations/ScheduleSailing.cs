@@ -18,7 +18,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// <param name="ships">The list of the total ships on harbor.</param>
         /// <param name="shipModel">The model of the ship.</param>
         /// <param name="sailingTime">The time at which the sailing is scheduled to occur.</param>
-        /// <param name="destinationLocation">The destination location of the sailing.</param>
+        /// <param name="destinationLocation">The destination of the sailing.</param>
         /// <param name="recurringType">The type of recurring sailing, if any.</param>
         /// <example>
         /// This example shows how to use the ScheduleSailings method.
@@ -63,7 +63,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// <param name="harbor">The harbor where the ship is docked.</param>
         /// <param name="ship">The ship for which to schedule the sailing.</param>
         /// <param name="sailingTime">The time at which the sailing is scheduled to depart.</param>
-        /// <param name="destinationLocation">The destination location code for the sailing.</param>
+        /// <param name="destinationLocation">The destination for the sailing.</param>
         /// <param name="recurringType">The recurring type for scheduling the sailing.</param>
         /// <exception cref="ArgumentException">Thrown when the sailing time is in the past or the destination location is negative.</exception>
         /// <exception cref="DuplicateSailingException">Thrown when a sailing with the same time and recurring type already exists for the ship.</exception>
