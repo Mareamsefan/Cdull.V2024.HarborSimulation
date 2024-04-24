@@ -130,7 +130,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Printing history for all ships in the harbor.
             Console.WriteLine(historyHandler.GetShipsHistory());
 
-            List<Sailing> sailingscheck = ScheduleSailing.CheckScheduledSailings(harbor, ships, Model.LNGCarrier);
+            List<Sailing> sailingscheck = ScheduleSailing.CheckScheduledSailings(
+                harbor, ships, Model.LNGCarrier);
             sailings.ForEach(sailing =>
                 Console.WriteLine(sailing.ToString())
             );
