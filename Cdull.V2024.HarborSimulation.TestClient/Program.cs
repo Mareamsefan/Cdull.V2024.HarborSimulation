@@ -29,6 +29,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             // Creating a list to hold ships.
             List<Ship> ships = new List<Ship>();
+        
 
             // Adding 5 medium-sized LNGCarrier ships with a current location 2000m away from the harbor.
             ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
@@ -85,6 +86,11 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             // Creating a container handler instance.
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
+            
+            List<Sailing> sailings = ScheduleSailing.CheckScheduledSailingsForShip(ship);
+               sailings.ForEach(sailing =>
+                Console.WriteLine(sailing.Tostring())
+            );
 
             // Scheduling container handling operations for the test ship on specific dates.
             containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
