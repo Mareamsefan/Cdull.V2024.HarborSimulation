@@ -33,7 +33,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             harbor.ToString();
 
-            
+
+            int craneId = 1;
+            Crane crane = new Crane(craneId);
 
 
                 
