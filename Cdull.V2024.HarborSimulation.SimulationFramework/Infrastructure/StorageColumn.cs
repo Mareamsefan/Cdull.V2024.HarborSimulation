@@ -7,11 +7,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class StorageColumn
     {
+        /// <summary>
+        /// Represents the Id of the storage column. 
+        /// </summary>
         public int ColumnId { get; set; }
+        /// <summary>
+        /// Represents the total capacity of the storage cloumn. 
+        /// </summary>
+        public int Capacity { get; set; }
         internal int Height { get; private set; }
         internal int Length { get; private set; }
         internal int Width { get; private set; }
-        public int Capacity { get; set; }
         internal List<Container> Containers { get; set; } = new List<Container>();
         internal PortalCrane Crane { get; set; }
         internal int OccupiedSpace { get; set; }
@@ -20,8 +26,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 
 
         /// <summary>
-        /// Represents a storage column in the harbor for storing containers.
+        /// Initializes a new instance of the <see cref="StorageColumn"/> class.
         /// </summary>
+        /// <param name="location">The location of the storage column.</param>
+        /// <param name="columnId">The ID of the storage column.</param>
+        /// <param name="columnLength">The length of the storage column.</param>
+        /// <param name="columnWidth">The width of the storage column.</param>
+        /// <param name="columnHeight">The height of the storage column.</param>
         public StorageColumn(int location, int columnId, int columnLength, int columnWidth, int columnHeight)
         {
             ColumnId = columnId;
@@ -86,6 +97,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         /// <param name="number">The number of container units to initialize.</param>
         /// <param name="size">The size of each container unit. Default is set to CargoSize.Large.</param>
+        /// <example>
+        /// This example shows how to use the InitializeContainers method
+        /// <code>
+        /// Initialize 5 large containers on the ship
+        /// StorageColumn column = new StorageColumn();
+        /// column.InitializeContainers(5);
+        /// </code>
+        /// </example>
         public void InitializeContainers(int number, ContainerSize size = ContainerSize.Large)
         {
             for (int i = 0; i < number; i++)
@@ -153,15 +172,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             return OccupiedSpace;
         }
 
-        /// <summary>
-        /// Returns a string representation of the harbor simulation.
-        /// </summary>
-        /// <returns>A string containing information about the harbor simulation, including harbor name, current time, ship counts, and container storage details.</returns>
-        public override string ToString()
-        {
-            return $"{ColumnId}";
-        }
-
 
         /// <summary>
         /// Checks if the storage column has enough space for the specified containers.
@@ -175,6 +185,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             return Capacity - OccupiedSpace >= requiredSpace;
         }
 
+
+        /// <summary>
+        /// Returns a string representation of the storage column.
+        /// </summary>
+        /// <returns>A string representing the storage column.</returns>
+        public override string ToString()
+        {
+            return $"Storage Column {ColumnId}";
+        }
 
     }
 }

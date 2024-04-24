@@ -90,7 +90,6 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// }
         /// </code>
         /// </example>
-
         public Harbor(string harborName, int locationRange, ContainerStorage harborContainerStorage)
         {
             Name = harborName;
@@ -110,6 +109,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// It ensures that the number of docks is greater than zero and creates each dock with a unique name.
         /// If the number of cranes is greater than zero, it adds the specified number of cranes to each dock.
         /// </remarks>
+        /// <example>
+        /// This example shows how to use the InitializeDocks method to create a list of docks.
+        /// <code>
+        ///     List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
+        /// </code>
+        /// </example>
         public List<Dock> InitializeDocks(int numberOfDock, Size dockSize, int numberOfCranes)
         {
             List<Dock> docks = new List<Dock>();
@@ -121,14 +126,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 
             for (int i = 0; i < numberOfDock; i++)
             {
-                Dock dock = new($"Dock-{i}", dockSize);
+                Dock dock = new(i, dockSize);
                 docks.Add(dock);
 
                 if (numberOfCranes > 0)
                 {
                     for (int z = 0; z < numberOfCranes; z++)
                     {
-                        Crane crane = new($"Crane{z}");
+                        Crane crane = new(z);
                         dock.Cranes.Add(crane);
                     }
                 }
@@ -141,17 +146,24 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <summary>
         /// Initializes a list of ships based on the provided parameters.
         /// </summary>
+        /// <param name="shipCurrentLocation">The current location of the ships.</param>
         /// <param name="numberOfShips">The number of ships to initialize.</param>
         /// <param name="shipModel">The model of the ships to initialize.</param>
         /// <param name="shipSize">The size of the ships to initialize. Default is set to Size.Small.</param>
-        /// <param name="numberOfCargo">The number of cargo units to initialize for each ship. Default is set to 0.</param>
-        /// <param name="containerSize">The size of each cargo unit. Default is set to containerSize.Large.</param>
+        /// <param name="numberOfContainers">The number of container units to initialize for each ship. Default is set to 0.</param>
+        /// <param name="containerSize">The size of each cargo unit. Default is set to ContainerSize.Large.</param>
         /// <returns>A list of initialized Ship objects.</returns>
         /// <remarks>
         /// This method initializes a list of ships based on the provided parameters.
         /// If the ship model is a ContainerShip, it initializes the specified number of cargo units for each ship.
         /// The ship size and number of cargo units parameters are optional, with default values assigned if not provided.
         /// </remarks>
+        /// <example>
+        /// This example shows how to use the InitializeShips method to create a list of ships.
+        /// <code> 
+        ///     List<Ship> ships = harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium);
+        /// </code>
+        /// </example>
 
         public List<Ship> InitializeShips(int shipCurrentLocation, int numberOfShips, Model shipModel, Size shipSize = Size.Small,
             int numberOfContainers = 0, ContainerSize containerSize = ContainerSize.Large)
@@ -186,6 +198,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <param name="agvLocation">The location where the AGVs should be initialized.</param>
         /// <returns>A list of initialized AGVs.</returns>
         /// <exception cref="ArgumentException">Thrown when the number of AGVs is less than or equal to zero.</exception>
+        /// <example>
+        /// This example shows how to use the InitializeAGVs method to create a list of AGVs.
+        /// <code>
+        ///     List<AGV> agvs = harbor.InitializeAGVs(20, 1000);
+        /// </code>
+        /// </example> 
         public List<AGV> InitializeAGVs(int numberOfAGV, int agvLocation)
         {
             List<AGV> agvs = new List<AGV>();
@@ -217,6 +235,23 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <param name="columnHeight">The height of the columns.</param>
         /// <returns>A list of initialized storage columns.</returns>
         /// <exception cref="ArgumentException">Thrown when parameters are invalid.</exception>
+        /// <example>
+        /// This example shows how to use the InitializeStorageColumns method to create a list of storage columns.
+        /// <code>
+        ///     List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407 };
+        ///     List<int> shortColumnLocations = new List<int> { 30, 74, 148, 222, 292, 270, 444 };
+        ///     int longColumnLength = 18;
+        ///     int shortColumnLength = 15;
+        ///     int numberOfLongColumns = 4;
+        ///     int numberOfShortColumns = 1;
+        ///     int columnWidth = 6;
+        ///     int columnHeight = 4;
+        ///     
+        ///     List<StorageColumn> storageColumns = harbor.InitializeStorageColumns(
+        ///         longColumnLocations, shortColumnLocations, longColumnLength, shortColumnLength, 
+        ///         numberOfLongColumns, numberOfShortColumns, columnWidth, columnHeight);
+        /// </code>
+        /// </example>
         public List<StorageColumn> InitializeStorageColumns(List<int> longColumnLocations, List<int> shortColumnLocations, int longColumnLength,
             int shortColumnLength, int numberOfLongColumns, int numberOfShortColumns, int columnWidth, int columnHeight)
         {
@@ -234,6 +269,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 
             return columns;
         }
+
+
+
 
         private void AddColumns(List<StorageColumn> columns, List<int> locations, int columnLength, int numberOfColumns, int columnWidth, int columnHeight)
         {
@@ -512,7 +550,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Harbor Name: {Name}" + $" CurrentTime: {CurrentTime}");
+            stringBuilder.AppendLine($"Harbor Id: {Name}" + $" CurrentTime: {CurrentTime}");
             stringBuilder.AppendLine($"Total Ships: {Ships.Count}");
             stringBuilder.AppendLine($"Docked Ships: {DockedShips.Count}");
             stringBuilder.AppendLine($"Sailing Ships: {SailingShips.Count}");

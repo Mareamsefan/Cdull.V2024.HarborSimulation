@@ -7,6 +7,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     public class Container
     {
         private static int lastId = 0;
+
         internal int Id;
         internal string Name { get; set; }
         internal List<string> History { get; } = new List<string>();

@@ -1,4 +1,5 @@
 ﻿using Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations;
+using Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 {
@@ -7,25 +8,34 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class Ship
     {
+        /// <summary>
+        /// Represents the name of the ship. 
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Represents the model of the ship. 
+        /// </summary>
         public Model Model { get; set; }
+        /// <summary>
+        /// Represents the size of the model. 
+        /// </summary>
         public Size Size { get; set; }
         internal bool HasDocked { get; set; }
-        public List<Container> Containers { get; } = new List<Container>();
+        internal List<Container> Containers { get; } = new List<Container>();
         internal List<string> History { get; } = new List<string>();
         internal string DockedAtTime { get; set; }
         internal string SailedAtTime { get; set; }
         public bool IsSailing { get; set; }
         public bool IsReadyToSail { get; set; }
-        internal bool IsWaitingForSailing { get; set; }
         internal float Speed { get; private set; }
         internal Dock? DockedAt { get; set; }
         internal int CurrentLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
-        internal bool IsLoadingCompleted { get; set; }
-        internal bool IsUnloadingCompleted { get; set; }
-        internal List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
+        internal ShipSailingState SailingState { get; set; }
 
+        internal List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
+        internal List<Sailing> ScheduledSailings { get; set; } = new List<Sailing>();
 
         /// <summary>
         /// Initializes a new instance of the Ship class.
@@ -41,24 +51,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             HasDocked = false;
             IsSailing = false;
             DockedAt = null;
-            IsWaitingForSailing = false;
             DockedAtTime = "";
             SailedAtTime = "";
             Speed = GetSpeedFromModel(shipModel);
             IsReadyToSail = false;
             CurrentLocation = shipCurrentLocation;
         }
-        /// <summary>
-        /// Generates a random destination for the ship.
-        /// </summary>
-        /// <param name="min">The minimum destination value.</param>
-        /// <param name="max">The maximum destination value.</param>
-        /// <returns>The randomly generated destination.</returns>
-        public int GenerateRandomDestination(int min, int max)
-        {
-            Random random = new Random();
-            return random.Next(min, max + 1);
-        }
+       
 
         /// <summary>
         /// Gets the speed of the ship based on its model.
@@ -108,7 +107,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <returns>A string representing the ship's name and model.</returns>
         public override string ToString()
         {
-            return $"Ship Name: {Name}, Model: {Model}";
+            return $"Name: {Name}, Model: {Model}";
         }
 
 

@@ -19,6 +19,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <param name="containerStorageName">The name of the container storage.</param>
         /// <param name="startLocationIndex">The starting location index.</param>
         /// <param name="endLocationIndex">The ending location index.</param>
+        /// <example>
+        /// This example shows how to use the ContainerStorage constructor to create a new container storage instance.
+        /// <code>
+        ///     ContainerStorage storage = new ContainerStorage(("ContainerStorage", 0, 500);
+        /// </code>
+        /// </example>
         public ContainerStorage(string containerStorageName, int startLocationIndex, int endLocationIndex)
         {
             Name = containerStorageName;

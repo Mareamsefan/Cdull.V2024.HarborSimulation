@@ -7,6 +7,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 
     public class AGV
     {
+        /// <summary>
+        /// Represents the Id of the AGV. 
+        /// </summary>
         public int Id { get; set; }
         internal int Counter { get; set; }
         internal bool IsAvailable { get; set; }

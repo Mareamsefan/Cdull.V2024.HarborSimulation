@@ -6,13 +6,24 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 {
-    [Flags]
+    /// <summary>
+    /// Represents the recurring types for scheduling ship sailings.
+    /// </summary>
     public enum RecurringType
     {
+       /// <summary>
+       /// Represents a non-recurring type sailing. 
+       /// </summary>
+        None,
+
         /// <summary>
-        /// Represents the recurring types for scheduling ship sailings.
+        /// Represents a daily recurring type sailing. 
         /// </summary>
         Daily,
+
+        /// <summary>
+        /// Represents a weekly recurring type sailing. 
+        /// </summary>
         Weekly
     }
 }

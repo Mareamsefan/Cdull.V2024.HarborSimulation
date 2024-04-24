@@ -7,24 +7,44 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class Dock
     {
-        internal string Name { get; set; }
-        internal Size Size { get; set; }
+        /// <summary>
+        /// Represents the Id of the dock. 
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Represents the size of the dock. 
+        /// </summary>
+        public Size Size { get; set; }
         internal bool IsAvailable { get; set; }
+
+        /// <summary>
+        /// Represents a list of the total cranes on dock. 
+        /// </summary>
         public List<Crane> Cranes { get; set; } = new List<Crane>();
         internal Ship? OccupiedBy { get; set; }
         internal int numberOfShipsPerDay { get; set; }
 
 
         /// <summary>
-        /// Initializes a new instance of the Dock class with the specified name, size, and model.
+        /// Initializes a new instance of the Dock class with the specified Id, size, and model.
         /// </summary>
-        /// <param name="dockName">The name of the dock.</param>
+        /// <param name="dockId">The Id of the dock.</param>
         /// <param name="dockSize">The size of the dock.</param>
         /// <param name="dockCranes">Optional list of cranes available at the dock.</param>
         /// <param name="dockCrane">Optional single crane available at the dock.</param>
-        public Dock(string dockName, Size dockSize, List<Crane>? dockCranes = null, Crane? dockCrane = null)
+        /// <example>
+        /// This example shows how to use the Dock constructor to create a new dock instance with optional cranes.
+        /// <code>
+        ///     int dockId = 1;
+        ///     Size dockSize = Size.Large;
+        ///     List<Crane> dockCranes = new List<Crane> { new Crane(1), new Crane(2) };
+        ///     Dock dock = new Dock(dockName, dockSize, dockCranes);
+        /// </code>
+        /// </example>
+        public Dock(int dockId, Size dockSize, List<Crane>? dockCranes = null, Crane? dockCrane = null)
         {
-            Name = dockName;
+            Id = dockId;
             Size = dockSize;
             IsAvailable = true;
             OccupiedBy = null;
