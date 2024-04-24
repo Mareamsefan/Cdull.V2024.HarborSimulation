@@ -16,7 +16,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// Initializes a new instance of the <see cref="ShipArrivalEventArgs"/> class with the specified arrived ship.
         /// </summary>
         /// <param name="arrivedShip">The ship that has arrived.</param>
-        public ShipArrivalEventArgs(Ship arrivedShip)
+        internal ShipArrivalEventArgs(Ship arrivedShip)
         {
             ArrivedShip = arrivedShip;
         }

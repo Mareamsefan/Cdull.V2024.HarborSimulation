@@ -20,6 +20,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         /// <param name="docks">The list of docks in the harbor.</param>
         /// <exception cref="ArgumentNullException">Thrown when the harbor, list of ships, or list of docks is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the start time is after the end time or if either the list of ships or list of docks is empty.</exception>
+        /// <example>
+        /// This example shows how to use the Run method.
+        /// <code>
+        /// IHarborSimulation driver = new Simulation();
+        /// driver.Run(harbor, startTime, endTime, ships, docks, agvs, storageColumns);
+        /// </code>
+        /// </example>
         public void Run(Harbor harbor, DateTime startTime, DateTime endTime, List<Ship> ships, List<Dock> docks, List<AGV> agvs, List<StorageColumn> storageColumns)
         {
       

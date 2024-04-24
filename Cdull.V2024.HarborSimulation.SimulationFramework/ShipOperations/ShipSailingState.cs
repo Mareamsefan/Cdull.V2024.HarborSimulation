@@ -6,13 +6,30 @@ using System.Threading.Tasks;
 
 namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
 {
+    /// <summary>
+    /// Represents the states of a sailing ship. 
+    /// </summary>
     internal enum ShipSailingState
     {
+        /// <summary>
+        /// Represnets that the ship is not sailing. 
+        /// </summary>
+        NotSailing,
+        
+        /// <summary>
+        /// Represents that the ship is sailing. 
+        /// </summary>
+        Sailing, 
 
-        NotSailing, // Skipet seiler ikke
-        Sailing,    // Skipet er i ferd med å seile
-        Waiting,    // Skipet venter på seiling
-        Arrived     // Skipet har nådd destinasjonen
+        /// <summary>
+        /// Represents that the ship is waiting to sail. 
+        /// </summary>
+        Waiting,
+
+        /// <summary>
+        /// Represents that the ship has arrived at its destination location and completed the sailing. 
+        /// </summary>
+        Arrived
 
     }
 }

@@ -92,25 +92,5 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
             return !HasReachedDestination;
         }
-
-
-
-        public async Task<bool> MoveAsync(int destinationLocation, float speed)
-        {
-            if (HasReachedDestination)
-            {
-                return false;
-            }
-
-            float distanceToTravel = destinationLocation - CurrentLocation;
-            float timeToTravel = distanceToTravel / speed; // Beregner tiden det tar å reise til destinasjonen basert på hastigheten
-
-            await Task.Delay(TimeSpan.FromSeconds(timeToTravel)); // Simulerer tiden det tar å reise til destinasjonen
-
-            HasReachedDestination = true;
-            CurrentLocation = destinationLocation;
-
-            return true;
-        }
     }
 }

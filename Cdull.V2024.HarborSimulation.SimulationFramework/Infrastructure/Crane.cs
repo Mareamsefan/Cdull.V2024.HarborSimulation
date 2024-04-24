@@ -7,18 +7,28 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class Crane
     {
-        private string Name { get; set; }
+        /// <summary>
+        /// Represents the name of the crane. 
+        /// </summary>
+        public int Id { get; set; }
         internal int handlingTime { get; set; }
         internal bool IsAvailable { get; set; }
         internal Container? Container { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the Crane class with the specified name.
+        /// Initializes a new instance of the Crane class with the specified Id.
         /// </summary>
-        /// <param name="craneName">The name of the crane.</param>
-        public Crane(string craneName)
+        /// <param name="craneId">The Id of the crane.</param>
+        /// <example>
+        /// This example shows how to use the Crane constructor to create a new crane instance.
+        /// <code>
+        ///     int craneId = 1;
+        ///     Crane crane = new Crane(craneId);
+        /// </code>
+        /// </example>
+        public Crane(int craneId)
         {
-            Name = craneName;
+            Id = craneId;
             handlingTime = 0;
             IsAvailable = true;
         }

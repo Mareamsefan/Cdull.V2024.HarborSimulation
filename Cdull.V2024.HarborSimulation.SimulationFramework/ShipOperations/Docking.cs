@@ -26,7 +26,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
 
             try
             {
-                historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Docked at {ship.DockedAtTime} on {ship.DockedAt.Name}");
+                historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Docked at {ship.DockedAtTime} on {ship.DockedAt.Id}");
             }
             catch (Exception ex)
             {

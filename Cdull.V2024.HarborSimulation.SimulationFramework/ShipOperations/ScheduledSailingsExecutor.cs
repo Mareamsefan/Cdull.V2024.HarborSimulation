@@ -14,7 +14,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// </summary>
         /// <param name="harbor">The harbor where the ships are docked.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="harbor"/> is null.</exception>
-        public static async Task ExecuteScheduledSailings (Harbor harbor)
+        internal static void ExecuteScheduledSailings (Harbor harbor)
         {
             if (harbor == null)
             {
@@ -51,7 +51,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
                         }
 
                     }
-                    else if (await driver.MoveAsync(sailing.DestinationLocation, ship.Speed))
+                    else if (ship.HasReachedDestination && ship.SailingState.Equals(ShipSailingState.Arrived))
                     {
                         ship.IsSailing = false;
                         harbor.SailingShips.Remove(ship);

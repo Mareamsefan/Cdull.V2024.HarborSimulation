@@ -108,6 +108,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             // Testing the new generic history class for harbor and ships.
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
+           
 
             // Printing history for the harbor on January 2, 2024.
             Console.WriteLine(historyHandler.GetHarborHistory(new DateTime(2024, 1, 2)));

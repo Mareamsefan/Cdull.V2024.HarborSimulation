@@ -1,12 +1,11 @@
 ﻿
 namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 {
-    public class PortalCrane
+    internal class PortalCrane
     {
         /// <summary>
         /// Represents a Poralcrane used in harbor to Move containers from AVG to container storage.
         /// </summary>
-
         internal bool IsAvailable { get; set; }
 
         internal int handlingTime { get; set; }
@@ -16,7 +15,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <summary>
         /// Initializes a new instance of the PortalCrane class.
         /// </summary>
-        public PortalCrane()
+        internal PortalCrane()
         {
             handlingTime = 0;
             IsAvailable = true;

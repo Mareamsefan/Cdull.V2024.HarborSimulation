@@ -1,16 +1,34 @@
 ﻿using Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure;
 
-/// <summary>
-/// Represents the scheduling and execution of ship sailings.
-/// </summary>
 namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
 {
+    /// <summary>
+    /// Represents a sailing event of a ship.
+    /// </summary>
     public class Sailing
     {
-      internal DateTime DateTime {  get; set; }
-      internal int DestinationLocation { get; set; }    
-      internal RecurringType RecurringType { get; set; }    
+        /// <summary>
+        /// Gets or sets the date and time of the sailing.
+        /// </summary>
+        internal DateTime DateTime {  get; set; }
 
+        /// <summary>
+        /// Gets or sets the destination location of the sailing.
+        /// </summary>
+        internal int DestinationLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the recurring type of the sailing.
+        /// </summary>
+        internal RecurringType RecurringType { get; set; }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sailing"/> class.
+        /// </summary>
+        /// <param name="sailingDateTime">The date and time of the sailing.</param>
+        /// <param name="sailingDestinationLocation">The destination location of the sailing.</param>
+        /// <param name="sailingRecurringType">The recurring type of the sailing.</param>
         internal Sailing(DateTime sailingDateTime, int sailingDestinationLocation, RecurringType sailingRecurringType) { 
         
             DateTime = sailingDateTime;

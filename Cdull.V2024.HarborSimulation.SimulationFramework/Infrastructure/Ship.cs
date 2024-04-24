@@ -8,11 +8,21 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class Ship
     {
+        /// <summary>
+        /// Represents the name of the ship. 
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Represents the model of the ship. 
+        /// </summary>
         public Model Model { get; set; }
+        /// <summary>
+        /// Represents the size of the model. 
+        /// </summary>
         public Size Size { get; set; }
         internal bool HasDocked { get; set; }
-        public List<Container> Containers { get; } = new List<Container>();
+        internal List<Container> Containers { get; } = new List<Container>();
         internal List<string> History { get; } = new List<string>();
         internal string DockedAtTime { get; set; }
         internal string SailedAtTime { get; set; }
@@ -24,8 +34,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         internal bool HasReachedDestination { get; set; }
         internal ShipSailingState SailingState { get; set; }
 
-        public List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
-        public List<Sailing> ScheduledSailings { get; set; } = new List<Sailing>();
+        internal List<ScheduledContainerHandling> ScheduledContainerHandlings { get; set; } = new List<ScheduledContainerHandling>();
+        internal List<Sailing> ScheduledSailings { get; set; } = new List<Sailing>();
 
         /// <summary>
         /// Initializes a new instance of the Ship class.
@@ -97,7 +107,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <returns>A string representing the ship's name and model.</returns>
         public override string ToString()
         {
-            return $"Ship Name: {Name}, Model: {Model}";
+            return $"Name: {Name}, Model: {Model}";
         }
 
 
