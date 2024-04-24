@@ -10,6 +10,24 @@ namespace Cdull.V2024.HarborSimulation.TestClient
     {
         static void Main(string[] args)
         {
+
+               List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407 };
+               List<int> shortColumnLocations = new List<int> { 30, 74, 148, 222, 292, 270, 444 };
+               int longColumnLength = 18;
+               int shortColumnLength = 15;
+               int numberOfLongColumns = 4;
+               int numberOfShortColumns = 1;
+               int columnWidth = 6;
+               int columnHeight = 4;
+        
+               List<StorageColumn> storageColumns = harbor.InitializeStorageColumns(
+               longColumnLocations, shortColumnLocations, longColumnLength, shortColumnLength, 
+               numberOfLongColumns, numberOfShortColumns, columnWidth, columnHeight);
+    
+
+
+
+            
             // Scenario setup:
             // Setting up a harbor with docks, ships, AGVs, and cargo handling operations.
 
