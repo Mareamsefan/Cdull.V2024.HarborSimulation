@@ -9,8 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cdull.V2024.HarborSimulation.SimulationFramework\Cdull.V2024.HarborSimulation.SimulationFramework.csproj" />
-    <ProjectReference Include="..\Cdull.V2024.HarborSimulation.TestClient\Cdull.V2024.HarborSimulation.TestClient.csproj" />
+    <PackageReference Include="Cdull.V2024.HarborSimulation.SimulationFramework" Version="1.0.1" />
   </ItemGroup>
 
 </Project>
