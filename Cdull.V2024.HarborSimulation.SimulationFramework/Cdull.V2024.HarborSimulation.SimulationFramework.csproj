@@ -32,4 +32,10 @@
     <Version>1.0.1</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Update="CDULL.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
