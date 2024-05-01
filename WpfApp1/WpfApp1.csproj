@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cdull.V2024.HarborSimulation.SimulationFramework\Cdull.V2024.HarborSimulation.SimulationFramework.csproj" />
+    <ProjectReference Include="..\Cdull.V2024.HarborSimulation.TestClient\Cdull.V2024.HarborSimulation.TestClient.csproj" />
+  </ItemGroup>
+
+</Project>

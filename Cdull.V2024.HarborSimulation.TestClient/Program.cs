@@ -11,81 +11,6 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         static void Main(string[] args)
         {
 
-            
-
-            historyHandler.GetShipsHistory();
-
-            historyHandler.GetHarborHistory(new DateTime(2024, 1, 2));
-
-            OccupySpace(Container container);
-
-
-            StorageColumn column = new StorageColumn();
-            column.InitializeContainers(5);
-
-            List<Container> GetShipContainers();
-
-            ContainerTestShip.ToString();
-
-                
-
-            InitializeContainers(int number, ContainerSize size = ContainerSize.Large);
-
-            
-            List<Dock> GetDocks();
-
-            List<Ship> GetShips();
-            
-            List<Ship> GetDockedShips();
-            
-            List<Ship> GetSailingShips();
-
-            Queue<Ship> GetWaitingShips();
-
-            DateTime GetCurrentTime();
-
-
-            SetCurrentTime(DateTime currentTime);
-
-
-            harbor.ToString();
-
-
-            int craneId = 1;
-            Crane crane = new Crane(craneId);
-
-
-            Container(string containerName, ContainerSize containerSize);
-
-            List<string> GetContainerHistory();
-
-
-            int dockId = 1;
-            Size dockSize = Size.Large;
-            List<Crane> dockCranes = new List<Crane> { new Crane(1), new Crane(2) };
-            Dock dock = new Dock(dockName, dockSize, dockCranes);
-
-                
-            
-
-            
-               List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407 };
-               List<int> shortColumnLocations = new List<int> { 30, 74, 148, 222, 292, 270, 444 };
-               int longColumnLength = 18;
-               int shortColumnLength = 15;
-               int numberOfLongColumns = 4;
-               int numberOfShortColumns = 1;
-               int columnWidth = 6;
-               int columnHeight = 4;
-        
-               List<StorageColumn> storageColumns = harbor.InitializeStorageColumns(
-               longColumnLocations, shortColumnLocations, longColumnLength, shortColumnLength, 
-               numberOfLongColumns, numberOfShortColumns, columnWidth, columnHeight);
-    
-
-
-
-            
             // Scenario setup:
             // Setting up a harbor with docks, ships, AGVs, and cargo handling operations.
 
@@ -98,7 +23,10 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage);
 
             // Creating 3 large docks with 7 cranes collectively.
+
             List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
+
+
             docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
 
             // Creating 20 AGVs for container movement.
@@ -123,6 +51,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Ship ContainerTestShip = new Ship("ContainerTestShip", Model.ContainerShip, Size.Small, 1000);
             ContainerTestShip.InitializeContainers(5, ContainerSize.Small);
             Ship LNGCarrierTestShip = new Ship("LNGCarrierTestShip", Model.LNGCarrier, Size.Medium, 2500);
+
+            ContainerTestShip.ToString();
 
             ships.Add(ContainerTestShip);
             ships.Add(LNGCarrierTestShip);
@@ -174,7 +104,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Scheduling container handling operations for the test ship on specific dates.
             containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
             containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 7), 1, 2, 10, LoadingType.Load);
-
+            
+            
             // Scheduling container handling operations for ContainerShip ships.
             ships.ForEach(ship =>
             {
@@ -213,6 +144,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 harbor, ships, Model.LNGCarrier);
             sailings.ForEach(sailing =>
                 Console.WriteLine(sailing.ToString())
+
             );
         }
 
