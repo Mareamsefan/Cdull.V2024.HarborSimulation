@@ -1,0 +1,16 @@
+﻿<Page x:Class="Cdull.V2024.HarborSimulationWPF.CreateHarborPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="CreateHarborPage" Height="350" Width="500">
+
+    <Grid Height="350" Width="477">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Label Content="Harbor Name: "/>
+            <TextBox x:Name="HarborNameTextBox"/>
+            <Label Content="Index Range:"/>
+            <TextBox x:Name="HarborIndexTextBox"/>
+            <Button Content="Create Harbor" Click="CreateHarbor"/>
+        </StackPanel>
+        
+    </Grid>
+</Page>
