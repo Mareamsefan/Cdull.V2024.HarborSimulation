@@ -30,7 +30,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         public bool IsReadyToSail { get; set; }
         internal float Speed { get; private set; }
         public Dock? DockedAt { get; set; }
-        internal int CurrentLocation { get; set; }
+        public int CurrentLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
         internal ShipSailingState SailingState { get; set; }
 

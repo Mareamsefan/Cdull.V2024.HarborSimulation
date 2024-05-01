@@ -1,94 +1,53 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using Cdull.V2024.HarborSimulation.SimulationFramework;
 using Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure;
-using Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Size = Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure.Size;
 
-namespace HarborSimulationApp
+namespace HarborSimulationGUI
 {
     public partial class MainWindow : Window
     {
-        private Simulation simulation;
+        private Harbor harbor;
 
         public MainWindow()
         {
             InitializeComponent();
-            simulation = new Simulation();
+            harbor = new Harbor("TestHarbor", 1000, new ContainerStorage("ContainerStorage", 0, 500));
         }
 
-        private async void StartSimulation_Click(object sender, RoutedEventArgs e)
+        private void InitializeShips_Click(object sender, RoutedEventArgs e)
         {
-            
-
-            // Simulate in a background task
-            await Task.Run(() =>
+            try
             {
-                // Setup harbor, ships, docks, etc. (similar to your existing setup code)
-                Harbor harbor = SetupHarbor();
+                int shipCurrentLocation = int.Parse(txtCurrentLocation.Text);
+                int numberOfShips = int.Parse(txtNumberOfShips.Text);
+                Model shipModel = (Model)Enum.Parse(typeof(Model), cmbShipModel.Text.Replace(" ", ""));
+                Size shipSize = (Size)Enum.Parse(typeof(Size), cmbShipSize.Text);
+                int numberOfContainers = int.Parse(txtNumberOfContainers.Text);
+                ContainerSize containerSize = (ContainerSize)Enum.Parse(typeof(ContainerSize), cmbContainerSize.Text);
 
-                DateTime startTime = new DateTime(2024, 1, 1);
-                DateTime endTime = new DateTime(2024, 1, 15);
+                List<Ship> ships = harbor.InitializeShips(shipCurrentLocation, numberOfShips, shipModel, shipSize, numberOfContainers, containerSize);
 
-                List<Ship> ships = SetupShips();
-                List<Dock> docks = SetupDocks();
-                List<AGV> agvs = SetupAGVs();
-                List<StorageColumn> storageColumns = SetupStorageColumns();
-                ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
+                // Clear previous ship info
+                lstShipInfo.Items.Clear();
 
-                // Run the simulation
-                simulation.Run(harbor, startTime, endTime, ships, docks, agvs, storageColumns);
-
-                // Update UI on the main thread
-                Application.Current.Dispatcher.Invoke(() =>
+                // Display ship information
+                foreach (var ship in ships)
                 {
-                    SimulationStatus.Text = "Simulation completed";
-                   
-                });
-            });
-        }
+                    string shipInfo = $"Name: {ship.Name}, Model: {ship.Model}, Size: {ship.Size}, Current Location: {ship.CurrentLocation}, Containers Count: {numberOfContainers}, Container Size: {containerSize}";
+                    lstShipInfo.Items.Add(shipInfo);
+                }
 
-        private Harbor SetupHarbor()
-        {
-            // Setup your harbor instance here
-            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500);
-            Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage);
-            // Add docks, ships, etc. as needed
-            return harbor;
-        }
-
-        private List<Ship> SetupShips()
-        {
-            // Setup your list of ships here
-            List<Ship> ships = new List<Ship>();
-            // Add ships to the list
-            return ships;
-        }
-
-        private List<Dock> SetupDocks()
-        {
-            // Setup your list of docks here
-            List<Dock> docks = new List<Dock>();
-            // Add docks to the list
-            return docks;
-        }
-
-        private List<AGV> SetupAGVs()
-        {
-            // Setup your list of AGVs here
-            List<AGV> agvs = new List<AGV>();
-            // Add AGVs to the list
-            return agvs;
-        }
-
-        private List<StorageColumn> SetupStorageColumns()
-        {
-            // Setup your list of storage columns here
-            List<StorageColumn> storageColumns = new List<StorageColumn>();
-            // Add storage columns to the list
-            return storageColumns;
+                // Update status bar
+                statusBarText.Text = $"{numberOfShips} ships initialized successfully.";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error initializing ships: {ex.Message}", "Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

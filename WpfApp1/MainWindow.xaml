@@ -1,20 +1,59 @@
-﻿<Window x:Class="HarborSimulationApp.MainWindow"
+﻿<Window x:Class="HarborSimulationGUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Harbor Simulation" Height="350" Width="500">
+        Title="Ship Initialization" Height="600" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Harbor Simulation" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,20,0,10"/>
+        <!-- Input Controls -->
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
+            <TextBlock Text="Ship Current Location:"/>
+            <TextBox x:Name="txtCurrentLocation" Width="200" Margin="0 5"/>
 
-        <Button Content="Start Simulation" Click="StartSimulation_Click" HorizontalAlignment="Center" Margin="0,10" Grid.Row="1"/>
+            <TextBlock Text="Number of Ships:"/>
+            <TextBox x:Name="txtNumberOfShips" Width="200" Margin="0 5"/>
 
-        <TextBlock x:Name="SimulationStatus" Grid.Row="2" Text="" HorizontalAlignment="Center" Margin="0,10"/>
+            <TextBlock Text="Ship Model:"/>
+            <ComboBox x:Name="cmbShipModel" Width="200" Margin="0 5">
+                <ComboBoxItem Content="ContainerShip"/>
+                <ComboBoxItem Content="Bulker"/>
+                <ComboBoxItem Content="Tanker"/>
+                <ComboBoxItem Content="LNGCarrier"/>
+                <ComboBoxItem Content="RoRo"/>
+            </ComboBox>
 
+            <TextBlock Text="Ship Size:"/>
+            <ComboBox x:Name="cmbShipSize" Width="200" Margin="0 5">
+                <ComboBoxItem Content="Small"/>
+                <ComboBoxItem Content="Medium"/>
+                <ComboBoxItem Content="Large"/>
+            </ComboBox>
+
+            <TextBlock Text="Number of Containers:"/>
+            <TextBox x:Name="txtNumberOfContainers" Width="200" Margin="0 5"/>
+
+            <TextBlock Text="Container Size:"/>
+            <ComboBox x:Name="cmbContainerSize" Width="200" Margin="0 5">
+                <ComboBoxItem Content="Small"/>
+                <ComboBoxItem Content="Large"/>
+            </ComboBox>
+
+            <Button Content="Initialize Ships" Click="InitializeShips_Click" Width="150" Margin="0 10"/>
+        </StackPanel>
+
+        <!-- Display Area for Ship Information -->
+        <ListBox x:Name="lstShipInfo" Grid.Row="1" Margin="20" BorderBrush="Black" BorderThickness="1"
+                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="2" Height="30">
+            <StatusBarItem>
+                <TextBlock x:Name="statusBarText"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

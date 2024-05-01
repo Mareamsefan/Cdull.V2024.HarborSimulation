@@ -59,7 +59,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         /// <param name="column">The storage column to add.</param>
         /// <exception cref="ArgumentException">Thrown when the specified column location is outside the range of this storage.</exception>
-        internal void AddStorageColumn(StorageColumn column)
+        public void AddStorageColumn(StorageColumn column)
         {
             if (!LocationIndexes.Contains(column.Location))
             {
