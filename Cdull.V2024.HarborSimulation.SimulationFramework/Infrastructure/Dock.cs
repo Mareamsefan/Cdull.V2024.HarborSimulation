@@ -7,6 +7,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class Dock
     {
+        public string dockName;
+        public Size dockSize;
+        public int numberOfCranes;
+
         /// <summary>
         /// Represents the Id of the dock. 
         /// </summary>
@@ -16,14 +20,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// Represents the size of the dock. 
         /// </summary>
         public Size Size { get; set; }
-        internal bool IsAvailable { get; set; }
+        public bool IsAvailable { get; set; }
 
         /// <summary>
         /// Represents a list of the total cranes on dock. 
         /// </summary>
         public List<Crane> Cranes { get; set; } = new List<Crane>();
-        internal Ship? OccupiedBy { get; set; }
+        public Ship? OccupiedBy { get; set; }
         internal int numberOfShipsPerDay { get; set; }
+        public object Name { get; set; }
 
 
         /// <summary>
@@ -59,6 +64,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
                 Cranes.Add(dockCrane);
             }
 
+        }
+
+        public Dock(string dockName, Size dockSize, int numberOfCranes)
+        {
+            this.dockName = dockName;
+            this.dockSize = dockSize;
+            this.numberOfCranes = numberOfCranes;
         }
 
         /// <summary>

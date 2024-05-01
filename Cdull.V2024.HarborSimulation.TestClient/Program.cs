@@ -10,6 +10,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
     {
         static void Main(string[] args)
         {
+
+           
             // Scenario setup:
             // Setting up a harbor with docks, ships, AGVs, and cargo handling operations.
 
@@ -21,7 +23,10 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage);
 
             // Creating 3 large docks with 7 cranes collectively.
+
             List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
+
+
             docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
 
             // Creating 20 AGVs for container movement.
@@ -43,6 +48,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Ship ContainerTestShip = new Ship("ContainerTestShip", Model.ContainerShip, Size.Small, 1000);
             ContainerTestShip.InitializeContainers(5, ContainerSize.Small);
             Ship LNGCarrierTestShip = new Ship("LNGCarrierTestShip", Model.LNGCarrier, Size.Medium, 2500);
+
+            ContainerTestShip.ToString();
 
             ships.Add(ContainerTestShip);
             ships.Add(LNGCarrierTestShip);
@@ -89,7 +96,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Scheduling container handling operations for the test ship on specific dates.
             containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
             containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 7), 1, 2, 10, LoadingType.Load);
-
+            
+            
             // Scheduling container handling operations for ContainerShip ships.
             ships.ForEach(ship =>
             {
@@ -127,6 +135,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             List<Sailing> sailingscheck = ScheduleSailing.CheckScheduledSailings(harbor, ships, Model.LNGCarrier);
             sailings.ForEach(sailing =>
                 Console.WriteLine(sailing.ToString())
+
             );
         }
 

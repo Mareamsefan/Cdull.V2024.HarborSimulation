@@ -1,55 +1,94 @@
-﻿using Cdull.V2024.HarborSimulation.SimulationFramework;
-using Cdull.V2024.HarborSimulation.SimulationFramework.Enums;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows;
-using System.Windows.Controls;
-using Size = Cdull.V2024.HarborSimulation.SimulationFramework.Enums.Size;
-using Dock = Cdull.V2024.HarborSimulation.SimulationFramework.Dock;
+using Cdull.V2024.HarborSimulation.SimulationFramework;
+using Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure;
+using Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Size = Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure.Size;
 
-namespace HarborSimulationGUI
+namespace HarborSimulationApp
 {
     public partial class MainWindow : Window
     {
-        private List<Dock> docks = new List<Dock>();
+        private Simulation simulation;
 
         public MainWindow()
         {
             InitializeComponent();
+            simulation = new Simulation();
         }
 
-        private void CreateDock_Click(object sender, RoutedEventArgs e)
+        private async void StartSimulation_Click(object sender, RoutedEventArgs e)
         {
-            string dockName = DockNameTextBox.Text;
-            if (string.IsNullOrWhiteSpace(dockName))
-            {
-                MessageBox.Show("Please enter a dock name.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            
 
-            if (DockSizeComboBox.SelectedItem == null)
+            // Simulate in a background task
+            await Task.Run(() =>
             {
-                MessageBox.Show("Please select a dock size.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+                // Setup harbor, ships, docks, etc. (similar to your existing setup code)
+                Harbor harbor = SetupHarbor();
 
-            string selectedSize = (DockSizeComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString();
-            if (string.IsNullOrWhiteSpace(selectedSize))
-            {
-                MessageBox.Show("Invalid dock size selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+                DateTime startTime = new DateTime(2024, 1, 1);
+                DateTime endTime = new DateTime(2024, 1, 15);
 
-            Size dockSize;
-            if (!Enum.TryParse(selectedSize, out dockSize))
-            {
-                MessageBox.Show("Invalid dock size selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+                List<Ship> ships = SetupShips();
+                List<Dock> docks = SetupDocks();
+                List<AGV> agvs = SetupAGVs();
+                List<StorageColumn> storageColumns = SetupStorageColumns();
+                ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
 
-            Dock newDock = new Dock(dockName, dockSize);
-            docks.Add(newDock);
-            DockListBox.Items.Add($"Dock Name: {newDock.Name}, Size: {newDock.Size}");
+                // Run the simulation
+                simulation.Run(harbor, startTime, endTime, ships, docks, agvs, storageColumns);
+
+                // Update UI on the main thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    SimulationStatus.Text = "Simulation completed";
+                   
+                });
+            });
         }
 
+        private Harbor SetupHarbor()
+        {
+            // Setup your harbor instance here
+            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500);
+            Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage);
+            // Add docks, ships, etc. as needed
+            return harbor;
+        }
+
+        private List<Ship> SetupShips()
+        {
+            // Setup your list of ships here
+            List<Ship> ships = new List<Ship>();
+            // Add ships to the list
+            return ships;
+        }
+
+        private List<Dock> SetupDocks()
+        {
+            // Setup your list of docks here
+            List<Dock> docks = new List<Dock>();
+            // Add docks to the list
+            return docks;
+        }
+
+        private List<AGV> SetupAGVs()
+        {
+            // Setup your list of AGVs here
+            List<AGV> agvs = new List<AGV>();
+            // Add AGVs to the list
+            return agvs;
+        }
+
+        private List<StorageColumn> SetupStorageColumns()
+        {
+            // Setup your list of storage columns here
+            List<StorageColumn> storageColumns = new List<StorageColumn>();
+            // Add storage columns to the list
+            return storageColumns;
+        }
     }
 }

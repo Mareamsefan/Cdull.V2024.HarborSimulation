@@ -8,13 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Cdull.V2024.HarborSimulation.SimulationFramework">
-      <HintPath>..\Cdull.V2024.HarborSimulation.SimulationFramework\bin\Debug\net8.0\Cdull.V2024.HarborSimulation.SimulationFramework.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Cdull.V2024.HarborSimulation.SimulationFramework\Cdull.V2024.HarborSimulation.SimulationFramework.csproj" />
+    <PackageReference Include="Cdull.V2024.HarborSimulation.SimulationFramework" Version="1.0.1" />
   </ItemGroup>
 
 </Project>
