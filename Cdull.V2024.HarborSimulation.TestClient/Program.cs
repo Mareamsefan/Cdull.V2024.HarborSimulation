@@ -11,13 +11,13 @@ namespace Cdull.V2024.HarborSimulation.TestClient
         static void Main(string[] args)
         {
 
-           
             // Scenario setup:
             // Setting up a harbor with docks, ships, AGVs, and cargo handling operations.
 
             // Creating a container storage with a location range for the storage columns to be located. 
             // The capacity of the container storage is determined by the storage columns it contains.
             ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500);
+            Console.WriteLine(containerStorage.GetOccupiedSpace());
 
             // Creating a new harbor named "TestHarbor" with a location index range of 1000 (from 0-1000)
             Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage);
@@ -34,6 +34,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             // Creating a list to hold ships.
             List<Ship> ships = new List<Ship>();
+
+            List<Ship> ships = harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium);
+        
 
             // Adding 5 medium-sized LNGCarrier ships with a current location 2000m away from the harbor.
             ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
@@ -92,6 +95,11 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             // Creating a container handler instance.
             ContainerHandler containerHandler = ContainerHandler.GetInstance();
+            
+            List<Sailing> sailings = ScheduleSailing.CheckScheduledSailingsForShip(ship);
+               sailings.ForEach(sailing =>
+                Console.WriteLine(sailing.Tostring())
+            );
 
             // Scheduling container handling operations for the test ship on specific dates.
             containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
@@ -132,7 +140,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Printing history for all ships in the harbor.
             Console.WriteLine(historyHandler.GetShipsHistory());
 
-            List<Sailing> sailingscheck = ScheduleSailing.CheckScheduledSailings(harbor, ships, Model.LNGCarrier);
+            List<Sailing> sailingscheck = ScheduleSailing.CheckScheduledSailings(
+                harbor, ships, Model.LNGCarrier);
             sailings.ForEach(sailing =>
                 Console.WriteLine(sailing.ToString())
 
