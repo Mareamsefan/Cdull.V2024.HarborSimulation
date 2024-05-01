@@ -35,6 +35,8 @@
   <ItemGroup>
     <None Update="CDULL.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 
