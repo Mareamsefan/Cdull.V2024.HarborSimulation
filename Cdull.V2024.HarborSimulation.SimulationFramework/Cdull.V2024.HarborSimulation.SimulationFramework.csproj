@@ -33,9 +33,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\..\Downloads\CDULL.png" Link="CDULL.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
+    <None Update="CDULL.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
