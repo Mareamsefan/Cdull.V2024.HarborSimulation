@@ -21,16 +21,31 @@ namespace Cdull.V2024.HarborSimulationWPF
     /// </summary>
     public partial class CreateContainerStoragePage : Page
     {
+        /// <summary>
+        /// The created container storage.
+        /// </summary>
         public ContainerStorage CreatedContainerStorage { get; private set; }
+        /// <summary>
+        /// Event raised when a container storage is created.
+        /// </summary>
         public event EventHandler<ContainerStorageEventArgs> OnContainerStorageCreated;
         private bool IsContainerStorageCreated = false;
 
+
+        /// <summary>
+        /// Constructor for CreateContainerStoragePage.
+        /// </summary>
         public CreateContainerStoragePage()
         {
             InitializeComponent();
         }
 
 
+        /// <summary>
+        /// Handles the creation of a container storage.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void CreateContainerStorage(object sender, RoutedEventArgs e)
         {
             if (IsContainerStorageCreated)

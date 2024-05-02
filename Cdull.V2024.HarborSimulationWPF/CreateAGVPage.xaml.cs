@@ -21,16 +21,27 @@ namespace Cdull.V2024.HarborSimulationWPF
     /// </summary>
     public partial class CreateAGVPage : Page
     {
-      
-
+        /// <summary>
+        /// Represents a page for creating AGVs (Automated Guided Vehicles) in a harbor simulation.
+        /// </summary>
         private Harbor harbor;
         private int i = 0;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateAGVPage"/> class.
+        /// </summary>
+        /// <param name="createdHarbor">The harbor object where AGVs will be initialized.</param>
         public CreateAGVPage(Harbor createdHarbor)
         {
             InitializeComponent();
             harbor = createdHarbor;
         }
 
+        /// <summary>
+        /// Event handler for the button click to initialize AGVs.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void InitializeAGVs_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -40,10 +51,8 @@ namespace Cdull.V2024.HarborSimulationWPF
 
                 List<AGV> agvs = harbor.InitializeAGVs(numberOfAGVs, agvLocation);
 
-                // Clear previous AGV info
                 lstAGVInfo.Items.Clear();
 
-                // Display AGV information
                 foreach (var agv in agvs)
                 {
 
@@ -53,7 +62,6 @@ namespace Cdull.V2024.HarborSimulationWPF
 
                 }
 
-                // Update status or inform the user
                 MessageBox.Show($"{numberOfAGVs} AGVs initialized successfully.", "AGV Initialization", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)

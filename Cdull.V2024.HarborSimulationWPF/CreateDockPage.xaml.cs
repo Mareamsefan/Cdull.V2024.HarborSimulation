@@ -26,13 +26,21 @@ namespace Cdull.V2024.HarborSimulationWPF
        
         private Harbor harbor;
 
-   
+        /// <summary>
+        /// Constructor for CreateDockPage.
+        /// </summary>
+        /// <param name="createdHarbor">The created harbor</param>
         public CreateDockPage(Harbor createdHarbor)
         {
             InitializeComponent();
             harbor = createdHarbor;
         }
 
+        /// <summary>
+        /// Handles the initialization of docks.
+        /// </summary>
+        /// <param name="sender">The sender of the event</param>
+        /// <param name="e">The event arguments</param>
         private void InitializeDocks_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -43,7 +51,6 @@ namespace Cdull.V2024.HarborSimulationWPF
 
                 List<Dock> docks = harbor.InitializeDocks(numberOfDocks, dockSize, numberOfCranes);
 
-                // Display dock information in ListBox
                 DisplayDockInformation(docks);
             }
             catch (FormatException)
@@ -60,6 +67,10 @@ namespace Cdull.V2024.HarborSimulationWPF
             }
         }
 
+        /// <summary>
+        /// Displays dock information in the ListBox.
+        /// </summary>
+        /// <param name="docks">The list of docks</param>
         private void DisplayDockInformation(List<Dock> docks)
         {
             lstDockInfo.Items.Clear();

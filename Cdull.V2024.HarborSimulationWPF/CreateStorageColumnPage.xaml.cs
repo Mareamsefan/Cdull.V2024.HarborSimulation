@@ -24,12 +24,21 @@ namespace Cdull.V2024.HarborSimulationWPF
       
         private Harbor harbor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateStorageColumnPage"/> class.
+        /// </summary>
+        /// <param name="createdHarbor">The harbor where the storage columns will be initialized.</param>
         public CreateStorageColumnPage(Harbor createdHarbor)
         {
             InitializeComponent();
             harbor = createdHarbor;
         }
 
+        /// <summary>
+        /// Handles the initialization of storage columns.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void InitializeStorageColumns_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -70,7 +79,11 @@ namespace Cdull.V2024.HarborSimulationWPF
             }
         }
 
-
+        /// <summary>
+        /// Parses the input string to extract the locations.
+        /// </summary>
+        /// <param name="input">The input string containing locations separated by comma.</param>
+        /// <returns>A list of integer locations.</returns>
         private List<int> ParseLocations(string input)
         {
             List<int> locations = new List<int>();

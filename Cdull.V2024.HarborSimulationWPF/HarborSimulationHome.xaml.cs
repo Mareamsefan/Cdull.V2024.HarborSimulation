@@ -24,11 +24,17 @@ namespace Cdull.V2024.HarborSimulationWPF
         private ContainerStorage containerStorage;
         private CreateHarborPage harborPage;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HarborSimulationHome"/> class.
+        /// </summary>
         public HarborSimulationHome()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Handles the click event for creating a container storage.
+        /// </summary>
         private void CreateContainerStorage_Click(object sender, RoutedEventArgs e)
         {
             CreateContainerStoragePage createContainerStoragePage = new CreateContainerStoragePage();
@@ -40,6 +46,9 @@ namespace Cdull.V2024.HarborSimulationWPF
 
         }
 
+        /// <summary>
+        /// Handles the click event for creating a harbor.
+        /// </summary>
         private void CreateHarbor_Click(object sender, RoutedEventArgs e)
         {
             if (containerStorage != null)
@@ -53,6 +62,9 @@ namespace Cdull.V2024.HarborSimulationWPF
             }
         }
 
+        /// <summary>
+        /// Handles the click event for creating docks.
+        /// </summary>
         private void CreateDocks_Click(object sender, RoutedEventArgs e)
         {   
             if (harborPage.CreatedHarbor != null)
@@ -66,6 +78,9 @@ namespace Cdull.V2024.HarborSimulationWPF
             }
         }
 
+        /// <summary>
+        /// Handles the click event for creating AGVs.
+        /// </summary>
         private void CreateAGVs_Click(object sender, RoutedEventArgs e)
         {
             if (harborPage.CreatedHarbor != null)
@@ -78,6 +93,10 @@ namespace Cdull.V2024.HarborSimulationWPF
                 MessageBox.Show("Please create a harbor first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        /// <summary>
+        /// Handles the click event for creating storage columns.
+        /// </summary>
         private void CreateStorageColumns_Click(object sender, RoutedEventArgs e)
         {
             if (harborPage.CreatedHarbor != null)
