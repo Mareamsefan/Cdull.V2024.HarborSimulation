@@ -38,14 +38,13 @@ namespace Cdull.V2024.HarborSimulationWPF
                 MessageBox.Show("A Harbor has already been created.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            // Sjekk om HarborNameTextBox er fylt ut
+
             if (string.IsNullOrWhiteSpace(HarborNameTextBox.Text))
             {
                 MessageBox.Show("Please enter a harbor name.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            // Opprett en instans av Harbor-klassen med navnet gitt av brukeren, den opprettede containerStorage og indexRange
             string harborName = HarborNameTextBox.Text;
             int indexRange;
             if (!int.TryParse(HarborIndexTextBox.Text, out indexRange))

@@ -39,10 +39,9 @@ namespace Cdull.V2024.HarborSimulationWPF
                 return;
             }
 
-            // Opprett en instans av ContainerStorage-klassen med parameterne gitt av brukeren
             try
             {
-                // Validering av StorageNameTextBox, StartIndexTextBox og EndIndexTextBox
+             
                 string storageName = StorageNameTextBox.Text;
                 int startIndex = int.Parse(StartIndexTextBox.Text);
                 int endIndex = int.Parse(EndIndexTextBox.Text);

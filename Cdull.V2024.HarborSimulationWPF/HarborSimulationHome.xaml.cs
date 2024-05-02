@@ -22,6 +22,7 @@ namespace Cdull.V2024.HarborSimulationWPF
     public partial class HarborSimulationHome : Page
     {
         private ContainerStorage containerStorage;
+        private CreateHarborPage harborPage;
 
         public HarborSimulationHome()
         {
@@ -30,11 +31,8 @@ namespace Cdull.V2024.HarborSimulationWPF
 
         private void CreateContainerStorage_Click(object sender, RoutedEventArgs e)
         {
-            // Opprett en instans av CreateContainerStoragePage
             CreateContainerStoragePage createContainerStoragePage = new CreateContainerStoragePage();
-            // Naviger til CreateContainerStoragePage
             MainFrame.Navigate(createContainerStoragePage);
-            // Hent CreatedContainerStorage fra CreateContainerStoragePage etter navigeringen
             createContainerStoragePage.OnContainerStorageCreated += (sender, args) =>
             {
                 containerStorage = args.CreatedContainerStorage;
@@ -44,11 +42,9 @@ namespace Cdull.V2024.HarborSimulationWPF
 
         private void CreateHarbor_Click(object sender, RoutedEventArgs e)
         {
-            // Sørg for at containerStorage er satt før du navigerer til HarborPage
             if (containerStorage != null)
             {
-                // Opprett en instans av HarborPage og send med containerStorage som parameter
-                CreateHarborPage harborPage = new CreateHarborPage(containerStorage);
+                harborPage = new CreateHarborPage(containerStorage);
                 MainFrame.Navigate(harborPage);
             }
             else
@@ -56,6 +52,46 @@ namespace Cdull.V2024.HarborSimulationWPF
                 MessageBox.Show("Please create a container storage first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void CreateDocks_Click(object sender, RoutedEventArgs e)
+        {   
+            if (harborPage.CreatedHarbor != null)
+            {
+                CreateDockPage createDockPage = new CreateDockPage(harborPage.CreatedHarbor);
+                MainFrame.Navigate(createDockPage);
+            }
+            else
+            {
+                MessageBox.Show("Please create a harbor first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CreateAGVs_Click(object sender, RoutedEventArgs e)
+        {
+            if (harborPage.CreatedHarbor != null)
+            {
+                CreateAGVPage createAGVPage = new CreateAGVPage(harborPage.CreatedHarbor);
+                MainFrame.Navigate(createAGVPage);
+            }
+            else
+            {
+                MessageBox.Show("Please create a harbor first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void CreateStorageColumns_Click(object sender, RoutedEventArgs e)
+        {
+            if (harborPage.CreatedHarbor != null)
+            {
+                CreateStorageColumnPage createStorageColumnPage = new CreateStorageColumnPage(harborPage.CreatedHarbor);
+                MainFrame.Navigate(createStorageColumnPage);
+            }
+            else
+            {
+                MessageBox.Show("Please create a harbor first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
 
         private void ComponentsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

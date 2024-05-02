@@ -34,7 +34,6 @@ namespace Cdull.V2024.HarborSimulationWPF
         {
             try
             {
-                // Parse input values
                 List<int> longColumnLocations = ParseLocations(txtLongColumnLocations.Text);
                 List<int> shortColumnLocations = ParseLocations(txtShortColumnLocations.Text);
                 int longColumnLength = int.Parse(txtLongColumnLength.Text);
@@ -44,27 +43,25 @@ namespace Cdull.V2024.HarborSimulationWPF
                 int columnWidth = int.Parse(txtColumnWidth.Text);
                 int columnHeight = int.Parse(txtColumnHeight.Text);
 
-                // Initialize storage columns
                 List<StorageColumn> columns = harbor.InitializeStorageColumns(
                     longColumnLocations, shortColumnLocations,
                     longColumnLength, shortColumnLength,
                     numberOfLongColumns, numberOfShortColumns,
                     columnWidth, columnHeight);
 
-                // Clear previous storage column info
+
                 lstStorageColumns.Items.Clear();
 
-                // Display storage column information
+ 
                 foreach (var column in columns)
                 {
                     string columnInfo = $"Column ID: {column.ColumnId}, Location: {column.Location}, Length: {column.Length}";
-                    if (!lstStorageColumns.Items.Contains(columnInfo)) // Check for duplicates
+                    if (!lstStorageColumns.Items.Contains(columnInfo)) 
                     {
                       lstStorageColumns.Items.Add(columnInfo);
                     }
                 }
 
-                // Update status or inform the user
                 MessageBox.Show($"Storage columns initialized successfully.", "Storage Columns Initialization", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)

@@ -1,7 +1,7 @@
 ﻿<Page x:Class="Cdull.V2024.HarborSimulationWPF.CreateContainerStoragePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="CreateContainerStoragePage" Height="200" Width="200">
+      Title="Create - ContainerStorage" Height="600" Width="800">
 
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -11,7 +11,7 @@
             <TextBox x:Name="StartIndexTextBox"/>
             <Label Content="End Index:"/>
             <TextBox x:Name="EndIndexTextBox"/>
-            <Button Content="Create Container Storage" Click="CreateContainerStorage"/>
+            <Button Content="Create Container Storage" Click="CreateContainerStorage" Height="24"/>
         </StackPanel>
 
     </Grid>

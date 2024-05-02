@@ -10,36 +10,36 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-      
+
         <Border Grid.Row="0" Height="35" Padding="5" Background="#4E87D4">
             <Label VerticalAlignment="Center" Foreground="White">Components</Label>
         </Border>
 
         <ListBox Name="ComponentsListBox" Grid.Row="1" Grid.RowSpan="2">
             <ListBoxItem>
-                <Button Content="Create Container Storage" Click="CreateContainerStorage_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="Create Container Storage" Click="CreateContainerStorage_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Height="28" Width="190"/>
             </ListBoxItem>
             <ListBoxItem>
-                <Button Content="Create Harbor" Click="CreateHarbor_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="Create Harbor" Click="CreateHarbor_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Height="28" Width="191"/>
             </ListBoxItem>
             <ListBoxItem>
-                <Button Content="Create Docks" Click="CreateDocks_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="Create Docks" Click="CreateDocks_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Height="28" Width="190"/>
             </ListBoxItem>
             <ListBoxItem>
-                <Button Content="Create AGVs" Click="CreateAGVs_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="Create AGVs" Click="CreateAGVs_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Height="28" Width="191"/>
             </ListBoxItem>
             <ListBoxItem>
-                <Button Content="Create Ships" Click="CreateShips_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="Create Ships" Click="CreateAGVs_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Height="28" Width="190"/>
             </ListBoxItem>
             <ListBoxItem>
-                <Button Content="Create Storage Columns" Click="CreateStorageColumns_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="Create Storage Columns" Click="CreateStorageColumns_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Height="28" Width="191"/>
             </ListBoxItem>
         </ListBox>
 
-     
+
         <Frame x:Name="MainFrame" Grid.Row="2" Navigated="MainFrame_Navigated"/>
 
-      
-        <Button Grid.Row="5" Margin="176,299,176,140" Height="25">Start Simulation</Button>
+
+        <Button Grid.Row="1" Margin="39,201,630,328">Start Simulation</Button>
     </Grid>
 </Page>
