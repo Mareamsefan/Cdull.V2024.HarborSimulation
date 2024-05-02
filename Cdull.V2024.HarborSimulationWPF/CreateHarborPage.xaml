@@ -4,13 +4,29 @@
       Title="Create - Harbor" Height="600" Width="800">
 
     <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Label Content="Harbor Name: "/>
-            <TextBox x:Name="HarborNameTextBox"/>
-            <Label Content="Index Range:"/>
-            <TextBox x:Name="HarborIndexTextBox"/>
-            <Button Content="Create Harbor" Click="CreateHarbor"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
+            <Label Content="Harbor Name:" Width="199"/>
+            <TextBox x:Name="HarborNameTextBox" Width="200" Margin="0 5"/>
+
+            <Label Content="Index Range:" Width="200"/>
+            <TextBox x:Name="HarborIndexTextBox" Width="200" Margin="0 5"/>
+
+            <Button Content="Create Harbor" Click="CreateHarbor" Width="150" Margin="0 10"/>
         </StackPanel>
 
+        <ListBox x:Name="HarborInfo" Grid.Row="1" Margin="20" BorderBrush="Black" BorderThickness="1"
+                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+
+        <StatusBar Grid.Row="2" Height="30">
+            <StatusBarItem>
+                <TextBlock x:Name="statusBarText"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Page>

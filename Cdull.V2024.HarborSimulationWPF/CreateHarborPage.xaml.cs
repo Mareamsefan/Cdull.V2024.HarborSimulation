@@ -62,9 +62,9 @@ namespace Cdull.V2024.HarborSimulationWPF
             Harbor harbor = new Harbor(harborName, indexRange, CreatedContainerStorage);
             IsHarborCreated = true;
             CreatedHarbor = harbor;
-            /*
+            
             string harborInfo = $"Harbor Name: {harborName}, Index Range: {indexRange}";
-            HarborInfo.Items.Add(harborInfo);*/
+            HarborInfo.Items.Add(harborInfo);
         }
     }
 

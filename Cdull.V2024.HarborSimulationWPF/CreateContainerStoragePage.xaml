@@ -4,15 +4,32 @@
       Title="Create - ContainerStorage" Height="600" Width="800">
 
     <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Label Content="Container Storage Name:"/>
-            <TextBox x:Name="StorageNameTextBox"/>
-            <Label Content="Start Index:"/>
-            <TextBox x:Name="StartIndexTextBox"/>
-            <Label Content="End Index:"/>
-            <TextBox x:Name="EndIndexTextBox"/>
-            <Button Content="Create Container Storage" Click="CreateContainerStorage" Height="24"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
+            <TextBlock Text="Container Storage Name:" Width="198"/>
+            <TextBox x:Name="StorageNameTextBox" Width="200" Margin="0 5"/>
+
+            <TextBlock Text="Start Index:" Width="198"/>
+            <TextBox x:Name="StartIndexTextBox" Width="200" Margin="0 5"/>
+
+            <TextBlock Text="End Index:" Width="198"/>
+            <TextBox x:Name="EndIndexTextBox" Width="200" Margin="0 5"/>
+
+            <Button Content="Create Container Storage" Click="CreateContainerStorage" Width="150" Margin="0 10"/>
         </StackPanel>
 
+        <ListBox x:Name="ContainerStorageInfo" Grid.Row="1" Margin="20" BorderBrush="Black" BorderThickness="1"
+                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+
+        <StatusBar Grid.Row="2" Height="30">
+            <StatusBarItem>
+                <TextBlock x:Name="statusBarText"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Page>
