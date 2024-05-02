@@ -18,7 +18,31 @@ namespace HarborSimulationGUI
             harbor = new Harbor("TestHarbor", 1000, new ContainerStorage("ContainerStorage", 0, 500));
         }
 
-        private void InitializeShips_Click(object sender, RoutedEventArgs e)
+
+
+        private void OpenDocks_Click(object sender, RoutedEventArgs e)
+        {
+            Docks docksWindow = new Docks(); // Opprett en ny instans av Docks-vinduet
+            docksWindow.Show(); // Vis Docks-vinduet
+        }
+
+        private void SetupAGVsButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Opprett et nytt AGVSetupWindow med referanse til harbor-objektet
+            AGVSetupWindow agvSetupWindow = new AGVSetupWindow(harbor);
+
+            // Vis AGVSetupWindow som en dialogboks
+            agvSetupWindow.ShowDialog();
+        }
+        private void SetupStorageColumnsButton_Click(object sender, RoutedEventArgs e)
+        {
+            StorageSetupWindow storageSetupWindow = new StorageSetupWindow(harbor);
+            storageSetupWindow.ShowDialog();
+        }
+
+
+
+            private void InitializeShips_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -48,6 +72,7 @@ namespace HarborSimulationGUI
             {
                 MessageBox.Show($"Error initializing ships: {ex.Message}", "Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
         }
     }
 }

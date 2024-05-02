@@ -16,13 +16,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         public int Capacity { get; set; }
         internal int Height { get; private set; }
-        internal int Length { get; private set; }
+        public int Length { get; private set; }
         internal int Width { get; private set; }
         internal List<Container> Containers { get; set; } = new List<Container>();
         internal PortalCrane Crane { get; set; }
         internal int OccupiedSpace { get; set; }
         internal bool IsAvailable { get; set; }
-        internal int Location { get; set; }
+        public int Location { get; set; }
 
 
         /// <summary>

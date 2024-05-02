@@ -1,0 +1,31 @@
+﻿<Window x:Class="HarborSimulationGUI.AGVSetupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AGV Setup" Height="300" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="AGV Setup" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10"/>
+
+        <TextBlock Grid.Row="1" Text="Number of AGVs:" Margin="10"/>
+        <TextBox x:Name="txtNumberOfAGVs" Grid.Row="1" Grid.Column="1" Width="100" Margin="10"/>
+
+        <TextBlock Grid.Row="2" Text="AGV Location:" Margin="10"/>
+        <TextBox x:Name="txtAGVLocation" Grid.Row="2" Grid.Column="1" Width="100" Margin="10"/>
+
+        <Button Grid.Row="3" Content="Initialize AGVs" Click="InitializeAGVs_Click" Width="150" Margin="10"/>
+
+        <ListBox x:Name="lstAGVInfo" Grid.Row="4" Margin="10,10,10,-83"
+                 BorderBrush="Black" BorderThickness="1"
+                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.RowSpan="4"/>
+    </Grid>
+</Window>

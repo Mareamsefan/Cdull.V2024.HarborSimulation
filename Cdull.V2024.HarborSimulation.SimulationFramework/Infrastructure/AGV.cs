@@ -14,7 +14,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         internal int Counter { get; set; }
         internal bool IsAvailable { get; set; }
         internal Container Container { get; set; }
-        internal int Location { get; set; }
+        public int Location { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AGV"/> class with the specified location.

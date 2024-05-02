@@ -43,7 +43,13 @@
             </ComboBox>
 
             <Button Content="Initialize Ships" Click="InitializeShips_Click" Width="150" Margin="0 10"/>
+
         </StackPanel>
+
+        <Button Content="Open Docks" Click="OpenDocks_Click" Margin="683,31,40,284"/>
+        <Button Content="Setup AGVs" Click="SetupAGVsButton_Click" Margin="683,91,40,229"/>
+        <Button Content="Setup Storage Columns" Click="SetupStorageColumnsButton_Click" Margin="683,151,40,174"/>
+
 
         <!-- Display Area for Ship Information -->
         <ListBox x:Name="lstShipInfo" Grid.Row="1" Margin="20" BorderBrush="Black" BorderThickness="1"

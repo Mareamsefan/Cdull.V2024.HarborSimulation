@@ -246,7 +246,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         ///     int numberOfShortColumns = 1;
         ///     int columnWidth = 6;
         ///     int columnHeight = 4;
-        ///     
+        ///         
         ///     List<StorageColumn> storageColumns = harbor.InitializeStorageColumns(
         ///         longColumnLocations, shortColumnLocations, longColumnLength, shortColumnLength, 
         ///         numberOfLongColumns, numberOfShortColumns, columnWidth, columnHeight);
