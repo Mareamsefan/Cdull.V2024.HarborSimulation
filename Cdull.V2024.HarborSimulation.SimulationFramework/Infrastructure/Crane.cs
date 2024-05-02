@@ -13,7 +13,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         public int Id { get; set; }
         internal int handlingTime { get; set; }
         internal bool IsAvailable { get; set; }
-        internal Container? Container { get; set; }
+        public Container? Container { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the Crane class with the specified Id.

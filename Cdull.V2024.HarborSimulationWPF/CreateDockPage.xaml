@@ -1,0 +1,44 @@
+﻿<Page x:Class="Cdull.V2024.HarborSimulationWPF.CreateDockPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Cdull.V2024.HarborSimulationWPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+      Title="Create - Docks">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20">
+            <TextBlock Text="Number of Docks:" Width="198"/>
+            <TextBox x:Name="txtNumberOfDocks" Width="200" Margin="0 5"/>
+
+            <TextBlock Text="Dock Size:" Width="198"/>
+            <ComboBox x:Name="cmbDockSize" Width="200" Margin="0 5">
+                <ComboBoxItem Content="Small"/>
+                <ComboBoxItem Content="Medium"/>
+                <ComboBoxItem Content="Large"/>
+            </ComboBox>
+
+            <TextBlock Text="Number of Cranes:" Width="197"/>
+            <TextBox x:Name="txtNumberOfCranes" Width="200" Margin="0 5"/>
+
+            <Button Content="Initialize Docks" Click="InitializeDocks_Click" Width="150" Margin="0 10"/>
+        </StackPanel>
+
+        <ListBox x:Name="lstDockInfo" Grid.Row="1" Margin="20" BorderBrush="Black" BorderThickness="1"
+                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+
+        <StatusBar Grid.Row="2" Height="30">
+            <StatusBarItem>
+                <TextBlock x:Name="statusBarText"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Page>

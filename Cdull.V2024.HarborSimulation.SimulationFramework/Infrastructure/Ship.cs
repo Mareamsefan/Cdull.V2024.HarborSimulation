@@ -22,15 +22,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         public Size Size { get; set; }
         internal bool HasDocked { get; set; }
-        internal List<Container> Containers { get; } = new List<Container>();
+        public List<Container> Containers { get; } = new List<Container>();
         internal List<string> History { get; } = new List<string>();
         internal string DockedAtTime { get; set; }
         internal string SailedAtTime { get; set; }
         public bool IsSailing { get; set; }
         public bool IsReadyToSail { get; set; }
-        internal float Speed { get; private set; }
+        public float Speed { get; private set; }
         public Dock? DockedAt { get; set; }
-        internal int CurrentLocation { get; set; }
+        public int CurrentLocation { get; set; }
         internal bool HasReachedDestination { get; set; }
         internal ShipSailingState SailingState { get; set; }
 
