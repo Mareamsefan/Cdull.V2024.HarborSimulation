@@ -7,8 +7,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     public class ContainerStorage
     {
         public string Name { get; set; }
-        internal List<StorageColumn> StorageColumns { get; set; } = new List<StorageColumn>();
-        internal List<int> LocationIndexes { get; set; } = new List<int>();
+        public List<StorageColumn> StorageColumns { get; set; } = new List<StorageColumn>();
+        public List<int> LocationIndexes { get; set; } = new List<int>();
         public int Capacity { get; set; }
 
 

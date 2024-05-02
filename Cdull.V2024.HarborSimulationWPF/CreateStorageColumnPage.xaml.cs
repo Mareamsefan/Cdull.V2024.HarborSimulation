@@ -57,10 +57,10 @@ namespace Cdull.V2024.HarborSimulationWPF
                 // Display storage column information
                 foreach (var column in columns)
                 {
-                    //string columnInfo = $"Column ID: {column.ColumnId}, Location: {column.Location}, Length: {column.Length}";
-                    //if (!lstStorageColumns.Items.Contains(columnInfo)) // Check for duplicates
+                    string columnInfo = $"Column ID: {column.ColumnId}, Location: {column.Location}, Length: {column.Length}";
+                    if (!lstStorageColumns.Items.Contains(columnInfo)) // Check for duplicates
                     {
-                   //     lstStorageColumns.Items.Add(columnInfo);
+                      lstStorageColumns.Items.Add(columnInfo);
                     }
                 }
 

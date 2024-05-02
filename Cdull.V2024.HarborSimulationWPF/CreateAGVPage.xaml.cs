@@ -47,7 +47,7 @@ namespace Cdull.V2024.HarborSimulationWPF
                 foreach (var agv in agvs)
                 {
 
-                    string agvInfo = $"AGV ID: {i}, Location: {agvLocation}";
+                    string agvInfo = $"AGV ID: {i}, Location: {agv.Location}";
                     lstAGVInfo.Items.Add(agvInfo);
                     i++;
 

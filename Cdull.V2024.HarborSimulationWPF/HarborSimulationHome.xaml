@@ -1,7 +1,7 @@
 ﻿<Page x:Class="Cdull.V2024.HarborSimulationWPF.HarborSimulationHome"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="HarborSimulation - Home" Height="500" Width="500">
+      Title="HarborSimulation - Home" Height="600" Width="800">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -10,9 +10,11 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+      
         <Border Grid.Row="0" Height="35" Padding="5" Background="#4E87D4">
             <Label VerticalAlignment="Center" Foreground="White">Components</Label>
         </Border>
+
         <ListBox Name="ComponentsListBox" Grid.Row="1" Grid.RowSpan="2">
             <ListBoxItem>
                 <Button Content="Create Container Storage" Click="CreateContainerStorage_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -20,16 +22,24 @@
             <ListBoxItem>
                 <Button Content="Create Harbor" Click="CreateHarbor_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </ListBoxItem>
+            <ListBoxItem>
+                <Button Content="Create Docks" Click="CreateDocks_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Button Content="Create AGVs" Click="CreateAGVs_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Button Content="Create Ships" Click="CreateShips_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Button Content="Create Storage Columns" Click="CreateStorageColumns_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </ListBoxItem>
         </ListBox>
 
+     
         <Frame x:Name="MainFrame" Grid.Row="2" Navigated="MainFrame_Navigated"/>
 
-        <ListBox x:Name="lstContainerStorageInfo" Grid.Row="3" Margin="50,330,50,120"  BorderBrush="Black" BorderThickness="1"
-                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
-
-        <ListBox x:Name="lstHarborInfo" Grid.Row="4" Margin="50,350,50,100"  BorderBrush="Black" BorderThickness="1"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" SelectionChanged="lstHarborInfo_SelectionChanged"/>
-        
+      
         <Button Grid.Row="5" Margin="176,299,176,140" Height="25">Start Simulation</Button>
     </Grid>
 </Page>

@@ -15,14 +15,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// Represents the total capacity of the storage cloumn. 
         /// </summary>
         public int Capacity { get; set; }
-        internal int Height { get; private set; }
-        internal int Length { get; private set; }
-        internal int Width { get; private set; }
-        internal List<Container> Containers { get; set; } = new List<Container>();
+        public int Height { get; private set; }
+        public int Length { get; private set; }
+        public int Width { get; private set; }
+        public List<Container> Containers { get; set; } = new List<Container>();
         internal PortalCrane Crane { get; set; }
-        internal int OccupiedSpace { get; set; }
+        public int OccupiedSpace { get; set; }
         internal bool IsAvailable { get; set; }
-        internal int Location { get; set; }
+        public int Location { get; set; }
 
 
         /// <summary>

@@ -13,43 +13,43 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <summary>
         /// Gets or sets the name of the harbor.
         /// </summary>
-        internal string Name { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// Gets or sets the currentime of the simulation. 
         /// </summary>
-        internal DateTime CurrentTime { get; set; }
+        public DateTime CurrentTime { get; set; }
         /// <summary>
         /// Gets or sets the range of locations within the harbor. 
         /// </summary>
-        internal Range LocationRange { get; set; }
+        public Range LocationRange { get; set; }
         /// <summary>
         /// Gets or sets the total list of docks in the harbor. 
         /// </summary>
-        internal List<Dock> Docks { get; set; } = new List<Dock>();
+        public List<Dock> Docks { get; set; } = new List<Dock>();
         /// <summary>
         /// Gets or sets the total list of ships in the harbor. 
         /// </summary>
-        internal List<Ship> Ships { get; set; } = new List<Ship>();
+        public List<Ship> Ships { get; set; } = new List<Ship>();
         /// <summary>
         /// Gets or sets the list of docked ships in the harbor. 
         /// </summary>
-        internal List<Ship> DockedShips { get; set; } = new List<Ship>();
+        public List<Ship> DockedShips { get; set; } = new List<Ship>();
         /// <summary>
         /// Gets or sets the list of sailing ships in the harbor. 
         /// </summary>
-        internal List<Ship> SailingShips { get; set; } = new List<Ship>();
+        public List<Ship> SailingShips { get; set; } = new List<Ship>();
         /// <summary>
         /// Gets or sets the queue of ships waiting for docking in the harbor. 
         /// </summary>
-        internal Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
+        public Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
         /// <summary>
         /// Gets or sets the list of AGVs (Automated Guided Vehicles) in the harbor.
         /// </summary>
-        internal List<AGV> AGVs { get; set; } = new List<AGV>();
+        public List<AGV> AGVs { get; set; } = new List<AGV>();
         /// <summary>
         /// Gets or sets the container storage that contains Storagecolumns in the harbor. 
         /// </summary>
-        internal ContainerStorage ContainerStorage { get; set; }
+        public ContainerStorage ContainerStorage { get; set; }
 
         /// <summary>
         /// Event raised when a ship departs from the harbor.
