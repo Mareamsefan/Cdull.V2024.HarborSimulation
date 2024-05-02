@@ -74,7 +74,7 @@ namespace Cdull.V2024.HarborSimulationWPF
                     OnContainerStorageCreated?.Invoke(this, new ContainerStorageEventArgs(containerStorage));
                 }
                 string containerStorageInfo = $"Storage Name: {storageName}, Start Index: {startIndex}, End Index: {endIndex}";
-                ContainerStorageInfo.Items.Add(containerStorageInfo);
+                //ContainerStorageInfo.Items.Add(containerStorageInfo);
 
                 
 

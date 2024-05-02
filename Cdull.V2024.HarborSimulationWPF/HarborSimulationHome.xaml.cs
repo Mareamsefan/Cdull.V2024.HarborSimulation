@@ -57,5 +57,19 @@ namespace Cdull.V2024.HarborSimulationWPF
             }
         }
 
+        private void ComponentsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void lstHarborInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void MainFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+
+        }
     }
 }
