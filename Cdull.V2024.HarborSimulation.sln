@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cdull.V2024.HarborSimulatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cdull.V2024.HarborSimulation.TestClient", "Cdull.V2024.HarborSimulation.TestClient\Cdull.V2024.HarborSimulation.TestClient.csproj", "{8043D6E6-A59C-4C5D-B4D1-5079E1223B39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cdull.V2024.HarborSimulationWPF", "Cdull.V2024.HarborSimulationWPF\Cdull.V2024.HarborSimulationWPF.csproj", "{2B0546F5-86B3-48B9-9577-4D10F6D9142F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cdull.V2024.HarborSimulationGUI", "Cdull.V2024.HarborSimulationWPF\Cdull.V2024.HarborSimulationGUI.csproj", "{2B0546F5-86B3-48B9-9577-4D10F6D9142F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
