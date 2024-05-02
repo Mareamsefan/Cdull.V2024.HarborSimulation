@@ -8,11 +8,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     {
         private static int lastId = 0;
 
-        internal int Id;
-        internal string Name { get; set; }
-        internal List<string> History { get; } = new List<string>();
-        internal ContainerSize Size { get; set; }
-        internal int numberOfDaysInStorage { get; set; }
+        public int Id;
+        public string Name { get; set; }
+        public List<string> History { get; } = new List<string>();
+        public ContainerSize Size { get; set; }
+        public int numberOfDaysInStorage { get; set; }
 
         /// <summary>
         /// Initializes a new instance of Container class with the specified name and weight.
