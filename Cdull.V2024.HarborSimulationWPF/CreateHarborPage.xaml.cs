@@ -21,16 +21,30 @@ namespace Cdull.V2024.HarborSimulationWPF
     /// </summary>
     public partial class CreateHarborPage : Page
     {
+        /// <summary>
+        /// Gets the created harbor.
+        /// </summary>
         public Harbor CreatedHarbor { get; set; }
+
         private ContainerStorage CreatedContainerStorage;
         private bool IsHarborCreated = false;
 
 
+        /// <summary>
+        /// Constructor for CreateHarborPage.
+        /// </summary>
+        /// <param name="createdContainerStorage">The created container storage</param>
         public CreateHarborPage(ContainerStorage createdContainerStorage)
         {
             InitializeComponent();
             CreatedContainerStorage = createdContainerStorage;
         }
+
+        /// <summary>
+        /// Handles the creation of a harbor.
+        /// </summary>
+        /// <param name="sender">The sender of the event</param>
+        /// <param name="e">The event arguments</param>
         private void CreateHarbor(object sender, RoutedEventArgs e)
         {
             if (IsHarborCreated)

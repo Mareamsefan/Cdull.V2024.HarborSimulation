@@ -23,12 +23,22 @@ namespace Cdull.V2024.HarborSimulationWPF
     public partial class CreateShipPage : Page
     {
         private Harbor harbor;
+
+        /// <summary>
+        /// Constructor for CreateShipPage
+        /// </summary>
+        /// <param name="createdHarbor">The harbor where the ships will be initialized</param>
         public CreateShipPage(Harbor createdHarbor)
         {
             InitializeComponent();
             harbor = createdHarbor;
         }
 
+        /// <summary>
+        /// Handles the initialization of ships
+        /// </summary>
+        /// <param name="sender">The sender of the event</param>
+        /// <param name="e">The event arguments</param>
         private void InitializeShips_Click(object sender, RoutedEventArgs e)
         {
             try
