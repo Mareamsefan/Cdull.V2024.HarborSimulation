@@ -111,7 +111,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             });
 
             // Checking all scheduled cargo handling operations for the test ship.
-            Console.WriteLine(containerHandler.CheckScheduledCargoHandling(ContainerTestShip));
+            Console.WriteLine(containerHandler.CheckScheduledContainerHandling(ContainerTestShip));
 
             // Running the simulation.
             driver.Run(harbor, startTime, endTime, ships, docks, agvs, storageColumns);
