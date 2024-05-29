@@ -24,6 +24,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <summary>
         /// Represents the size large of ship or dock. 
         /// </summary>
-        Large
+        Large,
+        
     }
 }
