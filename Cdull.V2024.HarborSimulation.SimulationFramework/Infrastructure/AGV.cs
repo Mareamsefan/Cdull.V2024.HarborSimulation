@@ -16,6 +16,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         public Container Container { get; set; }
         public int Location { get; set; }
 
+        internal int Speed { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AGV"/> class with the specified location.
         /// </summary>
@@ -26,8 +28,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             Id = Counter;
             Location = agvLocation;
             IsAvailable = true;
+            Speed = 7;
         }
 
+        public AGV(int agvLocation, int agvSpeed)
+        {
+            Counter++;
+            Id = Counter;
+            Location = agvLocation;
+            IsAvailable = true;
+            Speed = agvSpeed;
+        }
         /// <summary>
         /// Loads the specified container onto the AGV.
         /// </summary>

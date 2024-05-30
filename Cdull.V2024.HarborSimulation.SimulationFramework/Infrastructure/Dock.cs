@@ -7,18 +7,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class Dock
     {
-        public string dockName;
-        public Size dockSize;
-        public int numberOfCranes;
+        public string dockName { get; set; }
 
-        /// <summary>
-        /// Represents the Id of the dock. 
-        /// </summary>
+        public Size dockSize { get; set; }
+
+        public int numberOfCranes { get; set; }
+
         public int Id { get; set; }
 
-        /// <summary>
-        /// Represents the size of the dock. 
-        /// </summary>
         public Size Size { get; set; }
         public bool IsAvailable { get; set; }
 
@@ -47,24 +43,27 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         ///     Dock dock = new Dock(dockName, dockSize, dockCranes);
         /// </code>
         /// </example>
-        public Dock(int dockId, Size dockSize, List<Crane>? dockCranes = null, Crane? dockCrane = null)
+        public Dock(int dockId, Size dockSize, List<Crane> dockCranes)
         {
             Id = dockId;
             Size = dockSize;
             IsAvailable = true;
             OccupiedBy = null;
             numberOfShipsPerDay = 0;
+            Cranes = dockCranes;
+        }
 
-            if (dockCranes != null)
-            {
-                Cranes = dockCranes;
-            }
-            else if (dockCrane != null)
-            {
-                Cranes.Add(dockCrane);
-            }
+        public Dock(int dockId, Size dockSize, Crane dockCrane)
+        {
+            Id = dockId;
+            Size = dockSize;
+            IsAvailable = true;
+            OccupiedBy = null;
+            numberOfShipsPerDay = 0;
+            Cranes.Add(dockCrane);      
 
         }
+
 
         public Dock(string dockName, Size dockSize, int numberOfCranes)
         {
