@@ -56,11 +56,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <exception cref="ArgumentNullException">Thrown when the container parameter is null.</exception>
         internal void AddContainer(Container container)
         {
+            
             if (container == null)
             {
                 throw new ArgumentNullException(nameof(container), "Containers parameter cannot be null.");
             }
-
+            
 
             if (!Containers.Contains(container))
             {
@@ -194,6 +195,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         {
             return $"Storage Column {ColumnId}";
         }
+
+    
 
     }
 }

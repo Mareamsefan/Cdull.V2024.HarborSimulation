@@ -35,7 +35,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         /// <param name="container">The container being moved.</param>
         /// <param name="harbor">The harbor instance.</param>
         /// <returns>The AGV to which the container is moved.</returns>
-        internal AGV MoveContainerFromShipToAGV(Ship ship, Container container, Harbor harbor)
+        internal void MoveContainerFromShipToAGV(Ship ship, Container container, Harbor harbor)
         {
             Dock dock = ship.DockedAt;
             Crane crane = dock.Cranes.First();
@@ -66,7 +66,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
 
             }
             crane.handlingTime++;
-            return agv;
+          
         }
 
 
@@ -90,6 +90,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
 
             portalCrane.handlingTime++;
             Container container = agv.Container;
+            Console.WriteLine(nameof(container));
 
             if (column.Capacity == column.OccupiedSpace)
             {
@@ -106,13 +107,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
                 throw new InsufficientStorageSpaceException(column.ColumnId, column.Capacity - column.OccupiedSpace, 1);
             }
 
-            if (portalCrane.handlingTime == 60)
+            if (portalCrane.handlingTime == 30)
             {
-                agv.Container = null;
+                Console.WriteLine("TESTING" + column.ColumnId);
                 portalCrane.LiftContainer(container);
-                portalCrane.Container = null;
                 column.AddContainer(container);
                 column.OccupySpace(container);
+                agv.Container = null;
+                portalCrane.Container = null;
                 container.History.Add($"{container.Name} moved from AGV {agv.Id} to StorageColumn {column.ColumnId}");
                 portalCrane.IsAvailable = true;
                 portalCrane.handlingTime = 0;

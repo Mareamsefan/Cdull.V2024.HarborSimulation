@@ -17,26 +17,26 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Creating a container storage with a location range for the storage columns to be located. 
             // The capacity of the container storage is determined by the storage columns it contains.
             ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500);
-            Console.WriteLine(containerStorage.GetOccupiedSpace());
+            //Console.WriteLine(containerStorage.GetOccupiedSpace());
 
             // Creating a new harbor named "TestHarbor" with a location index range of 1000 (from 0-1000)
             Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage);
 
             // Creating 3 large docks with 7 cranes collectively.
 
-            List<Dock> docks = harbor.InitializeDocks(20, Size.Large, 2);
+            List<Dock> docks = harbor.InitializeDocks(1, Size.Large, 2);
 
 
-            docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
+            //docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
 
             // Creating 20 AGVs for container movement.
-            List<AGV> agvs = harbor.InitializeAGVs(20, 1000);
+            List<AGV> agvs = harbor.InitializeAGVs(1, 1000);
 
             // Creating a list to hold ships.
             List<Ship> ships = new List<Ship>();
 
             // Adding 5 medium-sized LNGCarrier ships with a current location 2000m away from the harbor.
-            ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
+            //ships.AddRange(harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium));
 
             // Adding 5 large ContainerShip ships with 5 small containers each, located 1500m away from the harbor.
             //ships.AddRange(harbor.InitializeShips(1500, 5, Model.ContainerShip, Size.Large, 5, ContainerSize.Small));
@@ -49,10 +49,11 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             ContainerTestShip.InitializeContainers(5, ContainerSize.Small);
             Ship LNGCarrierTestShip = new Ship("LNGCarrierTestShip", Model.LNGCarrier, Size.Medium, 2500);
 
-            ContainerTestShip.ToString();
+          
+            Console.WriteLine("CONTAINER COUNT "+ContainerTestShip.Containers.Count); 
 
             ships.Add(ContainerTestShip);
-            ships.Add(LNGCarrierTestShip);
+            //ships.Add(LNGCarrierTestShip);
 
             // Scheduling sailing for ContainerShip ships starting on January 2, 2024, with 50 ships, repeating weekly.
             // ScheduleSailing.ScheduleSailings(harbor, ships, Model.ContainerShip, new DateTime(2024, 1, 2), 50, RecurringType.Weekly);
@@ -60,8 +61,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             //Scheduling sailing for LNGCarrier ships starting on January 2, 2024, with 40 ships, repeating daily.
             ScheduleSailing.ScheduleSailings(harbor, ships, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Weekly);
 
-            ScheduleSailing.ScheduleOneSailing(harbor, LNGCarrierTestShip, new DateTime(2024, 1, 10), 50, RecurringType.None);
-         
+            //ScheduleSailing.ScheduleOneSailing(harbor, LNGCarrierTestShip, new DateTime(2024, 1, 10), 50, RecurringType.None);
+            ScheduleSailing.ScheduleOneSailing(harbor, ContainerTestShip, new DateTime(2024, 1, 2), 100, RecurringType.None); 
                 
             // Creating an instance of the simulation driver.
             IHarborSimulation driver = new Simulation();
@@ -76,14 +77,14 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             harbor.CompletedUnloadingShip += Harbor_ShipCompletedUnloading;
             harbor.CompletedloadingShip += Harbor_ShipCompletedLoading;
 
-            List<Sailing> sailings = ScheduleSailing.CheckScheduledSailings(harbor, ships, Model.LNGCarrier);
+           List<Sailing> sailings = ScheduleSailing.CheckScheduledSailings(harbor, ships, Model.LNGCarrier);
             sailings.ForEach(sailing =>
                 Console.WriteLine(sailing.ToString())
             );
        
             // Setting up storage columns at specific locations.
-            List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407 };
-            List<int> shortColumnLocations = new List<int> { 30, 74, 148, 222, 292, 270, 444 };
+            List<int> longColumnLocations = new List<int> { 37, 111, 185, 259, 333, 407};
+            List<int> shortColumnLocations = new List<int> { 30, 74, 148, 222, 292, 270, 444};
 
             // Setting up 4 storage columns at each of the longColumnLocations, and 1 storage column at each of the 
             // shortColumnLocations, resulting in a total of 24 long storage columns and 7 small storage columns.
@@ -96,9 +97,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
      
 
             // Scheduling container handling operations for the test ship on specific dates.
-            containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
+           /* containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 4), 1, 2, 10, LoadingType.Unload);
             containerHandler.ScheduleContainerHandling(ContainerTestShip, new DateTime(2024, 1, 7), 1, 2, 10, LoadingType.Load);
-            
+            */
             
             // Scheduling container handling operations for ContainerShip ships.
             ships.ForEach(ship =>
@@ -111,7 +112,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             });
 
             // Checking all scheduled cargo handling operations for the test ship.
-            Console.WriteLine(containerHandler.CheckScheduledContainerHandling(ContainerTestShip));
+           // Console.WriteLine(containerHandler.CheckScheduledContainerHandling(ContainerTestShip));
 
             // Running the simulation.
             driver.Run(harbor, startTime, endTime, ships, docks, agvs, storageColumns);
@@ -126,6 +127,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Retrieving the first ship in the harbor and printing its history.
             Ship ship1 = harbor.GetShips().First();
             Console.WriteLine(historyHandler.GetShipHistory(ship1));
+            Console.WriteLine(ContainerTestShip.Containers.Count);
 
             // Retrieving the last ship in the harbor and printing its history.
             //Ship ship2 = harbor.GetShips().Last();
@@ -134,12 +136,12 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Printing history for all ships in the harbor.
             Console.WriteLine(historyHandler.GetShipsHistory());
 
-            List<Sailing> sailingscheck = ScheduleSailing.CheckScheduledSailings(
+           /* List<Sailing> sailingscheck = ScheduleSailing.CheckScheduledSailings(
                 harbor, ships, Model.LNGCarrier);
             sailings.ForEach(sailing =>
                 Console.WriteLine(sailing.ToString())
 
-            );
+            );*/
         }
 
 
@@ -148,24 +150,24 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
         private static void Harbor_ShipDeparted(object? sender, ShipDepartureEventArgs e)
         {
-            Console.WriteLine($"Ship '{e.DepartedShip}' departed harbor.");
+            Console.WriteLine($"\nShip '{e.DepartedShip}' departed harbor.\n");
         }
 
         private static void Harbor_ShipArrived(object? sender, ShipArrivalEventArgs e)
         {
 
-            Console.WriteLine($"Ship '{e.ArrivedShip}' arrived harbor.");
+            Console.WriteLine($"\nShip '{e.ArrivedShip}' arrived harbor.\n");
         }
 
         private static void Harbor_ShipCompletedUnloading(object? sender, ShipUnloadingEventArgs e)
         {
 
-            Console.WriteLine($"Ship '{e.CompletedUnloadingShip}' completed unloading containers." );
+            Console.WriteLine($"\nShip '{e.CompletedUnloadingShip}' completed unloading containers.\n" );
         }
         private static void Harbor_ShipCompletedLoading(object? sender, ShipLoadingEventArgs e)
         {
 
-            Console.WriteLine($"Ship '{e.CompletedLoadingShip}' completed Loading containers.");
+            Console.WriteLine($"\nShip '{e.CompletedLoadingShip}' completed Loading containers.\n");
         }
 
     }

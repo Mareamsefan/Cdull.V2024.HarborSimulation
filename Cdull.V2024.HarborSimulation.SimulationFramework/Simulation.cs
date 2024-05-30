@@ -143,6 +143,34 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     });
                  
                 }
+
+                if (harbor.DockedShips.Any())
+                {
+                    Ship ship = harbor.DockedShips.First();
+                    
+                    if (ship.ScheduledContainerHandlings.Any())
+                    {
+                        AGV agv = harbor.GetAvailableAGV();
+                        if (ship.Containers.Any())
+                        {
+                            Container container = ship.Containers.First();
+                            containerHandler.MoveContainerFromShipToAGV(ship, container, harbor);
+
+                            if (agv.Container != null)
+                            {
+                                containerHandler.MoveContainerFromAGVToStorageColumn(harbor.ContainerStorage, 1, 3, agv);
+                            }
+
+                            StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(1);
+
+
+                            Console.WriteLine(storageColumn.Containers.Count);
+                        }
+                    }
+               
+
+                 
+                }
                
                 /*
                 if (ship.DockedAt.numberOfShipsPerDay < 7)
