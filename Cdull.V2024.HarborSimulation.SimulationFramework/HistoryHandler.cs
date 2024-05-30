@@ -82,7 +82,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine("Ship History for all ships:");
+            sb.AppendLine("\nShip History for all ships:\n");
 
             foreach (var shipEvent in shipHistory)
             {
@@ -122,7 +122,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Ship History for {ship.Name}:");
+            sb.AppendLine($"\nShip History for {ship.Name}:\n");
 
             foreach (var shipEvent in shipEvents)
             {

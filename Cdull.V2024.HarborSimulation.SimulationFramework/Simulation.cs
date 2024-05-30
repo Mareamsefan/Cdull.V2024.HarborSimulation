@@ -143,6 +143,70 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     });
                  
                 }
+
+                if (harbor.DockedShips.Any())
+                {
+                    Ship ship = harbor.DockedShips.First();
+                    
+                    if (ship.ScheduledContainerHandlings.Any())
+                    {
+                        ScheduledContainerHandling scheduledContainerHandling = ship.ScheduledContainerHandlings.First(); 
+                        AGV agv = harbor.GetAvailableAGV();
+                        if (ship.Containers.Any()) 
+                        {
+
+                            if (scheduledContainerHandling.HandlingTime.Date == harbor.CurrentTime.Date
+                                && scheduledContainerHandling.HandlingTime.Hour == harbor.CurrentTime.Hour
+                                && scheduledContainerHandling.HandlingTime.Minute == harbor.CurrentTime.Minute &&
+                                scheduledContainerHandling.LoadingType == LoadingType.Unload)
+                            {
+                                Container container = ship.Containers.First();
+                                containerHandler.MoveContainerFromShipToAGV(ship, container, harbor);
+
+                                if (agv.Container != null)
+                                {
+                                    containerHandler.MoveContainerFromAGVToStorageColumn(harbor, 1, 3, agv);
+                                }
+
+                                StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(1);
+
+
+                                Console.WriteLine(storageColumn.Containers.Count);
+                                harbor.RaiseShipCompletedUnloading(ship);
+                            }
+
+                          
+                        }
+                        
+                        if (!ship.Containers.Any())
+                        {
+                            if (scheduledContainerHandling.HandlingTime.Date == harbor.CurrentTime.Date &&
+                                  scheduledContainerHandling.LoadingType == LoadingType.Load)
+                            {
+
+                                StorageColumn storagecolumn = harbor.ContainerStorage.StorageColumns.First();
+                                Console.WriteLine("LOADTEST");
+                                if (storagecolumn.Containers.Any())
+                                {
+                                    Console.WriteLine("LOADTEST");
+                                    Container container = storagecolumn.Containers.First();
+                                    containerHandler.MoveContainerFromStorageColumnToAGV(1, harbor);
+                                    if (agv.Container != null)
+                                    {
+                                        containerHandler.MoveContainerFromAGVToShip(harbor, agv, ship);
+                                    }
+
+
+                                }
+
+
+                            }
+                        }
+                    }
+               
+
+                 
+                }
                
                 /*
                 if (ship.DockedAt.numberOfShipsPerDay < 7)

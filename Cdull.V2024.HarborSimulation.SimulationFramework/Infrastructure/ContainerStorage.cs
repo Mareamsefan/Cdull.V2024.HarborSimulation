@@ -86,6 +86,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             });
             return occupiedSpace;
         }
+        // KANSKJE DE BURDE HETE CONTAINERCOLUMNS IKKE STORAGE COLUMNS ?? BRUKERVENINNLIGHET? 
+    
 
 
     }
