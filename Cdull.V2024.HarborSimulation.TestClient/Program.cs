@@ -26,6 +26,24 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             List<Dock> docks = harbor.InitializeDocks(1, Size.Large, 2);
 
+            agv.GetId();
+
+            agv.GetIsAvailable();
+
+            agv.SetIsAvailable(true);
+
+            agv.GetContainer();
+
+            agv.SetContainer(Container container);
+
+            agv.GetLocation();
+
+            agv.SetLocation(500);
+
+            agv.GetSpeed();
+
+            agv.SetSpeed(7);
+
 
             //docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
 
