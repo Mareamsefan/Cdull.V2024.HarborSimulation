@@ -16,11 +16,11 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             // Creating a container storage with a location range for the storage columns to be located. 
             // The capacity of the container storage is determined by the storage columns it contains.
-            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500);
+            ContainerStorage containerStorage = new ContainerStorage("ContainerStorage", 0, 500, 3, 30);
             //Console.WriteLine(containerStorage.GetOccupiedSpace());
 
             // Creating a new harbor named "TestHarbor" with a location index range of 1000 (from 0-1000)
-            Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage);
+            Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage, 4);
 
             // Creating 3 large docks with 7 cranes collectively.
 
@@ -50,7 +50,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Ship LNGCarrierTestShip = new Ship("LNGCarrierTestShip", Model.LNGCarrier, Size.Medium, 2500);
 
           
-            Console.WriteLine("CONTAINER COUNT "+ContainerTestShip.Containers.Count); 
+            Console.WriteLine("CONTAINER COUNT "+ContainerTestShip.GetContainers.Count); 
 
             ships.Add(ContainerTestShip);
             //ships.Add(LNGCarrierTestShip);
@@ -104,7 +104,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             // Scheduling container handling operations for ContainerShip ships.
             ships.ForEach(ship =>
             {
-                if (ship.Model.Equals(Model.ContainerShip))
+                if (ship.GetModel.Equals(Model.ContainerShip))
                 {
                     containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 6), 2, 3, 10, LoadingType.Unload);
                     containerHandler.ScheduleContainerHandling(ship, new DateTime(2024, 1, 8), 2, 3, 10, LoadingType.Load);
@@ -125,9 +125,9 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             Console.WriteLine(historyHandler.GetHarborHistory(new DateTime(2024, 1, 2)));
 
             // Retrieving the first ship in the harbor and printing its history.
-            Ship ship1 = harbor.GetShips().First();
+            Ship ship1 = harbor.GetShips.First();
             Console.WriteLine(historyHandler.GetShipHistory(ship1));
-            Console.WriteLine(ContainerTestShip.Containers.Count);
+            Console.WriteLine(ContainerTestShip.GetContainers.Count);
 
             // Retrieving the last ship in the harbor and printing its history.
             //Ship ship2 = harbor.GetShips().Last();
