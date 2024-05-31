@@ -34,7 +34,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             container.GetNumberOfDaysInStorage();
 
-            container.AddToHistory("{container.GetName} was moved from here to there");
+            container.AddToHistory($"{container.GetName} was moved from here to there");
 
 
             //docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
