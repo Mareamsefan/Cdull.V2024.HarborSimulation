@@ -44,6 +44,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
 
 
         /// <summary>
+        /// Sets the container to be loaded onto the portal crane.
+        /// </summary>
+        /// <param name="container">The container to be loaded onto the portal crane.</param>
+        public void SetContainer(Container container) => _container = container;    
+
+        /// <summary>
         /// Gets a bool-value indicating whether the portal crane is available for use.
         /// </summary>
         /// <returns>True if the portal crane is available; otherwise, false.</returns>
@@ -61,6 +67,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         /// <returns>The handling time of the portal crane in minutes.</returns>
         public int GetHandlingTime => _handlingTime;
+
+        /// <summary>
+        /// Sets the handling time for the portal crane.
+        /// </summary>
+        /// <param name="handlingTime">The new handling time to set.</param>
+
+        public void SetHandlingTime(int handlingTime) => _handlingTime = handlingTime;
 
 
     }

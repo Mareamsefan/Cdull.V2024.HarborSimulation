@@ -73,11 +73,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
       
             harbor.GetDocks.AddRange(docks);
             harbor.GetShips.AddRange(ships);
-            harbor.GetAGvs.AddRange(agvs);
+            harbor.GetAGVs.AddRange(agvs);
 
             foreach(StorageColumn storageColumn in storageColumns)
             {
-               harbor.ContainerStorage.AddStorageColumn(storageColumn);
+               harbor.GetContainerStorage.AddStorageColumn(storageColumn);
             }
 
 
@@ -103,7 +103,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 harbor.GetContainerStorage.GetStorageColumns.ForEach(storageColumn =>
                 {
 
-                    var containersCopy = storageColumn.Containers.ToList();
+                    var containersCopy = storageColumn.GetContainers.ToList();
 
                     containersCopy.ForEach(container =>
                     {
@@ -117,10 +117,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
                 harbor.QueueShipsToDock();
 
-                if (harbor.WaitingShips.Any())
+                if (harbor.GetWaitingShips.Any())
                 {
-                    Ship ship = harbor.WaitingShips.First();
-                    if (!driver.Move(ship.CurrentLocation, ship.Speed))
+                    Ship ship = harbor.GetWaitingShips.First();
+                    if (!driver.Move(ship.GetCurrentLocation, ship.GetSpeed))
                     {
                         docking.DockShip(harbor, ship);
                         containerHandler.RemovePercentageOfContainersFromSource(0.15m, ship);
@@ -131,37 +131,37 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
                 }
 
-                if (harbor.DockedShips.Any())
+                if (harbor.GetDockedShips.Any())
                 {
-                    harbor.DockedShips.ForEach(ship =>
+                    harbor.GetDockedShips.ForEach(ship =>
                     { 
-                        ship.DockedAt._numberOfShipsPerDay++;
+                        ship.GetDockedAt.UpdateNumberOfShipsPerDay(ship.GetDockedAt.GetNumberOfShipsPerDay+1);
 
-                        if (!ship.Model.Equals(Model.ContainerShip))
+                        if (!ship.GetModel.Equals(Model.ContainerShip))
                         {
-                            ship.IsReadyToSail = true;
+                            ship.SetIsReadyToSail(true);
                         }
                     });
                  
                 }
 
-                if (harbor.DockedShips.Any())
+                if (harbor.GetDockedShips.Any())
                 {
-                    Ship ship = harbor.DockedShips.First();
+                    Ship ship = harbor.GetDockedShips.First();
                     
                     if (ship.ScheduledContainerHandlings.Any())
                     {
                         ScheduledContainerHandling scheduledContainerHandling = ship.ScheduledContainerHandlings.First(); 
                         AGV agv = harbor.GetAvailableAGV();
-                        if (ship.Containers.Any()) 
+                        if (ship.GetContainers.Any()) 
                         {
 
-                            if (scheduledContainerHandling.HandlingTime.Date == harbor.CurrentTime.Date
-                                && scheduledContainerHandling.HandlingTime.Hour == harbor.CurrentTime.Hour &&
+                            if (scheduledContainerHandling.HandlingTime.Date == harbor.GetCurrentTime.Date
+                                && scheduledContainerHandling.HandlingTime.Hour == harbor.GetCurrentTime.Hour &&
                                
                                 scheduledContainerHandling.LoadingType == LoadingType.Unload)
                             {
-                                Container container = ship.Containers.First();
+                                Container container = ship.GetContainers.First();
                                 containerHandler.MoveContainerFromShipToAGV(ship, container, harbor);
 
                                 if (agv.GetContainer != null)
@@ -169,10 +169,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                                     containerHandler.MoveContainerFromAGVToStorageColumn(harbor, 1, 3, agv);
                                 }
 
-                                StorageColumn storageColumn = harbor.ContainerStorage.GetSpecificColumn(1);
+                                StorageColumn storageColumn = harbor.GetContainerStorage.GetSpecificColumn(1);
 
 
-                                Console.WriteLine(storageColumn.Containers.Count);
+                                Console.WriteLine(storageColumn.GetContainers.Count);
                                
                             }
 
@@ -180,19 +180,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                         }
                         
 
-                        if (ship.Containers.Count == 0)
+                        if (ship.GetContainers.Count == 0)
                         {
                             
-                            if (scheduledContainerHandling.HandlingTime.Date == harbor.CurrentTime.Date &&
+                            if (scheduledContainerHandling.HandlingTime.Date == harbor.GetCurrentTime.Date &&
                                   scheduledContainerHandling.LoadingType == LoadingType.Load)
                             {
 
-                                StorageColumn storagecolumn = harbor.ContainerStorage.GetStorageColumns.First();
+                                StorageColumn storagecolumn = harbor.GetContainerStorage.GetStorageColumns.First();
                                 Console.WriteLine("LOADTEST");
-                                if (storagecolumn.Containers.Any())
+                                if (storagecolumn.GetContainers.Any())
                                 {
                                     Console.WriteLine("LOADTEST");
-                                    Container container = storagecolumn.Containers.First();
+                                    Container container = storagecolumn.GetContainers.First();
                                     containerHandler.MoveContainerFromStorageColumnToAGV(1, harbor);
                                     if (agv.GetContainer != null)
                                     {
@@ -211,56 +211,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                  
                 }
                
-                /*
-                if (ship.DockedAt._numberOfShipsPerDay < 7)
-                {
-                    foreach (ScheduledContainerHandling scheduledContainerHandling in ship.ScheduledContainerHandlings)
-                    {
-
-                        if (harbor.GetCurrentTime().Date == scheduledContainerHandling.HandlingTime.Date)
-                        {
-
-                            if (scheduledContainerHandling.LoadingType == LoadingType.Unload)
-                            {
-                                foreach (_container container in ship.Containers.ToList())
-                                {
-
-                                    AGV agv = containerHandler.MoveContainerFromShipToAGV(ship, container, harbor);
-
-                                    containerHandler.MoveContainerFromAGVToStorageColumn(harbor.ContainerStorage,
-                                    scheduledContainerHandling.StartColumnId, scheduledContainerHandling.EndColumnId, agv);
-                                }
-                                harbor.RaiseShipCompletedUnloading(ship);
-
-                            }
-
-                            else if (scheduledContainerHandling.LoadingType == LoadingType.Load)
-                            {
-                                foreach (_container container in ship.Containers.ToList())
-                                {
-
-                                    AGV agv = containerHandler.MoveContainerFromStorageColumnToAGV(harbor.ContainerStorage,
-                                   scheduledContainerHandling.StartColumnId, harbor);
-                                    containerHandler.MoveContainerFromAGVToShip(agv, ship);
-                                }
-                                harbor.RaiseShipCompletedUnloading(ship);
-                            }     
-
-                        }
-                    }
-                }
-            }); */
-
-
-
-
 
                 ScheduledSailingsExecutor.ExecuteScheduledSailings(harbor);
 
-
-             
-
-                harbor.SetCurrentTime(harbor.GetCurrentTime().AddSeconds(1));
+                harbor.SetCurrentTime(harbor.GetCurrentTime.AddSeconds(1));
 
             }
         }

@@ -92,35 +92,36 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
             portalCrane.SetIsAvailable(false);
 
 
-            portalCrane._handlingTime++;
+
+            portalCrane.SetHandlingTime(portalCrane.GetHandlingTime + 1);
             Container container = agv.GetContainer;
 
-            if (column.Capacity == column.OccupiedSpace)
+            if (column.GetCapacity == column.GetOccupiedSpace())
             {
-                column = harbor.ContainerStorage.GetSpecificColumn(startColumnId++);
+                column = harbor.GetContainerStorage.GetSpecificColumn(startColumnId++);
             }
-            else if (column.ColumnId < startColumnId || column.ColumnId > endColumnId)
+            else if (column.GetId < startColumnId || column.GetId > endColumnId)
             {
                 throw new ArgumentOutOfRangeException("columnId", "Column ID is outside the valid range.");
             }
 
 
-            else if (column.Capacity - column.OccupiedSpace < 1)
+            else if (column.GetCapacity - column.GetOccupiedSpace() < 1)
             {
-                throw new InsufficientStorageSpaceException(column.ColumnId, column.Capacity - column.OccupiedSpace, 1);
+                throw new InsufficientStorageSpaceException(column.GetId, column.GetCapacity - column.GetOccupiedSpace(), 1);
             }
 
-            if (portalCrane._handlingTime == 30)
+            if (portalCrane.GetHandlingTime == 30)
             {
-                Console.WriteLine("TESTING" + column.ColumnId);
+                Console.WriteLine("TESTING" + column.GetId);
                 portalCrane.LiftContainer(container);
                 column.AddContainer(container);
                 column.OccupySpace(container);
-                agv.Container = null;
-                portalCrane._container = null;
-                container.AddToHistory($"{container.GetName} moved at {harbor.CurrentTime} from AGV {agv.GetId} to StorageColumn {column.ColumnId}");
-                portalCrane._isAvailable = true;
-                portalCrane._handlingTime = 0;
+                agv.SetContainer(null);
+                portalCrane.SetContainer(null);
+                container.AddToHistory($"{container.GetName} moved at {harbor.GetCurrentTime} from AGV {agv.GetId} to StorageColumn {column.GetId}");
+                portalCrane.SetIsAvailable(true);
+                portalCrane.SetHandlingTime(0);
             }
         }
 
@@ -135,26 +136,26 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
 
         internal AGV MoveContainerFromStorageColumnToAGV(int columnId, Harbor harbor)
         {
-            StorageColumn column = harbor.ContainerStorage.GetSpecificColumn(columnId);
-            PortalCrane portalCrane = column.Crane;
-            portalCrane._isAvailable = false;
+            StorageColumn column = harbor.GetContainerStorage.GetSpecificColumn(columnId);
+            PortalCrane portalCrane = column.GetCrane;
+            portalCrane.SetIsAvailable(false);
             AGV agv = harbor.GetAvailableAGV();
 
-            if (column.Containers.Any())
+            if (column.GetContainers.Any())
             {
 
-                portalCrane._handlingTime++;
-                Container container = column.Containers.First();
+                portalCrane.SetHandlingTime(portalCrane.GetHandlingTime + 1);
+                Container container = column.GetContainers.First();
 
-                if (portalCrane._handlingTime == 60)
+                if (portalCrane.GetHandlingTime == 60)
                 {
                     column.RemoveContainer(container);
                     column.deOccupySpace(container, harbor);
                     portalCrane.LiftContainer(container);
-                    portalCrane._container = null;
+                    portalCrane.SetContainer(null);
                     agv.LoadContainerToAGV(container);
-                    portalCrane._isAvailable = true;
-                    container.History.Add($"{container.Name} moved at {harbor.CurrentTime} from StorageColumn {column.ColumnId} to AGV {agv.Id}");
+                    portalCrane.SetIsAvailable(true);
+                    container.AddToHistory($"{container.GetName} moved at {harbor.GetCurrentTime} from StorageColumn {column.GetId} to AGV {agv.GetId}");
                 }
                 return agv;
             }
@@ -173,11 +174,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         /// <param name="ship">The ship to which the container is being moved.</param>
         internal void MoveContainerFromAGVToShip(Harbor harbor, AGV agv, Ship ship)
         {
-            Dock dock = ship.DockedAt;
-            Crane crane = dock._cranes.First();
-            if (!crane.IsAvailable)
+            Dock dock = ship.GetDockedAt;
+            Crane crane = dock.GetCranes.First();
+            if (!crane.GetIsAvailable)
             {
-                foreach (var c in dock._cranes)
+                foreach (var c in dock.GetCranes)
                 {
                     if (dock.GetAvailableCrane(c))
                     {
@@ -187,18 +188,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
                 }
             }
 
-            crane.handlingTime++;
-            Container container = agv.Container;
+          
+            crane.SetHandlingTime(crane.GetHandlingTime + 1);
+            Container container = agv.GetContainer;
 
-            if (crane.handlingTime == 30)
+            if (crane.GetHandlingTime == 30)
             {
-                agv.Container = null;
+                agv.SetContainer(null);
                 crane.LiftContainer(container);
-                crane.Container = null;
-                ship.Containers.Add(container);
-                ship.IsReadyToSail = true;
-                crane.IsAvailable = true;
-                container.History.Add($"{container.Name} moved at {harbor.CurrentTime} from AGV {agv.Id} to Ship {ship._name}");
+                crane.SetContainer(null);
+                ship.GetContainers.Add(container);
+                ship.SetIsReadyToSail(true);
+                crane.SetIsAvailable(true);
+                container.AddToHistory($"{container.GetName} moved at {harbor.GetCurrentTime} from AGV {agv.GetId} to Ship {ship.GetName}");
 
             }
 
@@ -221,15 +223,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
 
             if (ship != null)
             {
-                int numberOfContainersToRemove = (int)(ship.Containers.Count * percentageDecimal);
+                int numberOfContainersToRemove = (int)(ship.GetContainers.Count * percentageDecimal);
 
                 for (int i = 0; i < numberOfContainersToRemove; i++)
                 {
-                    if (ship.Containers.Any())
+                    if (ship.GetContainers.Any())
                     {
-                        Container container = ship.Containers[0];
-                        ship.Containers.RemoveAt(0);
-                        container.History.Add($"{container.Name} was picked up by a truck, and left the harbor.");
+                        Container container = ship.GetContainers[0];
+                        ship.GetContainers.RemoveAt(0);
+                        container.AddToHistory($"{container.GetName} was picked up by a truck, and left the harbor.");
                     }
                     else
                     {
@@ -239,13 +241,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
             }
             else if (storageColumn != null)
             {
-                int numberOfContainersToRemove = (int)(storageColumn.Containers.Count * percentageDecimal);
+                int numberOfContainersToRemove = (int)(storageColumn.GetContainers.Count * percentageDecimal);
 
                 for (int i = 0; i < numberOfContainersToRemove; i++)
                 {
-                    if (storageColumn.Containers.Any())
+                    if (storageColumn.GetContainers.Any())
                     {
-                        storageColumn.Containers.RemoveAt(0);
+                        storageColumn.GetContainers.RemoveAt(0);
                     }
                     else
                     {
