@@ -26,6 +26,16 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             List<Dock> docks = harbor.InitializeDocks(1, Size.Large, 2);
 
+            container.GetId();
+
+            container.GetName();
+
+            container.GetSize();
+
+            container.GetNumberOfDaysInStorage();
+
+            container.AddToHistory("{container.GetName} was moved from here to there");
+
 
             //docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
 
