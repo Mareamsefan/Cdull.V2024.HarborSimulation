@@ -19,6 +19,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <summary>
         /// Represents a large cargo container, which occupies double the space of a small container. 
         /// </summary>
-        Large = 2
+        Large = 2,
+
     }
 }

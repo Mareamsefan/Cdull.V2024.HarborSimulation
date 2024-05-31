@@ -14,7 +14,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <summary>
         /// Represents an unloading operastion, where cargo containers are being unloaded from ship. 
         /// </summary>
-        Unload
+        Unload, 
+
     }
 
 }

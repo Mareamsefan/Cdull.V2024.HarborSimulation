@@ -8,15 +8,19 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     public class AGV
     {
         /// <summary>
-        /// Represents the Id of the AGV. 
+        /// Represents the _Id of the AGV. 
         /// </summary>
-        public int Id { get; set; }
-        internal int Counter { get; set; }
-        internal bool IsAvailable { get; set; }
-        public Container Container { get; set; }
-        public int Location { get; set; }
+        private int _id;
 
-        internal int Speed { get; set; }
+        private static int s_counter; 
+
+        private bool _isAvailable;
+
+        private Container? _container;
+
+        private int _location; 
+
+        private int _speed; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AGV"/> class with the specified location.
@@ -24,21 +28,28 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <param name="agvLocation">The initial location of the AGV within the harbor.</param>
         public AGV(int agvLocation)
         {
-            Counter++;
-            Id = Counter;
-            Location = agvLocation;
-            IsAvailable = true;
-            Speed = 7;
+            s_counter++;
+            _id = s_counter;
+            _location = agvLocation;
+            _isAvailable = true;
+            _speed = 7;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AGV"/> class with the specified location and speed.
+        /// </summary>
+        /// <param name="agvLocation">The initial location of the AGV within the harbor.</param>
+        /// <param name="agvSpeed">The speed of the AGV.</param>
         public AGV(int agvLocation, int agvSpeed)
         {
-            Counter++;
-            Id = Counter;
-            Location = agvLocation;
-            IsAvailable = true;
-            Speed = agvSpeed;
+            s_counter++;
+            _id = s_counter;
+            _location = agvLocation;
+            _isAvailable = true;
+            _speed = agvSpeed;
         }
+
+
         /// <summary>
         /// Loads the specified container onto the AGV.
         /// </summary>
@@ -49,8 +60,61 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         internal void LoadContainerToAGV(Container container)
         {
 
-            Container = container;
+            _container = container;
 
         }
+
+        /// <summary>
+        /// Gets the _Id of the AGV.
+        /// </summary>
+        public int GetId => _id;  
+
+
+        /// <summary>
+        /// Gets whether the AGV is available.
+        /// </summary>
+        public bool GetIsAvailable => _isAvailable;
+
+
+        /// <summary>
+        /// Sets whether the AGV is available.
+        /// </summary>
+        public void SetIsAvailable(bool isAvailable) => _isAvailable = isAvailable;
+
+
+        /// <summary>
+        /// Gets the container currently loaded on the AGV.
+        /// </summary>
+        public Container GetContainer => _container; 
+
+        /// <summary>
+        /// Sets the container to be loaded on the AGV.
+        /// </summary>
+        public void SetContainer(Container container) => _container = container;
+       
+
+        /// <summary>
+        /// Gets the location of the AGV.
+        /// </summary>
+        public int GetLocation => _location;
+        
+
+        /// <summary>
+        /// Sets the location of the AGV.
+        /// </summary>
+        public void SetLocation(int location) => _location = location;
+        
+
+        /// <summary>
+        /// Gets the speed of the AGV.
+        /// </summary>
+        public int GetSpeed => _speed;
+      
+
+        /// <summary>
+        /// Sets the speed of the AGV.
+        /// </summary>
+        public void SetSpeed(int speed) => _speed = speed;
+        
     }
 }

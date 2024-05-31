@@ -24,6 +24,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <summary>
         /// Represents a weekly recurring type sailing. 
         /// </summary>
-        Weekly
+        Weekly, 
+
     }
 }

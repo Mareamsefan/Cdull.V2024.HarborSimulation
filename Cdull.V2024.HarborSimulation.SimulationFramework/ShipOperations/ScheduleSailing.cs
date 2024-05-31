@@ -23,13 +23,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// <example>
         /// This example shows how to use the ScheduleSailings method.
         /// <code>
-        /// ScheduleSailing.ScheduleSailings(harbor, ships, Model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Weekly);
+        /// ScheduleSailing.ScheduleSailings(harbor, ships, _model.LNGCarrier, new DateTime(2024, 1, 2), 40, RecurringType.Weekly);
         /// </code>
         /// </example>
 
         public static void ScheduleSailings(Harbor harbor, List<Ship> ships,  Model shipModel, DateTime sailingTime, int destinationLocation, RecurringType recurringType)
         {
-            if (sailingTime < harbor.CurrentTime)
+            if (sailingTime < harbor.GetCurrentTime)
             {
                 throw new ArgumentException("Sailing time cannot be in the past.");
             }
@@ -41,7 +41,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
 
             foreach (Ship ship in ships)
             {
-                if (ship.Model.Equals(shipModel))
+                if (ship.GetModel.Equals(shipModel))
                 {
                     if (ship.ScheduledSailings.Any(s => s.DateTime == sailingTime && s.RecurringType == recurringType))
                     {
@@ -76,7 +76,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
 
         public static void ScheduleOneSailing(Harbor harbor, Ship ship, DateTime sailingTime, int destinationLocation, RecurringType recurringType)
         {
-            if (sailingTime < harbor.CurrentTime)
+            if (sailingTime < harbor.GetCurrentTime)
             {
                 throw new ArgumentException("Sailing time cannot be in the past.");
             }
@@ -106,7 +106,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// <example>
         /// This example shows how to use the CheckScheduledSailings method.
         /// <code>
-        /// List<Sailing> sailings = ScheduleSailing.CheckScheduledSailings(harbor, ships, Model.LNGCarrier);
+        /// List<Sailing> sailings = ScheduleSailing.CheckScheduledSailings(harbor, ships, _model.LNGCarrier);
         /// sailings.ForEach(sailing =>
         ///       Console.WriteLine(sailing.ToString())
         ///  );
@@ -120,7 +120,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
 
             foreach (Ship ship in ships)
             {
-                if (ship.Model == shipModel)
+                if (ship.GetModel == shipModel)
                 {
                     allScheduledSailings.AddRange(ship.ScheduledSailings);
                 }

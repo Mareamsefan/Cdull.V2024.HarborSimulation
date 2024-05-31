@@ -114,15 +114,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentNullException(nameof(ship), "Ship parameter cannot be null.");
             }
 
-            var shipEvents = shipHistory.Where(history => history.shipName == ship.Name);
+            var shipEvents = shipHistory.Where(history => history.shipName == ship.GetName);
 
             if (!shipEvents.Any())
             {
-                throw new InvalidOperationException($"No history available for ship '{ship.Name}'.");
+                throw new InvalidOperationException($"No history available for ship '{ship.GetName}'.");
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"\nShip History for {ship.Name}:\n");
+            sb.AppendLine($"\nShip History for {ship.GetName}:\n");
 
             foreach (var shipEvent in shipEvents)
             {
@@ -146,7 +146,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentNullException(nameof(ship), "Ship parameter cannot be null.");
             }
 
-            var newEvent = (ship: ship.Name, eventDescription: eventDescription);
+            var newEvent = (ship: ship._name, eventDescription: eventDescription);
             shipHistory.Add(newEvent);
         }
 

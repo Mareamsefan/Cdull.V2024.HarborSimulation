@@ -6,10 +6,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <summary>
         /// Represents a Poralcrane used in harbor to Move containers from AVG to container storage.
         /// </summary>
-        internal bool IsAvailable { get; set; }
+        private bool _isAvailable;
 
-        internal int handlingTime { get; set; }
-        internal Container Container { get; set; }
+        private int _handlingTime;
+
+        private Container _container; 
 
 
         /// <summary>
@@ -17,8 +18,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         internal PortalCrane()
         {
-            handlingTime = 0;
-            IsAvailable = true;
+            _handlingTime = 0;
+            _isAvailable = true;
         }
 
         // <summary>
@@ -28,12 +29,32 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <exception cref="InvalidOperationException">Thrown when the portal crane is already loaded with cargo.</exception>
         internal void LiftContainer(Container container)
         {
-            if (Container != null)
+            if (_container != null)
             {
                 throw new InvalidOperationException("Portalcrane already loaded with cargo.");
             }
-            Container = container;
+            _container = container;
         }
+
+        /// <summary>
+        /// Gets the container currently lifted by the portal crane.
+        /// </summary>
+        /// <returns>The container currently lifted by the portal crane, or null if no container is lifted.</returns>
+        public Container GetContainer => _container;
+
+
+        /// <summary>
+        /// Gets a bool-value indicating whether the portal crane is available for use.
+        /// </summary>
+        /// <returns>True if the portal crane is available; otherwise, false.</returns>
+        public bool GetIsAvailable => _isAvailable;
+
+        /// <summary>
+        /// Gets the time it takes for the portal crane to handle a container.
+        /// </summary>
+        /// <returns>The handling time of the portal crane in minutes.</returns>
+        public int GetHandlingTime => _handlingTime;
+
 
     }
 
