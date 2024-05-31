@@ -64,7 +64,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         /// <param name="harborName">The name of the harbor.</param>
         /// <param name="locationRange">The range of locations for the harbor, starting from 0.</param>
-        /// <param name="harborContainerStorage">The cargo storage capacity for the harbor.</param>
+        /// <param name="harborContainerStorage">The name of the ContainerStorage.</param>
         /// <param name="harborMaxNumberOfShipsPerDay">The maximum number of ships that each dock in the harbor can handle per day.</param>
         /// <example>
         /// This example demonstrates how to create a Harbor instance:
