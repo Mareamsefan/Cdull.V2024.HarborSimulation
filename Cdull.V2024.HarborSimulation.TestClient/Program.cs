@@ -26,16 +26,6 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             List<Dock> docks = harbor.InitializeDocks(1, Size.Large, 2);
 
-            containerStorage.GetName();
-
-            containerStorage.GetMaxWaitingDays();
-
-            containerStorage.GetCapacity();
-
-            containerStorage.SetCapacity(1000);
-
-            containerStorage.GetPercentageTakenByTruck();
-
 
             //docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
 
