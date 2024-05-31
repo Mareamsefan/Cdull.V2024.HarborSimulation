@@ -37,11 +37,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         /// <returns>The AGV to which the container is moved.</returns>
         internal void MoveContainerFromShipToAGV(Ship ship, Container container, Harbor harbor)
         {
-            Dock dock = ship.DockedAt;
-            Crane crane = dock._cranes.First();
+            Dock dock = ship.GetDockedAt;
+            Crane crane = dock.GetCranes.First();
             if (!crane.GetIsAvailable)
             {
-                foreach (var c in dock._cranes)
+                foreach (var c in dock.GetCranes)
                 {
                     if (dock.GetAvailableCrane(c))
                     {
@@ -56,11 +56,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
             if (crane.GetHandlingTime == 30)
             {
 
-                ship.Containers.Remove(container);
+                ship.GetContainers.Remove(container);
                 crane.LiftContainer(container);
                 container = crane.UnloadContainer(); 
                 agv.LoadContainerToAGV(container);
-                container.AddToHistory($"{container.GetName} moved at {harbor.CurrentTime} from Ship {ship._name} to AGV {agv.GetId}");
+                container.AddToHistory($"{container.GetName} moved at {harbor.GetCurrentTime} from Ship {ship.GetName} to AGV {agv.GetId}");
                 crane.SetIsAvailable(true);
                 crane.SetHandlingTime(0);
                
@@ -87,8 +87,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         internal void MoveContainerFromAGVToStorageColumn(Harbor harbor, int startColumnId,
             int endColumnId, AGV agv)
         {
-            StorageColumn column = harbor.ContainerStorage.GetSpecificColumn(startColumnId);
-            PortalCrane portalCrane = column.Crane;
+            StorageColumn column = harbor.GetContainerStorage.GetSpecificColumn(startColumnId);
+            PortalCrane portalCrane = column.GetCrane;
             portalCrane._isAvailable = false;
 
 

@@ -245,6 +245,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <param name="location">The new location of the Storage cloumn.</param>
         public void SetLocation(int location) => _location = location;
 
+
+        /// <summary>
+        /// Gets the PortalCrane instance.
+        /// </summary>
+        /// <returns>The PortalCrane instance.</returns>
+        internal PortalCrane GetCrane => _crane; 
+
         /// <summary>
         /// Returns a string representation of the storage column.
         /// </summary>
