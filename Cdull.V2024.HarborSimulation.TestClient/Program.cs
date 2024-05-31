@@ -20,11 +20,23 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             //Console.WriteLine(containerStorage.GetOccupiedSpace());
 
             // Creating a new harbor named "TestHarbor" with a location index range of 1000 (from 0-1000)
+
             Harbor harbor = new Harbor("TestHarbor", 1000, containerStorage, 4);
+
 
             // Creating 3 large docks with 7 cranes collectively.
 
             List<Dock> docks = harbor.InitializeDocks(1, Size.Large, 2);
+
+            container.GetId();
+
+            container.GetName();
+
+            container.GetSize();
+
+            container.GetNumberOfDaysInStorage();
+
+            container.AddToHistory($"{container.GetName} was moved from here to there");
 
 
             //docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
@@ -142,6 +154,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 Console.WriteLine(sailing.ToString())
 
             );*/
+
+            harbor.GetLocationRange();
         }
 
 
