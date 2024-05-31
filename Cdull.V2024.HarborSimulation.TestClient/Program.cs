@@ -28,15 +28,17 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             List<Dock> docks = harbor.InitializeDocks(1, Size.Large, 2);
 
-            container.GetId();
+            crane.GetId();
 
-            container.GetName();
+            crane.getHandlingTime();
 
-            container.GetSize();
+            crane.setHandlingTime(60);
 
-            container.GetNumberOfDaysInStorage();
+            crane.GetIsAvailable();
 
-            container.AddToHistory($"{container.GetName} was moved from here to there");
+            crane.SetIsAvailable(true);
+
+            crane.GetContainer();
 
 
             //docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
