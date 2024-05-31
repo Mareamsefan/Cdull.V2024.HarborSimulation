@@ -29,7 +29,8 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// <summary>
         /// Represents that the ship has arrived at its destination location and completed the sailing. 
         /// </summary>
-        Arrived
+        Arrived, 
+
 
     }
 }

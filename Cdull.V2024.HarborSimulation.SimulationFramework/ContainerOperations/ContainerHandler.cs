@@ -89,7 +89,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         {
             StorageColumn column = harbor.GetContainerStorage.GetSpecificColumn(startColumnId);
             PortalCrane portalCrane = column.GetCrane;
-            portalCrane._isAvailable = false;
+            portalCrane.SetIsAvailable(false);
 
 
             portalCrane._handlingTime++;

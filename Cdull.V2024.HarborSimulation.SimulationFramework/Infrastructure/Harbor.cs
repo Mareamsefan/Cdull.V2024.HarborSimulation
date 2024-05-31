@@ -547,7 +547,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// Retrieves the list of Automated Guided Vehicles (AGVs) used in the harbor.
         /// </summary>
         /// <returns>The list of AGVs used in the harbor.</returns>
-        public List<AGV> GetAGVS => _agvs; 
+        public List<AGV> GetAGVs => _agvs; 
 
         /// <summary>
         /// Returns a string representation of the harbor simulation.
