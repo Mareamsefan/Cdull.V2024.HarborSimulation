@@ -30,7 +30,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
             //docks.AddRange(harbor.InitializeDocks(1, Size.Large, 1));
 
             // Creating 20 AGVs for container movement.
-            List<AGV> agvs = harbor.InitializeAGVs(1000);
+            List<AGV> agvs = harbor.InitializeAGVs(1, 1000);
 
             // Creating a list to hold ships.
             List<Ship> ships = new List<Ship>();
