@@ -73,7 +73,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
       
             harbor.GetDocks.AddRange(docks);
             harbor.GetShips.AddRange(ships);
-            harbor.GetAgvs.AddRange(agvs);
+            harbor.GetAGvs.AddRange(agvs);
 
             foreach(StorageColumn storageColumn in storageColumns)
             {
@@ -82,17 +82,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
 
 
 
-            while (harbor.GetCurrentTime() < endTime)
+            while (harbor.GetCurrentTime < endTime)
             {
 
 
 
-                if (harbor.GetCurrentTime().Hour == 0 && harbor.GetCurrentTime().Minute == 0 && harbor.GetCurrentTime().Second == 0)
+                if (harbor.GetCurrentTime.Hour == 0 && harbor.GetCurrentTime.Minute == 0 && harbor.GetCurrentTime.Second == 0)
                 {
-                    historyHandler.SaveHarborHistory(harbor.GetCurrentTime(), harbor);
-                    harbor.ContainerStorage.GetStorageColumns.ForEach(storageColumn =>
+                    historyHandler.SaveHarborHistory(harbor.GetCurrentTime, harbor);
+                    harbor.GetContainerStorage.GetStorageColumns.ForEach(storageColumn =>
                     {
-                        storageColumn.Containers.ForEach(container =>
+                        storageColumn.GetContainers.ForEach(container =>
                         {
                             int updatedDaysInStorage = container.GetNumberOfDaysInStorage + 1;
                             container.UpdateNumberofDaysInStorage(updatedDaysInStorage);
@@ -100,7 +100,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                     });
 
                 }
-                harbor.ContainerStorage.GetStorageColumns.ForEach(storageColumn =>
+                harbor.GetContainerStorage.GetStorageColumns.ForEach(storageColumn =>
                 {
 
                     var containersCopy = storageColumn.Containers.ToList();

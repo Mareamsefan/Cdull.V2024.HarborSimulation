@@ -91,7 +91,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
             harbor.GetSailingShips.Add(ship);
             harbor.RaiseShipDeparted(ship);
             ship.SetHasReachedDestination(true);
-            ship.SailingState = ShipSailingState.Arrived; 
+            ship.SetSailingState(ShipSailingState.Arrived); 
 
         }
     }

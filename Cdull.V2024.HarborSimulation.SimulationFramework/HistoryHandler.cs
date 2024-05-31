@@ -146,7 +146,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework
                 throw new ArgumentNullException(nameof(ship), "Ship parameter cannot be null.");
             }
 
-            var newEvent = (ship: ship._name, eventDescription: eventDescription);
+            var newEvent = (ship: ship.GetName, eventDescription: eventDescription);
             shipHistory.Add(newEvent);
         }
 

@@ -49,6 +49,13 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <returns>True if the portal crane is available; otherwise, false.</returns>
         public bool GetIsAvailable => _isAvailable;
 
+
+        /// <summary>
+        /// Sets the availability status of the object.
+        /// </summary>
+        /// <param name="isAvailable">True if the object is available; otherwise, false.</param>
+        public void SetIsAvailable(bool isAvailable) => _isAvailable = isAvailable;
+
         /// <summary>
         /// Gets the time it takes for the portal crane to handle a container.
         /// </summary>

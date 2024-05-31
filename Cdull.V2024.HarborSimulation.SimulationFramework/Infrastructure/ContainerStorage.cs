@@ -95,7 +95,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             int occupiedSpace = 0;
             _storageColumns.ForEach(column =>
             {
-                occupiedSpace += column.OccupiedSpace;
+                occupiedSpace += column.GetOccupiedSpace();
             });
             return occupiedSpace;
         }
