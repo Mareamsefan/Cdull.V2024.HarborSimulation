@@ -144,38 +144,103 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         public List<Container> GetContainers => _containers;
 
-        public List<string> GetHistory => _history; 
+        /// <summary>
+        /// Gets the history of the ship.
+        /// </summary>
+        public List<string> GetHistory => _history;
 
+        /// <summary>
+        /// Gets the time when the ship docked.
+        /// </summary>
         public string GetDockedAtTime => _dockedAtTime;
 
+        /// <summary>
+        /// Sets the time when the ship docked.
+        /// </summary>
+        /// <param name="dockedAtTime">The time when the ship docked.</param>
         public void SetDockedAtTime(string dockedAtTime) => _dockedAtTime = dockedAtTime;
 
+        /// <summary>
+        /// Gets the time when the ship sailed.
+        /// </summary>
         public string GetSailedAtTime => _sailedAtTime;
 
+        /// <summary>
+        /// Sets the time when the ship sailed.
+        /// </summary>
+        /// <param name="sailedAtTime">The time when the ship sailed.</param>
         public void SetSailedAtTime(string sailedAtTime) => _sailedAtTime = sailedAtTime;
 
+        /// <summary>
+        /// Gets whether the ship is sailing.
+        /// </summary>
         public bool GetIsSailing => _isSailing;
 
+        /// <summary>
+        /// Sets whether the ship is sailing.
+        /// </summary>
+        /// <param name="isSailing">True if the ship is sailing; otherwise, false.</param>
         public void SetIsSailing(bool isSailing) => _isSailing = isSailing;
 
+        /// <summary>
+        /// Gets whether the ship is ready to sail.
+        /// </summary>
         public bool GetIsReadyToSail => _isReadyToSail;
 
+        /// <summary>
+        /// Sets whether the ship is ready to sail.
+        /// </summary>
+        /// <param name="isReadyTosail">True if the ship is ready to sail; otherwise, false.</param>
         public void SetIsReadyToSail(bool isReadyTosail) => _isReadyToSail = isReadyTosail;
 
+        /// <summary>
+        /// Gets the speed of the ship.
+        /// </summary>
         public float GetSpeed => _speed;
 
+        /// <summary>
+        /// Gets the dock where the ship is docked.
+        /// </summary>
         public Dock GetDockedAt => _dockedAt;
 
+        /// <summary>
+        /// Sets the dock where the ship is docked.
+        /// </summary>
+        /// <param name="dockedAt">The dock where the ship is docked.</param>
         public void SetDockedAt(Dock dockedAt) => _dockedAt = dockedAt;
 
+        /// <summary>
+        /// Gets the current location of the ship.
+        /// </summary>
         public int GetCurrentLocation => _currentLocation;
 
+        /// <summary>
+        /// Sets the current location of the ship.
+        /// </summary>
+        /// <param name="currentLocation">The current location of the ship.</param>
         public void SetCurrentLocation(int currentLocation) => _currentLocation = currentLocation;
 
+        /// <summary>
+        /// Gets whether the ship has reached its destination.
+        /// </summary>
         public bool GetHasReachedDestination => _hasReachedDestination;
 
-        internal ShipSailingState GetSailingState => _sailingState; 
+        /// <summary>
+        /// Sets whether the ship has reached its destination.
+        /// </summary>
+        /// <param name="hasReachedDestination">True if the ship has reached its destination; otherwise, false.</param>
 
+        public void SetHasReachedDestination(bool hasReachedDestination)=> _hasReachedDestination = hasReachedDestination;
+
+        /// <summary>
+        /// Sets the sailing state of the ship.
+        /// </summary>
+        /// <param name="sailingState">The sailing state of the ship.</param>
+        
+        internal ShipSailingState GetSailingState => _sailingState;
+        /// <summary>
+        /// Gets the sailing state of the ship.
+        /// </summary>
         internal void SetSailingState(ShipSailingState sailingState) => _sailingState = sailingState;
 
     }
