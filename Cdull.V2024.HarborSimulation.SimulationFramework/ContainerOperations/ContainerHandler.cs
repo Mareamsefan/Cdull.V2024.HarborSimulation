@@ -38,10 +38,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         internal void MoveContainerFromShipToAGV(Ship ship, Container container, Harbor harbor)
         {
             Dock dock = ship.DockedAt;
-            Crane crane = dock.Cranes.First();
-            if (!crane.IsAvailable)
+            Crane crane = dock._cranes.First();
+            if (!crane.GetIsAvailable)
             {
-                foreach (var c in dock.Cranes)
+                foreach (var c in dock._cranes)
                 {
                     if (dock.GetAvailableCrane(c))
                     {
@@ -51,22 +51,26 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
             }
 
             AGV agv = harbor.GetAvailableAGV();
-            crane.IsAvailable = false;
+            crane.SetIsAvailable(false); 
 
-            if (crane.handlingTime == 30)
+            if (crane.GetHandlingTime == 30)
             {
 
                 ship.Containers.Remove(container);
                 crane.LiftContainer(container);
-                crane.Container = null;
+                container = crane.UnloadContainer(); 
                 agv.LoadContainerToAGV(container);
-                container.History.Add($"{container.Name} moved at {harbor.CurrentTime} from Ship {ship.Name} to AGV {agv.Id}");
-                crane.IsAvailable = true;
-                crane.handlingTime = 0;
-
+                container.AddToHistory($"{container.GetName} moved at {harbor.CurrentTime} from Ship {ship._name} to AGV {agv.GetId}");
+                crane.SetIsAvailable(true);
+                crane.SetHandlingTime(0);
+               
             }
-            crane.handlingTime++;
-          
+            else
+            {
+                int updatedHandlingTime = crane.GetHandlingTime + 1;
+                crane.SetHandlingTime(updatedHandlingTime);
+            }
+
         }
 
 
@@ -85,11 +89,11 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         {
             StorageColumn column = harbor.ContainerStorage.GetSpecificColumn(startColumnId);
             PortalCrane portalCrane = column.Crane;
-            portalCrane.IsAvailable = false;
+            portalCrane._isAvailable = false;
 
 
-            portalCrane.handlingTime++;
-            Container container = agv.Container;
+            portalCrane._handlingTime++;
+            Container container = agv.GetContainer;
 
             if (column.Capacity == column.OccupiedSpace)
             {
@@ -106,17 +110,17 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
                 throw new InsufficientStorageSpaceException(column.ColumnId, column.Capacity - column.OccupiedSpace, 1);
             }
 
-            if (portalCrane.handlingTime == 30)
+            if (portalCrane._handlingTime == 30)
             {
                 Console.WriteLine("TESTING" + column.ColumnId);
                 portalCrane.LiftContainer(container);
                 column.AddContainer(container);
                 column.OccupySpace(container);
                 agv.Container = null;
-                portalCrane.Container = null;
-                container.History.Add($"{container.Name} moved at {harbor.CurrentTime} from AGV {agv.Id} to StorageColumn {column.ColumnId}");
-                portalCrane.IsAvailable = true;
-                portalCrane.handlingTime = 0;
+                portalCrane._container = null;
+                container.AddToHistory($"{container.GetName} moved at {harbor.CurrentTime} from AGV {agv.GetId} to StorageColumn {column.ColumnId}");
+                portalCrane._isAvailable = true;
+                portalCrane._handlingTime = 0;
             }
         }
 
@@ -133,23 +137,23 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         {
             StorageColumn column = harbor.ContainerStorage.GetSpecificColumn(columnId);
             PortalCrane portalCrane = column.Crane;
-            portalCrane.IsAvailable = false;
+            portalCrane._isAvailable = false;
             AGV agv = harbor.GetAvailableAGV();
 
             if (column.Containers.Any())
             {
 
-                portalCrane.handlingTime++;
+                portalCrane._handlingTime++;
                 Container container = column.Containers.First();
 
-                if (portalCrane.handlingTime == 60)
+                if (portalCrane._handlingTime == 60)
                 {
                     column.RemoveContainer(container);
                     column.deOccupySpace(container, harbor);
                     portalCrane.LiftContainer(container);
-                    portalCrane.Container = null;
+                    portalCrane._container = null;
                     agv.LoadContainerToAGV(container);
-                    portalCrane.IsAvailable = true;
+                    portalCrane._isAvailable = true;
                     container.History.Add($"{container.Name} moved at {harbor.CurrentTime} from StorageColumn {column.ColumnId} to AGV {agv.Id}");
                 }
                 return agv;
@@ -170,10 +174,10 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
         internal void MoveContainerFromAGVToShip(Harbor harbor, AGV agv, Ship ship)
         {
             Dock dock = ship.DockedAt;
-            Crane crane = dock.Cranes.First();
+            Crane crane = dock._cranes.First();
             if (!crane.IsAvailable)
             {
-                foreach (var c in dock.Cranes)
+                foreach (var c in dock._cranes)
                 {
                     if (dock.GetAvailableCrane(c))
                     {
@@ -194,7 +198,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ContainerOperations
                 ship.Containers.Add(container);
                 ship.IsReadyToSail = true;
                 crane.IsAvailable = true;
-                container.History.Add($"{container.Name} moved at {harbor.CurrentTime} from AGV {agv.Id} to Ship {ship.Name}");
+                container.History.Add($"{container.Name} moved at {harbor.CurrentTime} from AGV {agv.Id} to Ship {ship._name}");
 
             }
 

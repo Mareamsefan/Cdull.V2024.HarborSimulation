@@ -7,18 +7,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class Crane
     {
-        /// <summary>
-        /// Represents the name of the crane. 
-        /// </summary>
-        public int Id { get; set; }
-        internal int handlingTime { get; set; }
-        internal bool IsAvailable { get; set; }
-        public Container? Container { get; set; }
+        private int _id;
+
+        private int _handlingTime;
+
+        private bool _isAvailable;
+
+        private Container? _container; 
 
         /// <summary>
-        /// Initializes a new instance of the Crane class with the specified Id.
+        /// Initializes a new instance of the Crane class with the specified _Id.
         /// </summary>
-        /// <param name="craneId">The Id of the crane.</param>
+        /// <param name="craneId">The _Id of the crane.</param>
         /// <example>
         /// This example shows how to use the Crane constructor to create a new crane instance.
         /// <code>
@@ -28,10 +28,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </example>
         public Crane(int craneId)
         {
-            Id = craneId;
-            handlingTime = 0;
-            IsAvailable = true;
+            _id = craneId;
+            _handlingTime = 0;
+            _isAvailable = true;
         }
+
+
 
         /// <summary>
         /// Lifts a container and loads it onto the crane.
@@ -40,12 +42,59 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <exception cref="InvalidOperationException">Thrown when the crane is already loaded with cargo.</exception>
         internal void LiftContainer(Container container)
         {
-            if (Container != null)
+            if (container != null)
             {
                 throw new InvalidOperationException("Crane already loaded with cargo.");
             }
-            Container = container;
+            _container = container;
         }
+
+        /// <summary>
+        /// Unloads the container from the crane.
+        /// </summary>
+        /// <returns>The container that was unloaded.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when there is no container to unload.</exception>
+        internal Container UnloadContainer()
+        {
+            if (_container == null)
+            {
+                throw new InvalidOperationException("No container to unload.");
+            }
+            Container containerToUnload = _container;
+            _container = null;
+            return containerToUnload;
+        }
+
+        /// <summary>
+        /// Gets the _Id of the crane.
+        /// </summary>
+        public int GetId => _id;
+
+        /// <summary>
+        /// Gets the handling time of the crane.
+        /// </summary>
+        public int GetHandlingTime => _handlingTime;
+
+        /// <summary>
+        /// Sets the handling time of the crane.
+        /// </summary>
+        public void SetHandlingTime(int handlingTime) => _handlingTime = handlingTime;
+
+        /// <summary>
+        /// Gets the availability status of the crane.
+        /// </summary>
+        public bool GetIsAvailable => _isAvailable;
+
+        /// <summary>
+        /// Sets the availability status of the crane.
+        /// </summary>
+        public void SetIsAvailable(bool isAvailable) => _isAvailable = isAvailable;
+
+        /// <summary>
+        /// Gets the container currently loaded on the crane.
+        /// </summary>
+        public Container? GetContainer => _container;
+
     }
 
 }

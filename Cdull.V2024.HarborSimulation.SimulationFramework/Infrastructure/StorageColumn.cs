@@ -7,22 +7,26 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class StorageColumn
     {
-        /// <summary>
-        /// Represents the Id of the storage column. 
-        /// </summary>
-        public int ColumnId { get; set; }
-        /// <summary>
-        /// Represents the total capacity of the storage cloumn. 
-        /// </summary>
-        public int Capacity { get; set; }
-        public int Height { get; private set; }
-        public int Length { get; private set; }
-        public int Width { get; private set; }
-        public List<Container> Containers { get; set; } = new List<Container>();
-        internal PortalCrane Crane { get; set; }
-        public int OccupiedSpace { get; set; }
-        internal bool IsAvailable { get; set; }
-        public int Location { get; set; }
+      
+        private int _id;
+       
+        private int _capacity;
+
+        private int _height;
+
+        private int _length;
+
+        private int _width; 
+
+        private  List<Container> _containers = new List<Container>();
+
+        private PortalCrane _crane;
+
+        private int _occupiedSpace;
+
+        private bool _isAvailable;
+
+        private int _location; 
 
 
         /// <summary>
@@ -35,15 +39,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <param name="columnHeight">The height of the storage column.</param>
         public StorageColumn(int location, int columnId, int columnLength, int columnWidth, int columnHeight)
         {
-            ColumnId = columnId;
-            Length = columnLength;
-            Width = columnWidth;
-            Height = columnHeight;
-            IsAvailable = true;
-            Location = location;
-            Crane = new PortalCrane();
+            _id = columnId;
+            _length = columnLength;
+            _width = columnWidth;
+            _height = columnHeight;
+            _isAvailable = true;
+            _location = location;
+            _crane = new PortalCrane();
 
-            Capacity = Length * Width * Height;
+            _capacity = _length * _width * _height;
         }
 
         /// <summary>
@@ -63,9 +67,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             }
             
 
-            if (!Containers.Contains(container))
+            if (!_containers.Contains(container))
             {
-                Containers.Add(container);
+                _containers.Add(container);
 
             }
         }
@@ -85,9 +89,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
                 throw new ArgumentNullException(nameof(container), "Containers parameter cannot be null.");
             }
 
-            if (Containers.Contains(container))
+            if (_containers.Contains(container))
             {
-                Containers.Remove(container);
+                _containers.Remove(container);
             }
 
         }
@@ -111,7 +115,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             for (int i = 0; i < number; i++)
             {
                 Container container = new($"container{i}", size);
-                Containers.Add(container);
+                _containers.Add(container);
             }
 
         }
@@ -127,14 +131,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <exception cref="InvalidOperationException">Thrown when the container storage capacity is exceeded.</exception>
         internal void OccupySpace(Container container)
         {
-            if (OccupiedSpace < Capacity)
+            if (_occupiedSpace < _capacity)
             {
-                OccupiedSpace += (int)container.Size;
+                _occupiedSpace += (int)container.GetSize;
             }
 
             else
             {
-                IsAvailable = false;
+                _isAvailable = false;
                 throw new InvalidOperationException("Containers storage capacity exceeded.");
             }
 
@@ -151,11 +155,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <exception cref="InvalidOperationException">Thrown when the occupied space or capacity is invalid.</exception>
         internal void deOccupySpace(Container container, Harbor harbor)
         {
-            if (OccupiedSpace <= Capacity && OccupiedSpace > 0)
+            if (_occupiedSpace <= _capacity && _occupiedSpace > 0)
             {
-                OccupiedSpace -= (int)container.Size;
-                harbor.ContainerStorage.Capacity -= (int)container.Size;
-                IsAvailable = true;
+                _occupiedSpace -= (int)container.GetSize;
+                int updatedCapacity = harbor.GetContainerStorage.GetCapacity - (int)container.GetSize; 
+                harbor.GetContainerStorage.SetCapacity(updatedCapacity);
+                _isAvailable = true;
             }
             else
             {
@@ -170,7 +175,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <returns>The total weight of the container stored in the container storage.</returns>
         public int GetOccupiedSpace()
         {
-            return OccupiedSpace;
+            return _occupiedSpace;
         }
 
 
@@ -181,11 +186,64 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <returns>True if the storage column has enough space; otherwise, false.</returns>
         internal bool HasEnoughSpaceForContainers(List<Container> containers)
         {
-            int requiredSpace = containers.Sum(container => (int)container.Size);
+            int requiredSpace = containers.Sum(container => (int)container.GetSize);
 
-            return Capacity - OccupiedSpace >= requiredSpace;
+            return _capacity - _occupiedSpace >= requiredSpace;
         }
 
+
+        /// <summary>
+        /// Gets the Id of the Storage cloumn.
+        /// </summary>
+        public int GetId => _id;
+
+        /// <summary>
+        /// Gets the capacity of the Storage cloumn.
+        /// </summary>
+        public int GetCapacity => _capacity;
+
+        /// <summary>
+        /// Gets the height of the Storage cloumn.
+        /// </summary>
+        public int GetHeight => _height;
+
+        /// <summary>
+        /// Gets the length of the Storage cloumn.
+        /// </summary>
+        public int GetLength => _length;
+
+        /// <summary>
+        /// Gets the width of the Storage cloumn.
+        /// </summary>
+        public int GetWidth => _width;
+
+        /// <summary>
+        /// Gets the list of containers stored in the Storage cloumn.
+        /// </summary>
+        public List<Container> GetContainers => _containers;
+
+
+        /// <summary>
+        /// Gets whether the Storage cloumn is available.
+        /// </summary>
+        public bool GetIsAvailable => _isAvailable;
+
+        /// <summary>
+        /// Sets whether the Storage cloumn is available.
+        /// </summary>
+        /// <param name="isAvailable">True if the Storage cloumn is available; otherwise, false.</param>
+        public void SetIsAvailable(bool isAvailable) => _isAvailable = isAvailable;
+
+        /// <summary>
+        /// Gets the location of the Storage cloumn.
+        /// </summary>
+        public int GetLocation => _location;
+
+        /// <summary>
+        /// Sets the location of the Storage cloumn.
+        /// </summary>
+        /// <param name="location">The new location of the Storage cloumn.</param>
+        public void SetLocation(int location) => _location = location;
 
         /// <summary>
         /// Returns a string representation of the storage column.
@@ -193,8 +251,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <returns>A string representing the storage column.</returns>
         public override string ToString()
         {
-            return $"Storage Column {ColumnId}";
+            return $"Storage Column {_id}";
         }
+
 
     
 

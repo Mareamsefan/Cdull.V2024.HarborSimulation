@@ -18,15 +18,15 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         private bool Dock(Ship ship, Dock availableDock, Harbor harbor)
         {
             HistoryHandler historyHandler = HistoryHandler.GetInstance();
-            ship.HasDocked = true;
-            ship.DockedAt = availableDock;
-            availableDock.IsAvailable = false;
-            availableDock.OccupiedBy = ship;
-            ship.DockedAtTime = harbor.CurrentTime.ToString();
+            ship.SetHasDocked(true);
+            ship.SetDockedAt(availableDock);
+            availableDock.SetIsAvailable(false);
+            availableDock.SetOccpuiedBy(ship);
+            ship.SetDockedAtTime(harbor.GetCurrentTime.ToString());
 
             try
             {
-                historyHandler.AddEventToShipHistory(ship, $"{ship.Name} Docked at {ship.DockedAtTime} on {ship.DockedAt.Id}");
+                historyHandler.AddEventToShipHistory(ship, $"{ship.GetName} Docked at {ship.GetDockedAtTime} on {ship.GetDockedAt.GetId}");
             }
             catch (Exception ex)
             {
@@ -34,7 +34,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
             }
             try
             {
-                harbor.WaitingShips.Dequeue();
+                harbor.GetWaitingShips.Dequeue();
             }
             catch (Exception ex)
             {
@@ -55,18 +55,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.ShipOperations
         /// </remarks>
         internal void DockShip(Harbor harbor, Ship ship)
         {
-            Dock availableDock = harbor.AvailableDockOfSize(ship.Size);
+            Dock availableDock = harbor.AvailableDockOfSize(ship.GetSize);
 
-            if (availableDock is not null && !ship.IsSailing)
+            if (availableDock is not null && !ship.GetIsSailing)
             {
                 if (Dock(ship, availableDock, harbor))
                 {
-                    harbor.DockedShips.Add(ship);
+                    harbor.GetDockedShips.Add(ship);
                 }
             }
             else
             {
-                harbor.WaitingShips.Enqueue(harbor.WaitingShips.Dequeue());
+                harbor.GetWaitingShips.Enqueue(harbor.GetWaitingShips.Dequeue());
             }
         }
     }

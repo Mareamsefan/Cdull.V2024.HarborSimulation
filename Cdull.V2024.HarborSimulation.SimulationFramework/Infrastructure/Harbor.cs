@@ -10,46 +10,36 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
     /// </summary>
     public class Harbor
     {
+        private readonly string _name;
+
         /// <summary>
-        /// Gets or sets the name of the harbor.
+        /// Represents the maximum number of ships per day that each dock in the harbor can accommodate.
         /// </summary>
-        public string Name { get; set; }
-        /// <summary>
-        /// Gets or sets the currentime of the simulation. 
-        /// </summary>
-        public DateTime CurrentTime { get; set; }
-        /// <summary>
-        /// Gets or sets the range of locations within the harbor. 
-        /// </summary>
-        public Range LocationRange { get; set; }
-        /// <summary>
-        /// Gets or sets the total list of docks in the harbor. 
-        /// </summary>
-        public List<Dock> Docks { get; set; } = new List<Dock>();
-        /// <summary>
-        /// Gets or sets the total list of ships in the harbor. 
-        /// </summary>
-        public List<Ship> Ships { get; set; } = new List<Ship>();
-        /// <summary>
-        /// Gets or sets the list of docked ships in the harbor. 
-        /// </summary>
-        public List<Ship> DockedShips { get; set; } = new List<Ship>();
-        /// <summary>
-        /// Gets or sets the list of sailing ships in the harbor. 
-        /// </summary>
-        public List<Ship> SailingShips { get; set; } = new List<Ship>();
-        /// <summary>
-        /// Gets or sets the queue of ships waiting for docking in the harbor. 
-        /// </summary>
-        public Queue<Ship> WaitingShips { get; set; } = new Queue<Ship>();
-        /// <summary>
-        /// Gets or sets the list of AGVs (Automated Guided Vehicles) in the harbor.
-        /// </summary>
-        public List<AGV> AGVs { get; set; } = new List<AGV>();
-        /// <summary>
-        /// Gets or sets the container storage that contains Storagecolumns in the harbor. 
-        /// </summary>
-        public ContainerStorage ContainerStorage { get; set; }
+        /// <remarks>
+        /// This value determines the maximum capacity of each dock in terms of the number of ships it can handle per day.
+        /// It influences the scheduling and allocation of ships to docks within the harbor simulation.
+        /// </remarks>
+
+        private int _maxNumberOfShipsPerDay; 
+
+        private DateTime _currentTime;
+
+        private readonly Range _locationRange;
+
+        private List<Dock> _docks = new List<Dock>();
+
+        private List<Ship> _ships = new List<Ship>();
+
+        private List<Ship> _dockedShips = new List<Ship>();
+
+        private List<Ship> _sailingShips = new List<Ship>();
+
+        private Queue<Ship> _waitingShips = new Queue<Ship>();
+
+        private List<AGV> _agvs = new List<AGV>();
+
+        private ContainerStorage _containerStorage;
+
 
         /// <summary>
         /// Event raised when a ship departs from the harbor.
@@ -68,12 +58,14 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </summary>
         public event EventHandler<ShipLoadingEventArgs> CompletedloadingShip;
 
+
         /// <summary>
-        /// Initializes a new instance of the Harbor class with the specified name, location range, and cargo storage.
+        /// Initializes a new instance of the Harbor class with the specified name, location range, cargo storage, and maximum number of ships per day.
         /// </summary>
         /// <param name="harborName">The name of the harbor.</param>
         /// <param name="locationRange">The range of locations for the harbor, starting from 0.</param>
         /// <param name="harborContainerStorage">The cargo storage capacity for the harbor.</param>
+        /// <param name="harborMaxNumberOfShipsPerDay">The maximum number of ships that each dock in the harbor can handle per day.</param>
         /// <example>
         /// This example demonstrates how to create a Harbor instance:
         /// <code>
@@ -84,17 +76,18 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         ///         // Create a ContainerStorage instance for the harbor
         ///         ContainerStorage harborContainerStorage = new ContainerStorage(1000);
         ///   
-        ///         // Create a new instance of Harbor with the specified name, location range, and cargo storage
-        ///         Harbor harbor = new Harbor("Oslo Harbor", 1000, harborContainerStorage);
+        ///         // Create a new instance of Harbor with the specified name, location range, cargo storage, and maximum number of ships per day
+        ///         Harbor harbor = new Harbor("Oslo Harbor", 1000, harborContainerStorage, 10);
         ///     }
         /// }
         /// </code>
         /// </example>
-        public Harbor(string harborName, int locationRange, ContainerStorage harborContainerStorage)
+        public Harbor(string harborName, int locationRange, ContainerStorage harborContainerStorage, int harborMaxNumberOfShipsPerDay)
         {
-            Name = harborName;
-            LocationRange = new Range(0, locationRange);
-            ContainerStorage = harborContainerStorage;
+            _name = harborName;
+            _locationRange = new Range(0, locationRange);
+            _containerStorage = harborContainerStorage;
+            _maxNumberOfShipsPerDay = harborMaxNumberOfShipsPerDay; 
         }
 
         /// <summary>
@@ -134,7 +127,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
                     for (int z = 0; z < numberOfCranes; z++)
                     {
                         Crane crane = new(z);
-                        dock.Cranes.Add(crane);
+                        dock.GetCranes.Add(crane);
                     }
                 }
             }
@@ -161,7 +154,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <example>
         /// This example shows how to use the InitializeShips method to create a list of ships.
         /// <code> 
-        ///     List<Ship> ships = harbor.InitializeShips(2000, 5, Model.LNGCarrier, Size.Medium);
+        ///     List<Ship> ships = harbor.InitializeShips(2000, 5, _model.LNGCarrier, Size.Medium);
         /// </code>
         /// </example>
 
@@ -177,7 +170,7 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             for (int i = 0; i < numberOfShips; i++)
             {
                 Ship ship = new($"{shipModel}ship-{i}", shipModel, shipSize, shipCurrentLocation);
-                if (!ships.Any(s => s.Name == ship.Name))
+                if (!ships.Any(s => s.GetName == ship.GetName))
                 {
                     ships.Add(ship);
 
@@ -291,9 +284,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <returns>The available AGV.</returns>
         internal AGV GetAvailableAGV()
         {
-            foreach (AGV agv in AGVs)
+            foreach (AGV agv in _agvs)
             {
-                if (agv.IsAvailable)
+                if (agv.GetIsAvailable)
                 {
                     return agv;
                 }
@@ -316,22 +309,22 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </remarks>
         internal Dock AvailableDockOfSize(Size shipSize)
         {
-            if (Docks.Count == 0)
+            if (_docks.Count == 0)
             {
                 throw new ArgumentNullException(nameof(Dock), "Harbor cannot have Zero Docks.");
             }
 
-            foreach (Dock dock in Docks)
+            foreach (Dock dock in _docks)
             {
-                if (shipSize < Size.Medium && dock.IsAvailable)
+                if (shipSize < Size.Medium && dock.GetIsAvailable)
                 {
                     return dock;
                 }
-                else if (shipSize.Equals(Size.Medium) && !dock.Size.Equals(Size.Small) && dock.IsAvailable)
+                else if (shipSize.Equals(Size.Medium) && !dock.GetSize.Equals(Size.Small) && dock.GetIsAvailable)
                 {
                     return dock;
                 }
-                else if (shipSize.Equals(Size.Large) && dock.Size.Equals(Size.Large) && dock.IsAvailable)
+                else if (shipSize.Equals(Size.Large) && dock.GetSize.Equals(Size.Large) && dock.GetIsAvailable)
                 {
                     return dock;
                 }
@@ -352,9 +345,9 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </remarks>
         internal bool IsShipInQueue(Ship ship)
         {
-            foreach (Ship otherShip in WaitingShips)
+            foreach (Ship otherShip in _waitingShips)
             {
-                if (ship.Name == otherShip.Name)
+                if (ship.GetName == otherShip.GetName)
                 {
                     return true;
                 }
@@ -377,16 +370,16 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// <exception cref="ArgumentNullException">Thrown when the list of ships is empty.</exception>
         internal bool QueueShipsToDock()
         {
-            if (Ships.Count == 0)
+            if (_ships.Count == 0)
             {
-                throw new ArgumentNullException(nameof(Ships), "Harbor cannot have Zero Ships.");
+                throw new ArgumentNullException(nameof(_ships), "Harbor cannot have Zero Ships.");
             }
 
-            foreach (Ship ship in Ships)
+            foreach (Ship ship in _ships)
             {
-                if (!ship.IsSailing && !ship.HasDocked && !IsShipInQueue(ship))
+                if (!ship.GetIsSailing && !ship.GetHasDocked && !IsShipInQueue(ship))
                 {
-                    WaitingShips.Enqueue(ship);
+                    _waitingShips.Enqueue(ship);
                     RaiseShipArrived(ship);
                     return true;
                 }
@@ -409,33 +402,33 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         /// </exception>
         internal bool RemoveShipFromDock(Ship ship)
         {
-            if (ship.DockedAt != null)
+            if (ship.GetDockedAt != null)
             {
                 if (ship == null)
                 {
                     throw new ArgumentNullException(nameof(ship), "Ship parameter cannot be null.");
                 }
 
-                if (ship.DockedAt == null)
+                if (ship.GetDockedAt == null)
                 {
                     throw new InvalidOperationException("The ship is not currently docked.");
                 }
 
-                Dock dock = ship.DockedAt;
+                Dock dock = ship.GetDockedAt;
                 if (dock == null)
                 {
                     throw new InvalidOperationException("The ship's dock reference is null.");
                 }
-                dock.OccupiedBy = null;
-                dock.IsAvailable = true;
-                bool removed = DockedShips.Remove(ship);
+                dock.SetOccpuiedBy(null);
+                dock.SetIsAvailable(true);
+                bool removed = _dockedShips.Remove(ship);
 
                 if (!removed)
                 {
                     throw new InvalidOperationException("Failed to remove ship from docked ships list.");
                 }
-                ship.HasDocked = false;
-                ship.DockedAt = null;
+                ship.SetHasDocked(false);
+                ship.SetDockedAt(null);
                 return true;
             }
             else
@@ -480,68 +473,81 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
             CompletedloadingShip?.Invoke(this, new ShipLoadingEventArgs(completedLoadingShip));
         }
 
+
         /// <summary>
         /// Gets the list of docks in the harbor.
         /// </summary>
         /// <returns>The list of docks.</returns>
-        public List<Dock> GetDocks()
-        {
-            return Docks;
-        }
+        public List<Dock> GetDocks => _docks;
+
+
+        /// <summary>
+        /// Gets the range of locations within the harbor.
+        /// </summary>
+        /// <returns>The range of locations within the harbor.</returns>
+        public Range GetLocationRange => _locationRange;
+
 
         /// <summary>
         /// Gets the list of ships in the harbor.
         /// </summary>
         /// <returns>The list of ships.</returns>
-        public List<Ship> GetShips()
-        {
-            return Ships;
-        }
+        public List<Ship> GetShips => _ships;
 
         /// <summary>
         /// Gets the list of ships currently docked in the harbor.
         /// </summary>
         /// <returns>The list of docked ships.</returns>
-        public List<Ship> GetDockedShips()
-        {
-            return DockedShips;
-        }
+        public List<Ship> GetDockedShips => _dockedShips;
 
         /// <summary>
         /// Gets the list of ships currently sailing from the harbor.
         /// </summary>
         /// <returns>The list of sailing ships.</returns>
-        public List<Ship> GetSailingShips()
-        {
-            return SailingShips;
-        }
+        public List<Ship> GetSailingShips => _sailingShips; 
+        
 
         /// <summary>
         /// Gets the queue of ships waiting to dock in the harbor.
         /// </summary>
         /// <returns>The queue of waiting ships.</returns>
-        public Queue<Ship> GetWaitingShips()
-        {
-            return WaitingShips;
-        }
+        public Queue<Ship> GetWaitingShips => _waitingShips;
+
+      
 
         /// <summary>
         /// Retrieves the current time of the harbor simulation.
         /// </summary>
         /// <returns>The current time of the harbor simulation.</returns>
-        public DateTime GetCurrentTime()
-        {
-            return CurrentTime;
-        }
+        public DateTime GetCurrentTime => _currentTime; 
+       
 
         /// <summary>
         /// Sets the current time of the harbor simulation to the specified value.
         /// </summary>
         /// <param name="currentTime">The new current time to set for the harbor simulation.</param>
-        public void SetCurrentTime(DateTime currentTime)
-        {
-            CurrentTime = currentTime;
-        }
+        public void SetCurrentTime(DateTime currentTime) => _currentTime = currentTime;
+
+
+        /// <summary>
+        /// Retrieves the maximum number of ships that each dock in the harbor can handle per day.
+        /// </summary>
+        /// <returns>The maximum number of ships per day.</returns>
+        public int GetMaxNumberOfShipsPerDay => _maxNumberOfShipsPerDay;
+
+
+        /// <summary>
+        /// Retrieves the container storage capacity for the harbor.
+        /// </summary>
+        /// <returns>The container storage capacity for the harbor.</returns>
+        public ContainerStorage GetContainerStorage => _containerStorage;
+
+
+        /// <summary>
+        /// Retrieves the list of Automated Guided Vehicles (AGVs) used in the harbor.
+        /// </summary>
+        /// <returns>The list of AGVs used in the harbor.</returns>
+        public List<AGV> GetAGVS => _agvs; 
 
         /// <summary>
         /// Returns a string representation of the harbor simulation.
@@ -550,12 +556,12 @@ namespace Cdull.V2024.HarborSimulation.SimulationFramework.Infrastructure
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Harbor Id: {Name}" + $" CurrentTime: {CurrentTime}");
-            stringBuilder.AppendLine($"Total Ships: {Ships.Count}");
-            stringBuilder.AppendLine($"Docked Ships: {DockedShips.Count}");
-            stringBuilder.AppendLine($"Sailing Ships: {SailingShips.Count}");
-            stringBuilder.AppendLine($"Waiting Ships: {WaitingShips.Count}");
-            stringBuilder.AppendLine($"Containers Storage: Capacity: {ContainerStorage.Capacity}, Occupied Space: {ContainerStorage.GetOccupiedSpace()}\n");
+            stringBuilder.AppendLine($"Harbor _Id: {_name}" + $" CurrentTime: {_currentTime}");
+            stringBuilder.AppendLine($"Total Ships: {_ships.Count}");
+            stringBuilder.AppendLine($"Docked Ships: {_dockedShips.Count}");
+            stringBuilder.AppendLine($"Sailing Ships: {_sailingShips.Count}");
+            stringBuilder.AppendLine($"Waiting Ships: {_waitingShips.Count}");
+            stringBuilder.AppendLine($"Containers Storage: Capacity: {_containerStorage.GetCapacity}, Occupied Space: {_containerStorage.GetOccupiedSpace()}\n");
             return stringBuilder.ToString();
         }
 
