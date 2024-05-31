@@ -142,6 +142,8 @@ namespace Cdull.V2024.HarborSimulation.TestClient
                 Console.WriteLine(sailing.ToString())
 
             );*/
+
+            List<AGV> getAGVs();
         }
 
 
