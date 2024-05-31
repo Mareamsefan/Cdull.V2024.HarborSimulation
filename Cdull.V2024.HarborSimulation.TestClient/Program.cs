@@ -143,7 +143,7 @@ namespace Cdull.V2024.HarborSimulation.TestClient
 
             );*/
 
-            List<AGV> getAGVs();
+            harbor.GetMaximumNumberOfShipsPerDay();
         }
 
 
